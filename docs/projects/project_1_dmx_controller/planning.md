@@ -24,7 +24,7 @@
 **Rationale:** Provides a wireless OTA option for slaves that have Wi-Fi capability and are close enough to the router. Allows for OTA without needing physical access for USB reflash.<br/>
 **Alternative considered:** OTA only via webserver slave — rejected, slaves with Wi-Fi capability should be able to update directly without needing to route through the webserver. OTA proxy via ESP-NOW — rejected, adds significant complexity and development effort, and is not strictly necessary for slaves with Wi-Fi capability.
 
-**REQ-FW-150:** OTA shall be triggerable per ESP from the React UI on the webserver slave.<br/>
+**REQ-FW-150:** OTA shall be triggerable per ESP from the Hemx UI on the webserver slave.<br/>
 **Rationale:** Provides a user-friendly way to initiate OTA updates from the web interface.<br/>
 **Alternative considered:** OTA only via command line or physical button — rejected, less user-friendly and not suitable for remote updates.
 
@@ -34,7 +34,7 @@
 **Rationale:**: 1ms tick allows for low latency handling of time critical messages (e.g. MIDI note on/off) while keeping CPU overhead manageable. 100Hz tick adds unacceptable latency for time critical messages.<br/>
 **Altarnative considered:** 100Hz (10ms tick) — rejected, adds unacceptable latency for time critical messages. 1ms tick achieves ~6ms total MIDI note to OSC UDP latency, while 10ms tick adds ~11-20ms.
 
-\*\*# Software Organization
+# Software Organization
 
 **REQ-GEN-800:** The project shall use a single VS Code, including all slave code.
 **Rationale:** A single project is easier for development.

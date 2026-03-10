@@ -82,7 +82,7 @@
 **Rationale:** Provides a consistent OTA method for all devices, regardless of Wi-Fi capability, increasing flexibility and maintainability.<br/>
 **Alternative considered:** OTA via Wi-Fi for capable devices and proxy for non-Wi-Fi devices — rejected, would create multiple update methods and increase complexity.
 
-**REQ-SLV-380:** The webserver slave shall support triggering OTA updates on any slave from the React UI.<br/>
+**REQ-SLV-380:** The webserver slave shall support triggering OTA updates on any slave from the Htmx UI.<br/>
 **Rationale:** Provides a user-friendly way to manage OTA updates across all devices from a single interface.<br/>
 **Alternative considered:** No UI for OTA updates — rejected, would require manual triggering of updates, reducing usability.
 
@@ -132,7 +132,7 @@
 **Rationale:** Ensures that monitoring does not interfere with the main routing path, maintaining performance for time critical messages.<br/>
 **Alternative considered:** Monitoring copies sent via the same queue as the main routing path — rejected, would risk increased latency for time critical messages when monitoring is enabled.
 
-\*\*# Software Organization Structure
+# Software Organization Structure
 
 **REQ-SLV-800:** Slave code shall be organized in subfolders per slave type under `software/slaves/`.<br/>
 **Rationale:** Keeps code organized and modular, allowing for easier maintenance and development of individual slave types.<br/>

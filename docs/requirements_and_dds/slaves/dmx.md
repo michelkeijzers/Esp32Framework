@@ -12,7 +12,7 @@
 
 **REQ-ERR-110:** DMX slave shall continue sending last known universe if master contact is lost.
 
-\*\*# Software Organization
+# Software Organization
 
 # Testing
 

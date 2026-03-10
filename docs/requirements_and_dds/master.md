@@ -7,7 +7,7 @@
 **Alternative considered:** Dynamic routing table or routing based on message content — rejected, adds complexity and potential for misconfiguration.
 
 **REQ-MAS-105:** The master shall get the MAC addresses via ESP-NOW from the webserver slave at boot and store them in NVS for routing.<br/>
-**Rationale:** The webserver slave can have the MAC addresses edited on the React website and still not having the need for uploading firmware to the master because of changed MAC addresses.<br/>
+**Rationale:** The webserver slave can have the MAC addresses edited on the Htmx website and still not having the need for uploading firmware to the master because of changed MAC addresses.<br/>
 **Alternative considered:** Hardcoded MAC addresses in master code — rejected, would require firmware changes to update MAC addresses and reduce flexibility. Manual entry of MAC addresses via serial or other interface — rejected, less user-friendly and more error-prone than getting them from the webserver slave which has a user-friendly interface for editing them.
 
 **REQ-MAS-110:** The master shall route incoming ESP-NOW messages to their destination MAC address based on the routing table.<br/>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>DMX Control</title>
+   <link rel="stylesheet" href="pico.min.css">
+   <link rel="stylesheet" href="custom.css">
+   <script src="htmx.min.js"></script>
+   <script>
+      // Highlight the last selected button
+      document.addEventListener('DOMContentLoaded', function () {
+         function handleSelect(e) {
+            // Remove .selected-btn from all
+            document.querySelectorAll('.selectable-btn').forEach(btn => btn.classList.remove('selected-btn'));
+            // Add to clicked
+            e.currentTarget.classList.add('selected-btn');
+         }
+         document.querySelectorAll('.selectable-btn').forEach(btn => {
+            btn.addEventListener('click', handleSelect);
+         });
+      });
+   </script>
+</head>
+
+<body>
+   <main class="container">
+      <div class="header-flex">
+         <h1 class="title-colored no-margin">DMX Controller</h1>
+         <span class="version-colored version-label">Version 0.1.0</span>
+      </div>
+      <div class="subtitle-row">
+         <button onclick="window.location.href='index.html'" class="home-btn">Home</button>
+         <h2 style="margin: 0;">Control</h2>
+      </div>
+      <div id="result"></div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem; max-width: 350px; margin: 2rem auto;">
+         <button class="big-bold-btn blackout-btn selectable-btn" hx-post="/api/blackout" hx-target="#preset-label"
+            hx-swap="outerHTML">Blackout</button>
+         <div class="preset-grid">
+            <!-- 20 preset buttons -->
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/1" hx-target="#preset-label"
+               hx-swap="outerHTML">1</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/2" hx-target="#preset-label"
+               hx-swap="outerHTML">2</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/3" hx-target="#preset-label"
+               hx-swap="outerHTML">3</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/4" hx-target="#preset-label"
+               hx-swap="outerHTML">4</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/5" hx-target="#preset-label"
+               hx-swap="outerHTML">5</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/6" hx-target="#preset-label"
+               hx-swap="outerHTML">6</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/7" hx-target="#preset-label"
+               hx-swap="outerHTML">7</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/8" hx-target="#preset-label"
+               hx-swap="outerHTML">8</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/9" hx-target="#preset-label"
+               hx-swap="outerHTML">9</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/10" hx-target="#preset-label"
+               hx-swap="outerHTML">10</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/11" hx-target="#preset-label"
+               hx-swap="outerHTML">11</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/12" hx-target="#preset-label"
+               hx-swap="outerHTML">12</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/13" hx-target="#preset-label"
+               hx-swap="outerHTML">13</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/14" hx-target="#preset-label"
+               hx-swap="outerHTML">14</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/15" hx-target="#preset-label"
+               hx-swap="outerHTML">15</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/16" hx-target="#preset-label"
+               hx-swap="outerHTML">16</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/17" hx-target="#preset-label"
+               hx-swap="outerHTML">17</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/18" hx-target="#preset-label"
+               hx-swap="outerHTML">18</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/19" hx-target="#preset-label"
+               hx-swap="outerHTML">19</button>
+            <button class="big-bold-btn preset-btn selectable-btn" hx-post="/api/select_preset/20" hx-target="#preset-label"
+               hx-swap="outerHTML">20</button>
+         </div>
+         <div id="preset-label">Preset Name</div>
+      </div>
+   </main>
+</body>
+
+</html>

@@ -18,7 +18,7 @@
 
 **REQ-ERR-120:** MIDI merge buffer overflow shall use a defined drop strategy — no stream corruption permitted.
 
-\*\*# Software Organization
+# Software Organization
 
 # Testing
 

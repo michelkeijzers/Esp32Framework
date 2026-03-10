@@ -1,0 +1,112 @@
+.home-btn {
+  width: auto;
+  min-width: 80px;
+  padding: 0.5rem 1.2rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  background: #00c;
+  color: #fff;
+  border: 2px solid #888;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.home-btn:hover {
+  background: #44f;
+  color: #fff;
+}
+.subtitle-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+.selected-btn {
+  background: yellow !important;
+  color: #222 !important;
+}
+.container #result {
+  display: none;
+}
+.container h2 {
+  color: var(--primary-background, #eee);
+  display: flex;
+  align-items:center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+body {
+  background: #00f !important;
+  color: #111 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+
+.preset-btn {
+  min-width: 120px;
+  box-sizing: border-box;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+.preset-btn:hover {
+  background: #cc8;
+  color: #222;
+}
+
+.blackout-btn {
+  width: 100%;
+  min-width: 506px;
+  margin-bottom: 0rem;
+}
+
+.blackout-btn:hover {
+  background: #cc8;
+  color: #222;
+}
+
+.big-bold-btn {
+  font-weight: bold;
+  font-size: 1.25rem;
+  padding: 1rem 0.5rem;
+  width: 100%;
+}
+
+.title-colored,
+.version-colored {
+  color: var(--primary-background, #eee);
+}
+
+.header-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.no-margin {
+  margin: 0;
+}
+
+.version-label {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+#preset-label {
+  text-align: center;
+  margin-top: 0.2rem;
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: #eee;
+}
+}

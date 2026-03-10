@@ -16,7 +16,7 @@
 
 # ESP-NOW Protocol
 
-**REQ-GEN-200:** ESP-NOW shall be used for all inter-ESP communication — no Wi-Fi or Bluetooth connections between ESPs.
+**REQ-GEN-200:** ESP-NOW shall be used for all inter-ESP communication — no Wi-Fi or Bluetooth connections between ESPs.<br/>
 **Rationale:** ESP-NOW provides low-latency, connectionless communication ideal for real-time performance use. Avoids Wi-Fi overhead and complexity.<br/>
 **Alternative considered:** Wi-Fi or Bluetooth — rejected, higher latency and complexity, not suitable for real-time performance.
 
@@ -70,7 +70,7 @@
 **Rationale:** Provides a wireless OTA option for slaves that have Wi-Fi capability and are close enough to the router. Allows for OTA without needing physical access for USB reflash.<br/>
 **Alternative considered:** OTA only via webserver slave — rejected, slaves with Wi-Fi capability should be able to update directly without needing to route through the webserver. OTA proxy via ESP-NOW — rejected, adds significant complexity and development effort, and is not strictly necessary for slaves with Wi-Fi capability.
 
-**REQ-FW-150:** OTA shall be triggerable per ESP from the React UI on the webserver slave.<br/>
+**REQ-FW-150:** OTA shall be triggerable per ESP from the Htmx UI on the webserver slave.<br/>
 **Rationale:** Provides a user-friendly way to initiate OTA updates from the web interface.<br/>
 **Alternative considered:** OTA only via command line or physical button — rejected, less user-friendly and not suitable for remote updates.
 
@@ -80,10 +80,10 @@
 **Rationale:**: 1ms tick allows for low latency handling of time critical messages (e.g. MIDI note on/off) while keeping CPU overhead manageable. 100Hz tick adds unacceptable latency for time critical messages.<br/>
 **Alternative considered:** 100Hz (10ms tick) — rejected, adds unacceptable latency for time critical messages. 1ms tick achieves ~6ms total MIDI note to OSC UDP latency, while 10ms tick adds ~11-20ms.
 
-\*\*# Software Organization
+# Software Organization
 
-**REQ-GEN-800:** The project shall use a single VS Code, including all slave code.
-**Rationale:** A single project is easier for development.
+**REQ-GEN-800:** The project shall use a single VS Code, including all slave code.<br/>
+**Rationale:** A single project is easier for development.<br/>
 **Alternative considered:** Multiple projects per role — rejected, would increase complexity and reduce maintainability.
 
 **REQ-GEN-810:** The project shall use a single ESP-IDF project with role selection via configuration/NVS.<br/>
@@ -91,7 +91,7 @@
 **Alternative considered:** Separate ESP-IDF projects per role — rejected, would fragment codebase and reduce reusability, as common code would need to be duplicated across projects.
 
 **REQ-GEN-820:** NVS write frequency shall be minimized — flash has limited write cycles, NVS wear levelling is enabled.<br/>
-**Rationale:** Prevent NVS wear levelling.
+**Rationale:** Prevent NVS wear levelling.<br/>
 **Alternative considered:** Frequent NVS writes — rejected, would wear out flash memory over time.
 
 **REQ-MAS-800:** Every ESP shall have the following RTOS tasks: <br/>
@@ -103,7 +103,7 @@
 **Rationale:** Separating concerns into different tasks allows for better organization and responsiveness. ESP-Now task can prioritize handling messages, while OTA and slave specific tasks can run independently without blocking message handling.<br/>
 **Alternative considered:** Single task for all functionality — rejected, would be less responsive and harder to organize code. No separate task for receiving/sending messages — rejected, would make it harder to prioritize message handling and could lead to dropped messages under load.
 
-**REQ-MAS-810:** Every ESP shall spawn tasks after initializing ESP-NOW and peripherals.
+**REQ-MAS-810:** Every ESP shall spawn tasks after initializing ESP-NOW and peripherals.<br/>
 **Rationale:** Ensures ESP-NOW is ready to receive messages as soon as tasks are running, preventing missed messages during startup.<br/>
 **Alternative considered:** Spawn tasks before ESP-NOW initialization — rejected, could lead to missed messages during startup if tasks are running before ESP-NOW is ready.
 

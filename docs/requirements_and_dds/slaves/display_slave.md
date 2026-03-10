@@ -36,7 +36,7 @@
 **Rationale:** Allows for brightness control of LEDs, expanding the range of possible display effects.<br/>
 **Alternative considered:** No PWM support — rejected, would limit display capabilities and effects.
 
-\*\*# Software Organization
+# Software Organization
 
 # Testing
 

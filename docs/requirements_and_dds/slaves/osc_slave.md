@@ -12,11 +12,11 @@
 
 **REQ-GEN-100:** The webserver slave shall generate MIDI messages based on input slave events and stored mappings.
 
-**REQ-GEN-110:** Input-to-MIDI mappings shall be stored in webserver slave NVS and configurable via React UI without reflashing.
+**REQ-GEN-110:** Input-to-MIDI mappings shall be stored in webserver slave NVS and configurable via Htmx UI without reflashing.
 
 **REQ-GEN-120:** The webserver slave shall support configurable MIDI channel, note, velocity, CC value, program change, and transpose per input.
 
-\*\*# Software Organization
+# Software Organization
 
 # Testing
 

@@ -51,7 +51,7 @@
 **Rationale:** Provides a clear and flexible way to control outputs from the master or webserver slave.<br/>
 **Alternative considered:** No defined message for setting outputs — rejected, would limit control options and require custom implementation for each output type.
 
-\*\*# Software Organization
+# Software Organization
 
 # Testing
 

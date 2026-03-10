@@ -13,4 +13,4 @@
 | display_slave   | REQ-DISP | Slave         | Display slave                             |
 | gpio_slave      | REQ-GPIO | Slave         | Input slave                               |
 | webserver_slave | REQ-WEB  | Slave         | Webserver slave                           |
-| React website   | REQ-REA  | Website       | React website                             |
+| Htmx website    | REQ-REA  | Website       | Htmx website                              |

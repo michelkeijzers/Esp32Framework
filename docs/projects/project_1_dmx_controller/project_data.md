@@ -1,11 +1,80 @@
 **Purpose:** Control a DMX universe from a footswitch with display feedback and browser based configuration.
 
+**Website Pages**
+
+- Home page:
+  - Navigation buttons to other pages:
+- Control Page
+  - Buttons for each preset (2-20)
+  - Button Blackout
+  - Button Previous Preset
+  - Button Next Preset
+- DMX Presets Page:
+  - List with presets (index + name).
+  - Button Add Preset
+  - Button Delete Preset
+  - Button Move Up Preset
+  - Button Move Down Preset
+  - Button Edit Preset
+- Edit Preset Preset
+  - Text Box Name (editable)
+  - List/Grid with 512 pairs of index and DMX value
+  - Clicking a value shows Edit Value Page
+- Edit Value Page
+  - Button 10 digits
+  - Button Cancel
+  - Button Enter
+- Configuration Page
+  - Button Load
+  - Button Save
+  - Configuration items
+- Status Page
+  - List of ESP devices with Role, Sequence Number, Status
+- Initialization
+  - List of ESP devices with Role, Sequence Number, MAC Address
+  - Text Box MAC Address, editable
+  - Button Send
+- Security
+  - Text Box New Security Key (16 byte hex string), editable
+  - Button Send New Key
+- Logging Page
+  - Textbox (noneditable) with logging text
+  - Scrollbar
+- Firmware Page
+  - List of ESP devices with Role, Sequence Number, Firmware Version
+  - Button Firmware Update (of selected ESP)
+  - Line for OTA status
+- Manual Page
+  - HTML
+
+  - Update Firmware button for each device, with status (e.g. "up to date", "update available", "updating...", "update failed")
+
+- Home page, with navigation buttons mostly to pages.
+
+- DMX Presets page, with buttons to add/delete/moving presets up/down, and a list that shows the presets names.
+
+- DMX Preset Page: When clicking on a preset (or with edit page), navigation shows the name and 512 values of the selected preset.
+
+- DMX Value Edit Page: The selected value (out of 512) can be changed by big digit buttons for easy usage on mobile phone.
+
+- Firmware page, with a list of (editable) MAC addresses, and a Update Firmware button PER ESP device and status.
+
+- Status page, with all ESP32s in the system, including their status.
+
+- Logging page, with logging (ppossibly table formatted with timestamp, source DSP and text)
+
+- Manual (Help) Page
+
+- Configuration page: configuration for various ESPs, with separate LOAD and SAVE button.
+
+- Control page, with current preset, and buttons to select preset (2-20?), and Blackout button.
+
 **ESPs:**
 
 | ESP | Role           | Peripherals                          | Antenna |
 | --- | -------------- | ------------------------------------ | ------- |
 | #1  | ROLE_MASTER    | None                                 | FPC     |
-| #2  | ROLE_WEBSERVER | Wi-Fi, React UI, OTA                 | FPC     |
+| #2  | ROLE_WEBSERVER | Wi-Fi, Htmx UI, OTA                  | FPC     |
 | #3  | Input slave    | Single footswitch — direct GPIO      | PCB     |
 | #4  | Display slave  | TM1637 seven segment, max brightness | PCB     |
 | #5  | DMX slave      | MAX3485, XLR, named universes in NVS | PCB     |

@@ -7,7 +7,7 @@
 | ESP | Role           | Peripherals                                    | Antenna |
 | --- | -------------- | ---------------------------------------------- | ------- |
 | #1  | ROLE_MASTER    | None                                           | FPC     |
-| #2  | ROLE_WEBSERVER | Wi-Fi, React UI, input-to-MIDI mapping, OTA    | FPC     |
+| #2  | ROLE_WEBSERVER | Wi-Fi, Htmx UI, input-to-MIDI mapping, OTA     | FPC     |
 | #3  | Input slave    | 2x 74HC165 (12 switches), 2x A1324 via ADS1115 | PCB     |
 | #4  | Display slave  | 2x MAX7219 — custom display + 18 LEDs          | PCB     |
 | #5  | MIDI slave     | MIDI IN + OUT + MERGE                          | PCB     |
