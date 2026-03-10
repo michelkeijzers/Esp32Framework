@@ -14,17 +14,27 @@
 **Rationale:** Keeps separation of concerns clear — master handles routing, webserver handles project logic and UI.<br/>
 **Alternative considered:** Webserver performs routing decisions — rejected, would blur separation of concerns and require project specific code in master.
 
+**REQ-WEB-130:** The webserver slave shall send the MAC addresses to the master via ESP-NOW at boot for routing purposes.<br/>
+**Rationale:** Ensures the master has the correct MAC addresses for routing without requiring manual configuration or firmware updates.<br/>
+**Alternative considered:** Hardcoded MAC addresses in master code — rejected, would require firmware changes to update MAC addresses and reduce flexibility. Manual entry of MAC addresses via serial or other interface — rejected, less user-friendly and more error-prone than getting them from the webserver slave which has a user-friendly interface for editing them.
+
 # Security
 
 **REQ-SEC-110:** Webserver authentication is not enabled by default — deferred, acceptable for hobby use.<br/>
 **Rationale:** Authentication adds complexity and is not strictly necessary for hobby use. Can be added in the future if needed.<br/>
 **Alternative considered:** Authentication via login.
 
-## React Website
+**REQ-SEC-120:** Webserver shall provide a means to change the static security key and able to message it to the master to spread.<br/>
+**Rationale:** Allows users to set their own encryption key without needing to modify and reflash firmware, improving security and usability.<br/>
+**Alternative considered:** Hardcoded key in firmware — rejected, would require firmware changes to update key and reduce security if firmware is shared. Key configuration via web interface — rejected, adds complexity and requires webserver slave to be involved in key management, which is not ideal for a generic master that should not have project specific logic.
 
 **REQ-WEB-200:** The webserver slave shall serve a React bundle from LittleFS.<br/>
 **Rationale:** Provides a modern, responsive UI for configuration and monitoring.<br/>
 **Alternative considered:** No webserver or simpler UI — rejected, would limit usability and configuration options.
+
+**REQ-WEB-210:** The React web site shall allow editing of slave MAC addresses for routing purposes.<br/>
+**Rationale:** Allows users to easily configure routing without needing to reflash firmware for MAC address changes.<br/>
+**Alternative considered:** Hardcoded MAC addresses in master code — rejected, would require firmware changes to update MAC addresses and reduce flexibility. Manual entry of MAC addresses via serial or other interface — rejected, less user-friendly and more error-prone than editing them via the web interface.
 
 ## WiFi Connection
 

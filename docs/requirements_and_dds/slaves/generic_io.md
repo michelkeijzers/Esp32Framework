@@ -11,11 +11,11 @@
 **Alternative considered:** Using multiple GPIOs for each button — rejected, would quickly exhaust available GPIO pins on the ESP32-C3.<br/>
 **Status:**: Deferred until project FCB1010.
 
-**REQ-GPIO-200:** Debouncing shall be implemented in software for all button inputs, with a configurable debounce time in config.h.<br/>
+**REQ-GPIO-200:** Debouncing shall be implemented in software for all button inputs, with a configurable debounce time in NVS.<br/>
 **Rationale:** Ensures reliable button input without false triggers due to mechanical bounce.<br/>
 **Alternative considered:** No debouncing or hardware debouncing — rejected, would lead to unreliable button inputs.
 
-**REQ-GPIO-210:** Long press detection shall be implemented in software for all button inputs, with a configurable long press time in config.h.<br/>
+**REQ-GPIO-210:** Long press detection shall be implemented in software for all button inputs, with a configurable long press time in NVS.<br/>
 **Rationale:** Allows for additional functionality based on long presses without requiring additional hardware.<br/>
 **Alternative considered:** No long press detection — rejected, would limit functionality and user interaction options.
 

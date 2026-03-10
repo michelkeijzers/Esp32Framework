@@ -6,7 +6,7 @@
 **Rationale:** Defines the different roles each ESP can assume in the system.<br/>
 **Alternative considered:** Fewer or more roles — rejected, would limit flexibility or add unnecessary complexity.
 
-**REQ-GEN-110:** The role of each ESP shall be determined at compile time via configuration / NVS. No runtime role switching.<br/>
+**REQ-GEN-110:** The role of each ESP shall be determined at compile time. No runtime role switching.<br/>
 **Rationale:** Roles are static per project — no need for dynamic switching. Compile time configuration simplifies implementation and reduces attack surface.<br/>
 **Alternative considered:** Runtime role switching — rejected, adds complexity and potential for misconfiguration.
 
@@ -46,6 +46,10 @@
 **Rationale:** ESP-NOW messages are transmitted over the air and can be intercepted. Static Key encryption provides a basic level of security to prevent unauthorized interception and tampering of messages.<br/>
 **Alternative considered:** No encryption — rejected, would leave messages vulnerable to interception and tampering. Dynamic keys or more advanced encryption — rejected, adds complexity and is not strictly necessary for hobby use. Key management can be handled securely via NVS and physical access to devices. Obfuscation of key in code can provide additional security through obscurity, but no private data is sent. Application-Level security (magic number in message) is not as good as static keys.
 
+**REQ-SEC-310:** The static Key for ESP-NOW encryption shall be configurable via NVS and not hardcoded in firmware.<br/>
+**Rationale:** Allows users to set their own encryption key without needing to modify and reflash firmware, improving security and usability.<br/>
+**Alternative considered:** Hardcoded key in firmware — rejected, would require firmware changes to update key and reduce security if firmware is shared. Key configuration via web interface — rejected, adds complexity and requires webserver slave to be involved in key management, which is not ideal for a generic master that should not have project specific logic.
+
 # Boot
 
 **REQ-GEN-400:** Slaves shall handle booting before master is ready — retry ESP-NOW registration until master responds.<br/>
@@ -74,7 +78,7 @@
 
 **REQ-GEN-600:** FreeRTOS tick rate shall be configured to 1000Hz (1ms tick) via sdkconfig.defaults.<br/>
 **Rationale:**: 1ms tick allows for low latency handling of time critical messages (e.g. MIDI note on/off) while keeping CPU overhead manageable. 100Hz tick adds unacceptable latency for time critical messages.<br/>
-**Altarnative considered:** 100Hz (10ms tick) — rejected, adds unacceptable latency for time critical messages. 1ms tick achieves ~6ms total MIDI note to OSC UDP latency, while 10ms tick adds ~11-20ms.
+**Alternative considered:** 100Hz (10ms tick) — rejected, adds unacceptable latency for time critical messages. 1ms tick achieves ~6ms total MIDI note to OSC UDP latency, while 10ms tick adds ~11-20ms.
 
 \*\*# Software Organization
 
@@ -89,6 +93,19 @@
 **REQ-GEN-820:** NVS write frequency shall be minimized — flash has limited write cycles, NVS wear levelling is enabled.<br/>
 **Rationale:** Prevent NVS wear levelling.
 **Alternative considered:** Frequent NVS writes — rejected, would wear out flash memory over time.
+
+**REQ-MAS-800:** Every ESP shall have the following RTOS tasks: <br/>
+
+- ESP-Now Task (handles incoming messages and sending messages, verifies CRC)
+- OTA Task (handles over-the-air updates)
+- Slave specific task(s)
+
+**Rationale:** Separating concerns into different tasks allows for better organization and responsiveness. ESP-Now task can prioritize handling messages, while OTA and slave specific tasks can run independently without blocking message handling.<br/>
+**Alternative considered:** Single task for all functionality — rejected, would be less responsive and harder to organize code. No separate task for receiving/sending messages — rejected, would make it harder to prioritize message handling and could lead to dropped messages under load.
+
+**REQ-MAS-810:** Every ESP shall spawn tasks after initializing ESP-NOW and peripherals.
+**Rationale:** Ensures ESP-NOW is ready to receive messages as soon as tasks are running, preventing missed messages during startup.<br/>
+**Alternative considered:** Spawn tasks before ESP-NOW initialization — rejected, could lead to missed messages during startup if tasks are running before ESP-NOW is ready.
 
 # Testing
 

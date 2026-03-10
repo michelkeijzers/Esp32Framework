@@ -152,7 +152,6 @@ TM1637 brightness: software controlled via `tm1637_set_brightness(0-7)`.
 project/
 main/
 main.c ← app_main, role selection via #ifdef
-config.h ← THIS_DEVICE_ROLE + all settings
 CMakeLists.txt
 sdkconfig.defaults ← CONFIG_FREERTOS_HZ=1000, flash size, CPU freq
 partitions.csv ← dual partition layout for all roles

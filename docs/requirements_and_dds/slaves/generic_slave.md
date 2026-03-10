@@ -20,10 +20,7 @@
 
 # Configuration and NVS
 
-**REQ-SLV-200:** Only slave features defined in config.h shall be compiled into the binary — unused slave code shall not enter flash.<br/>
-**Rationale:** Keeps firmware size minimal and prevents unused code from taking up flash space.<br/>**Alternative considered:** All slave code compiled regardless of config — rejected, would increase firmware size and reduce available flash for NVS and other data.
-
-**REQ-SLV-210:** Each slave shall own its domain data as single source of truth — stored in NVS.<br/>
+**REQ-SLV-200:** Each slave shall own its domain data as single source of truth — stored in NVS.<br/>
 **Rationale:** Centralizes project specific data in NVS, allowing for configuration without reflashing. Keeps slave code generic and reusable across projects.<br/>
 **Alternative considered:** Hardcoded data in firmware — rejected, would require reflashing for configuration changes and reduce flexibility.
 
@@ -109,7 +106,7 @@
 
 # Debugging
 
-**REQ-SLV-700:** Slaves shall support a debug mode enabled via config.h that outputs detailed logs over UART for development and troubleshooting purposes.<br/>
+**REQ-SLV-700:** Slaves shall support a debug mode enabled that outputs detailed logs over UART for development and troubleshooting purposes.<br/>
 **Rationale:** Provides a way to get detailed information about slave behavior during development and troubleshooting without affecting performance in production.<br/>
 **Alternative considered:** No debug mode — rejected, would make development and troubleshooting more difficult.
 

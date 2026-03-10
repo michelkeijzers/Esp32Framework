@@ -1,0 +1,26 @@
+{
+  "configurations": [
+    {
+      "name": "ESP-IDF",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "C:/Users/i4studio/esp/v5.4.1/esp-idf/components/**/include",
+        "C:/Users/i4studio/esp/v5.4.1/esp-idf/components/freertos/config/include",
+        "C:/Users/i4studio/esp/v5.4.1/esp-idf/components/freertos/config/include/freertos",
+        "C:/Users/i4studio/esp/v5.4.1/esp-idf/components/freertos/config/riscv/include",
+        "C:/Users/i4studio/esp/v5.4.1/esp-idf/components/freertos/FreeRTOS-Kernel/include",
+        "C:/Users/i4studio/esp/v5.4.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/riscv/include",
+        "C:/Users/i4studio/esp/v5.4.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/riscv/include/freertos",
+        "C:/Users/i4studio/esp/v5.4.1/esp-idf/components/freertos/esp_additions/include",
+        "${workspaceFolder}/build/config"
+      ],
+      "defines": ["ESP_PLATFORM", "IDF_VER=\"v5.4.1\""],
+      "compilerPath": "C:/Users/i4studio/.espressif/tools/riscv32-esp-elf/esp-14.2.0_20241119/riscv32-esp-elf/bin/riscv32-esp-elf-gcc.exe",
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "compileCommands": "${workspaceFolder}/build/compile_commands.json",
+      "intelliSenseMode": "linux-gcc-x64"
+    }
+  ],
+  "version": 4
+}

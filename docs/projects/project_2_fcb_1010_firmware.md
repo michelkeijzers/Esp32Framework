@@ -66,3 +66,9 @@ Recommended PSU: 5V 2A — 1290mA headroom.
 - `slaves/input/hc165/` — shift register button input
 - `slaves/input/a1324/` — Hall effect pedal sensor
 - `slaves/osc/` — OSC over UDP
+
+**DD-008: MAX7219 for FCB1010 display**
+
+- Decision: 2x MAX7219 chained via SPI for custom segment display and LEDs
+- Reason: FCB1010 has custom 2.5 digit display with non-standard first digit, 12 indicator LEDs, and 6 configuration LEDs — 37 outputs total. MAX7219 provides 128 outputs across 2 ICs with built-in current limiting and multiplexing. Much cleaner to solder than 5x 74HC595.
+- Alternative considered: 5x 74HC595 + ULN2803 — rejected, excessive soldering complexity on perf board

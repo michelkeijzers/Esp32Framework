@@ -1,0 +1,2 @@
+source C:/Users/i4studio/Esp32Framework/Esp32Framework/build/bootloader/gdbinit/symbols
+source C:/Users/i4studio/Esp32Framework/Esp32Framework/build/bootloader/gdbinit/connect
