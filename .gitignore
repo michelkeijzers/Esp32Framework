@@ -1,0 +1,22 @@
+# ESP-IDF build artifacts and sensitive files
+build/
+*.bin
+*.elf
+*.map
+*.log
+spiffs_image.bin
+littlefs_image.bin
+
+# IDE and environment files
+.vscode/
+.idea/
+__pycache__/
+*.pyc
+
+# Secrets and config
+secret*.*
+sdkconfig.old
+
+# Other
+*.csv
+*.json

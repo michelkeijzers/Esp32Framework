@@ -1,6 +1,0 @@
-{
-  "cSpell.words": ["connectionless", "ment", "netif", "OLED", "reflashing"],
-  "idf.currentSetup": "C:\\Users\\i4studio\\esp\\v5.4.1\\esp-idf",
-  "idf.openOcdConfigs": ["board/esp32c3-builtin.cfg"],
-  "C_Cpp.errorSquiggles": "disabled"
-}
