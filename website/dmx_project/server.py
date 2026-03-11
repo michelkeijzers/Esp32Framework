@@ -1,4 +1,3 @@
-# --- Imports ---
 from flask import Flask, request, send_from_directory, jsonify
 import threading
 
@@ -240,6 +239,54 @@ def static_files(path):
 def api_send():
     print("POST data:", request.form)
     return f"<div id='result'>Received: {request.form.get('dmx-value')}</div>"
+
+
+@app.route("/api/nodes_info", methods=["GET", "POST"])
+def api_nodes_info():
+    if request.method == "GET":
+        # Mocked node info: name and ip_address for each node
+        nodes = [
+            {"name": "Master", "ip_address": "192.168.1.100"},
+            {"name": "Webserver", "ip_address": "192.168.1.101"},
+            {"name": "GPIO Slave", "ip_address": "192.168.1.102"},
+            {"name": "Display Slave", "ip_address": "192.168.1.103"},
+        ]
+        return jsonify(nodes)
+    elif request.method == "POST":
+        data = request.get_json(force=True)
+        print("POST /api/nodes_info: received data=", data)
+        # Here you would save the IPs to persistent storage or config
+        # For now, just acknowledge receipt
+        if not isinstance(data, list):
+            return jsonify({"ack": "nok", "error": "Expected a list of IPs"}), 400
+        # Optionally, validate IP format here
+        return jsonify({"ack": "ok"})
+
+
+# --- Reset System Endpoint ---
+@app.route("/api/reset_system", methods=["POST"])
+def api_reset_system():
+    print("POST /api/reset_system called")
+    # Here you would trigger a system reset or send a command to hardware
+    return ("", 204)  # No Content
+
+
+# --- ESP-NOW Key Endpoint ---
+@app.route("/api/esp_now_key", methods=["POST"])
+def api_esp_now_key():
+    data = request.get_json(force=True)
+    print("POST /api/esp_now_key: received scrambled key=", data)
+    # TODO: Descramble and distribute the key to ESP-NOW network
+    if (
+        not isinstance(data, list)
+        or len(data) != 16
+        or not all(isinstance(x, str) and len(x) == 2 for x in data)
+    ):
+        return (
+            jsonify({"ack": "nok", "error": "Expected a list of 16 hex strings"}),
+            400,
+        )
+    return jsonify({"ack": "ok"})
 
 
 if __name__ == "__main__":

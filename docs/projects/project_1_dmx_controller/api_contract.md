@@ -258,6 +258,91 @@ Example response (JSON):
 ]
 ```
 
+# Initialization Page
+
+## Opening page
+
+**Endpoint:** `GET /api/nodes_info`  
+**Description:** Returns an array of all nodes with their names and current IP addresses. Used to display and edit node IPs in the Initialization page.
+
+Example request:
+
+```
+GET /api/nodes_info
+```
+
+Example response (JSON):
+
+```json
+[
+  { "name": "Master", "ip_address": "192.168.1.100" },
+  { "name": "Webserver", "ip_address": "192.168.1.101" },
+  { "name": "GPIO Slave", "ip_address": "192.168.1.102" },
+  { "name": "Display Slave", "ip_address": "192.168.1.103" }
+]
+```
+
+## Save Button
+
+**Endpoint:** `POST /api/nodes_info`  
+**Description:** Updates the IP addresses for all nodes. Expects a JSON array of IP addresses (in the same order as returned by GET). Returns ack/nack.
+
+Example request:
+
+```json
+POST /api/nodes_info
+
+["192.168.1.100", "192.168.1.101", "192.168.1.102", "192.168.1.103"]
+```
+
+Example response (JSON):
+
+```json
+{ "ack": "ok" }
+```
+
+## Reset System Button
+
+**Endpoint:** `POST /api/reset_system`  
+**Description:** Triggers a system reset or restart action. No request body or response is required. Used by the Reset System button on the Initialization page.
+
+Example request:
+
+```
+POST /api/reset_system
+```
+
+Example response:
+
+204 No Content
+
+# Security Page
+
+## Send ESP-NOW Security Key
+
+**Endpoint:** `POST /api/esp_now_key`  
+**Description:** Sends the ESP-NOW security key from the web UI to the backend. The key is a 16-byte (uint8_t) array, scrambled using a fixed permutation for security and reversibility. The backend must descramble the key using the same order.
+
+**Scramble order (index mapping):**
+
+[7, 2, 12, 0, 9, 5, 1, 14, 8, 3, 10, 6, 13, 11, 4, 15]
+
+- To scramble: `scrambled[i] = original[scramble_order[i]]` for i = 0..15
+- To descramble: `original[scramble_order[i]] = scrambled[i]` for i = 0..15
+
+Example request (URL + JSON):
+
+```json
+POST /api/esp_now_key
+["a1", "b2", "c3", "d4", "e5", "f6", "07", "18", "29", "3a", "4b", "5c", "6d", "7e", "8f", "90"]
+```
+
+**Response (JSON):**
+
+```json
+{"ack": "ok"}
+```
+
 # General Notes
 
 - All API endpoints are under the `/api/` prefix.
