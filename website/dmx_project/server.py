@@ -1,7 +1,9 @@
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, send_from_directory, jsonify
 
 app = Flask(__name__, static_folder=".")
 
+
+# Preset names mapping
 # Preset names mapping
 PRESET_NAMES = {
     "1": "Warm White",
@@ -25,6 +27,60 @@ PRESET_NAMES = {
     "19": "Accent",
     "20": "Custom Scene",
 }
+
+# Example: all presets inactive except the first
+PRESET_ACTIVATIONS = [True] + [False] * (len(PRESET_NAMES) - 1)
+
+
+# GET endpoint to return all preset names and activations as a single array of objects
+@app.route("/api/presets", methods=["GET"])
+def api_presets():
+    names = list(PRESET_NAMES.values())
+    activations = PRESET_ACTIVATIONS
+    presets = [
+        {"name": name, "active": active} for name, active in zip(names, activations)
+    ]
+    return jsonify(presets)
+
+
+# --- DMX Preset Actions (stubs, update logic as needed) ---
+@app.route("/api/move_preset_up/<int:x>", methods=["POST"])
+def move_preset_up(x):
+    print(f"Move preset up: {x}")
+    # TODO: Implement logic to move preset up
+    return api_presets()
+
+
+@app.route("/api/move_preset_down/<int:x>", methods=["POST"])
+def move_preset_down(x):
+    print(f"Move preset down: {x}")
+    # TODO: Implement logic to move preset down
+    return api_presets()
+
+
+@app.route("/api/delete_preset/<int:x>", methods=["POST"])
+def delete_preset(x):
+    print(f"Delete preset: {x}")
+    # TODO: Implement logic to delete preset
+    return api_presets()
+
+
+@app.route("/api/insert_preset_at/<int:x>", methods=["POST"])
+def insert_preset_at(x):
+    print(f"Insert preset at: {x}")
+    # TODO: Implement logic to insert preset
+    return api_presets()
+
+
+@app.route("/preset_active/<int:x>/<int:state>", methods=["POST"])
+def preset_active(x, state):
+    print(f"Set preset {x} active: {state}")
+    # TODO: Implement logic to set preset active/inactive
+    return api_presets()
+
+
+# Example: all presets inactive except the first
+PRESET_ACTIVATIONS = [True] + [False] * (len(PRESET_NAMES) - 1)
 
 
 @app.route("/api/select_preset/<int:x>", methods=["POST"])
