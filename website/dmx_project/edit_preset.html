@@ -15,17 +15,19 @@
          <h1 class="title-colored no-margin">DMX Controller</h1>
          <span class="version-colored version-label">Version 0.1.0</span>
       </div>
-      <div class="subtitle-row">
-         <button onclick="window.location.href='index.html'" class="home-btn">Home</button>
-         <button onclick="window.location.href='presets.html'" class="home-btn back-btn">Back</button>
-         <h2 style="margin: 0;">Edit Preset</h2>
+      <div class="subtitle-row style=" display: flex; align-items: center; justify-content: flex-end; gap: 0.7rem;">
+         <button onclick="window.location.href='index.html'" class="home-btn" style="position: relative; left: -5rem">Home</button>
+         <button onclick="window.location.href='presets.html'" class="home-btn back-btn" style="position: relative; left: -4rem">Back</button>
+         <h2 style="text-align: center; display:flex; justify-content: center; position: relative; left: 4rem">Edit Preset</h2>
       </div>
+
       <form id="edit-preset-form" style="max-width: 400px; margin: 2rem auto 0 auto;">
          <div class="preset-row">
             <label for="preset-name-input" class="preset-label" id="preset-label">Preset Name:</label>
             <input type="text" id="preset-name-input" name="preset-name" value="" required class="preset-name-input">
          </div>
       </form>
+
       <div id="dmx-grid" class="dmx-grid"></div>
       <script>
          // Get query string parameter

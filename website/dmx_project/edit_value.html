@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="custom.css">
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,35 +16,44 @@
          <h1 class="title-colored no-margin">DMX Controller</h1>
          <span class="version-colored version-label">Version 0.1.0</span>
       </div>
-      <div class="subtitle-row">
-         <button onclick="window.location.href='index.html'" class="home-btn">Home</button>
-         <button id="back-btn" class="home-btn back-btn">Back</button>
-         <h2 style="margin: 0;">Edit Value</h2>
+      <div class="subtitle-row" style="display: flex; align-items: center; justify-content: flex-end; gap: 0.7rem;">
+         <button onclick="window.location.href='index.html'" class="home-btn" style="position: relative; left: -7rem">Home</button>
+         <button id="back-btn" class="home-btn back-btn" style="position: relative; left: -6rem">Back</button>
+         <h2 style="text-align: center; display:flex; justify-content: center; position: relative; left: 1.5rem; padding:0px">Edit Value</h2>
       </div>
-      <form id="edit-value-form" style="margin-top:2.5rem; display:flex; flex-direction:column; align-items:center;">
+      <form id="edit-value-form" style="display:flex; flex-direction:column; align-items:center;">
+         <div style="display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.2rem;">
+            <label for="dmx-channel-input" class="edit-value-label">DMX Channel:</label>
+            <input type="number" id="dmx-channel-input" class="edit-value-input dmx-channel-input-small" style="width: 7rem" min="0" max="512"
+               disabled>
+         </div>
          <label for="dmx-value-input" class="edit-value-label">DMX Value:</label>
-         <input type="number" id="dmx-value-input" name="dmx-value" min="0" max="255" class="edit-value-input" value="" required>
-         <div class="keypad">
-            <div class="keypad-row">
-               <button type="button" class="keypad-btn" data-digit="7">7</button>
-               <button type="button" class="keypad-btn" data-digit="8">8</button>
-               <button type="button" class="keypad-btn" data-digit="9">9</button>
-            </div>
-            <div class="keypad-row">
-               <button type="button" class="keypad-btn" data-digit="4">4</button>
-               <button type="button" class="keypad-btn" data-digit="5">5</button>
-               <button type="button" class="keypad-btn" data-digit="6">6</button>
-            </div>
-            <div class="keypad-row">
-               <button type="button" class="keypad-btn" data-digit="1">1</button>
-               <button type="button" class="keypad-btn" data-digit="2">2</button>
-               <button type="button" class="keypad-btn" data-digit="3">3</button>
-            </div>
-            <div class="keypad-row">
-               <button type="button" class="keypad-btn" id="keypad-back">&larr;</button>
-               <button type="button" class="keypad-btn" data-digit="0">0</button>
-               <button type="button" class="keypad-btn keypad-enter" id="keypad-enter">Enter</button>
-            </div>
+         <div style="display: flex; align-items: flex-start; gap: 0.7rem; margin-bottom: 1.2rem;">
+            <button type="button" id="dmx-minus-btn" class="dmx-incdec-btn">-</button>
+            <input type="number" id="dmx-value-input" name="dmx-value" min="0" max="255" class="edit-value-input" value="" required>
+            <button type="button" id="dmx-plus-btn" class="dmx-incdec-btn">+</button>
+         </div>
+         <div class="keypad-container"></div>
+         <div class="keypad-row">
+            <button type="button" class="keypad-btn" data-digit="7">7</button>
+            <button type="button" class="keypad-btn" data-digit="8">8</button>
+            <button type="button" class="keypad-btn" data-digit="9">9</button>
+         </div>
+         <div class="keypad-row">
+            <button type="button" class="keypad-btn" data-digit="4">4</button>
+            <button type="button" class="keypad-btn" data-digit="5">5</button>
+            <button type="button" class="keypad-btn" data-digit="6">6</button>
+         </div>
+         <div class="keypad-row">
+            <button type="button" class="keypad-btn" data-digit="1">1</button>
+            <button type="button" class="keypad-btn" data-digit="2">2</button>
+            <button type="button" class="keypad-btn" data-digit="3">3</button>
+         </div>
+         <div class="keypad-row">
+            <button type="button" class="keypad-btn" id="keypad-back">&larr;</button>
+            <button type="button" class="keypad-btn" data-digit="0">0</button>
+            <button type="button" class="keypad-btn keypad-enter" id="keypad-enter">Enter</button>
+         </div>
          </div>
       </form>
       <script>
@@ -63,14 +73,47 @@
                   btn.disabled = false;
                }
             });
+            // Enable/disable + and - buttons
+            const plusBtn = document.getElementById('dmx-plus-btn');
+            const minusBtn = document.getElementById('dmx-minus-btn');
+            const numVal = parseInt(val, 10);
+            if (!isNaN(numVal)) {
+               plusBtn.disabled = numVal >= 255;
+               minusBtn.disabled = numVal <= 0;
+            } else {
+               plusBtn.disabled = false;
+               minusBtn.disabled = false;
+            }
          }
          document.addEventListener('DOMContentLoaded', () => {
             const value = getQueryParam('value');
             const input = document.getElementById('dmx-value-input');
+
+            const dmxChannelInput = document.getElementById('dmx-channel-input');
+            const dmxIndex = getQueryParam('index');
+            if (dmxChannelInput && dmxIndex !== null) {
+               dmxChannelInput.value = dmxIndex;
+            }
             if (value !== null) input.value = value;
             updateKeypadButtons(input.value || '');
             // Allow manual typing and keep keypad logic in sync
             // Prevent typing numbers outside 0-255
+            // Plus button logic
+            document.getElementById('dmx-plus-btn').addEventListener('click', function () {
+               let val = parseInt(input.value, 10) || 0;
+               if (val < 255) {
+                  input.value = val + 1;
+                  updateKeypadButtons(input.value);
+               }
+            });
+            // Minus button logic
+            document.getElementById('dmx-minus-btn').addEventListener('click', function () {
+               let val = parseInt(input.value, 10) || 0;
+               if (val > 0) {
+                  input.value = val - 1;
+                  updateKeypadButtons(input.value);
+               }
+            });
             input.addEventListener('keydown', function (e) {
                // Allow navigation keys, backspace, delete, tab, etc.
                if (["Backspace", "Delete", "Tab", "ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) return;
@@ -139,17 +182,23 @@
                updateKeypadButtons(input.value);
             });
             // Enter button
-            document.getElementById('keypad-enter').addEventListener('click', async function () {
+            async function submitDMXValue() {
                const idx = getQueryParam('index');
                const val = input.value;
                if (!presetNumber || !idx || val === '' || isNaN(val) || val < 0 || val > 255) return;
-               // POST to /api/preset_value/<x>/<y>/<z>
                await fetch(`/api/preset_value/${presetNumber}/${idx}/${val}`, { method: 'POST' });
-               // Return to edit_preset.html
                let url = 'edit_preset.html';
                url += `?number=${encodeURIComponent(presetNumber)}`;
                if (presetName) url += `&name=${encodeURIComponent(presetName)}`;
                window.location.href = url;
+            }
+            document.getElementById('keypad-enter').addEventListener('click', submitDMXValue);
+            // Keyboard Enter support
+            input.addEventListener('keydown', function (e) {
+               if (e.key === 'Enter') {
+                  e.preventDefault();
+                  submitDMXValue();
+               }
             });
          });
       </script>

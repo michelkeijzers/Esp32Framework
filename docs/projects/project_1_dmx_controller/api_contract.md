@@ -16,7 +16,7 @@ Example request:
 POST /api/select_preset/1
 ```
 
-Example response:
+Example response (JSON):
 
 ```json
 { "preset_name": "Warm White" }
@@ -34,7 +34,7 @@ Example request:
 POST /api/blackout
 ```
 
-Example response:
+Example response (JSON):
 
 ```json
 { "preset_name": "Blackout" }
@@ -54,7 +54,7 @@ Example request:
 GET /api/presets
 ```
 
-Example response:
+Example response (JSON):
 
 ```json
 [
@@ -83,12 +83,13 @@ Example response: See Get Presets example response above, with the specified pre
 **Endpoint:** `POST /api/move_preset_down/<preset_index>`  
 **Description:** Moves the preset at the given index down by one position. Returns the updated preset list.
 
-Example: 
+Example:
 
 ```
 POST /api/move_preset_down/1
 ```
-Response: See Get Preset example response above, with the specified presets move down by one position. For example, if "Warm White" was at index 2 and is moved down, it would swap places with "Party Mode".
+
+Example response: See Get Preset example response above, with the specified presets move down by one position. For example, if "Warm White" was at index 2 and is moved down, it would swap places with "Party Mode".
 
 ## Delete Preset
 
@@ -101,27 +102,115 @@ Example:
 POST /api/delete_preset/2
 ```
 
+Example response: See Get Preset example response above, with the specified preset being deleted.
+
 ## Insert Preset At
 
 **Endpoint:** `POST /api/insert_preset_at/<preset_index>`  
 **Description:** Inserts a new preset at the given index. Returns the updated preset list.
 
-Example request:
+Example:
 
 ```
 POST /api/insert_preset_at/1
 ```
 
-## Set Preset Active
+Example response: See Get Preset example response above, with an empty preset being inserted at the selected position.
 
-**Endpoint:** `POST /preset_active/<preset_index>/<state>`  
-**Description:** Sets the active state of the preset at the given index. Returns the updated preset list. `state` is 1 for active, 0 for inactive.
+## Swap Preset Activation
 
-Example:
+**Endpoint:** `POST /api/swap_preset_activation/<preset_index>`<br/>
+**Description:** Swaps the preset activation of the preset at the given index. Returns the updated preset list.
+
+Example request:
 
 ```
-POST /api/preset_activate/2/1
-Response: See Get Preset example response above, with the updated activation state of the preset.
+POST /api/swap_preset_activation/2/1
+```
+
+Example response: See Get Preset example response above, with the updated activation state of the preset.
+
+# DMX Edit DMX Value Page
+
+## Preset Value
+
+**Endpoint:** `POST /api/preset_value/<preset>/<index>/<value>`<br/>
+**Description:** Set the DMX value for a specific preset and channel.
+
+Example request:
+
+```
+POST /api/preset_value/2/45/128
+```
+
+Example response (JSON):
+
+```json
+{
+  "index": 45,
+  "value": 128
+}
+```
+
+# Configuration Page
+
+## Load Button
+
+**Endpoint:** `GET /api/configuration`<br/>
+**Description:** Returns all configuration settings as a JSON object. Used to load configuration in the UI.
+
+Example request:
+
+```
+GET /api/configuration
+```
+
+Example response (JSON):
+
+```json
+{
+  "circular navigation": true
+}
+```
+
+## Save Button
+
+**Endpoint:** `POST /api/configuration`<br/>
+**Description:** Saves all configuration settings. Expects a JSON object with all config fields. Returns ack ("ok"/"nok").
+
+Example request (URL + JSON):
+
+```json
+POST /api/configuration
+
+{
+  "circular navigation": false
+}
+```
+
+Example response (JSON):
+
+```json
+{ "ack": "ok" }
+```
+
+## Presets/Circular Navigation Checkbox
+
+**Endpoint:** `POST /api/configuration_presets_circular_navigation`<br/>
+**Description:** Sets the circular navigation boolean for presets. Expects `{ "state": true|false }` in the request body. Returns ack/nack.
+
+Example request (URL + JSON):
+
+```json
+POST /api/configuration_presets_circular_navigation
+
+{ "state": true }
+```
+
+Example response (JSON):
+
+```json
+{ "ack": "ok" }
 ```
 
 # General Notes
@@ -129,28 +218,3 @@ Response: See Get Preset example response above, with the updated activation sta
 - All API endpoints are under the `/api/` prefix.
 - For production/embedded (ESP32) use, all responses should be JSON unless otherwise noted.
 - Extend this contract as new features/endpoints are added.
-```
-
-# DMX Edit DMX Value Page
-
-## Preset Value
-
-**Endpoint:** `POST /api/preset_value/<preset>/<index>/<value>`
-**Description:** Set the DMX value for a specific preset and channel.
-
-Example request: 
-
-```
-POST /api/preset_value/2/45/128
-Response:
-{
-  "status": "ok",
-  "preset": 2,
-  "index": 45,
-  "value": 128
-}
-```
-
----
-
-Add this to your API documentation as the contract for updating a DMX value via POST.

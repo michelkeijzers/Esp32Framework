@@ -19,8 +19,115 @@
          <button onclick="window.location.href='index.html'" class="home-btn">Home</button>
          <h2 style="margin: 0;">Configuration</h2>
       </div>
-      <p>This page will contain configuration options.</p>
-      <button onclick="window.location.href='index.html'">Back</button>
+      <div style="display: flex; gap: 1.2rem; margin-bottom: 1.2rem; margin-top: 1.2rem">
+         <button
+            style="background: #a00; color: #fff; border: 1px solid #a00; font-weight: bold; padding: 0.7rem 2.2rem; border-radius: 0.5rem; font-size: 1.1rem; cursor: pointer;"
+            id="load-btn">Load</button>
+         <button
+            style="background: #a00; color: #fff; border: 1px solid #a00; font-weight: bold; padding: 0.7rem 2.2rem; border-radius: 0.5rem; font-size: 1.1rem; cursor: pointer;"
+            id="save-btn">Save</button>
+      </div>
+      <section style="background: #111; color: #eee; border-radius: 1rem; padding: 2rem; margin: 2rem 0; max-width: 500px;">
+         <h3 style="margin-top: 0;">Presets</h3>
+         <div style="display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1rem;">
+            <label for="circular-nav-toggle" style="font-size: 1.2rem;">Circular Navigation</label>
+            <input type="checkbox" id="circular-nav-toggle" style="transform: scale(1.5);">
+            <span id="circular-nav-status" style="font-size: 1.1rem;">Off</span>
+         </div>
+      </section>
+      <script>
+
+         const toggle = document.getElementById('circular-nav-toggle');
+         const status = document.getElementById('circular-nav-status');
+         const loadBtn = document.getElementById('load-btn');
+         const saveBtn = document.getElementById('save-btn');
+         const label = document.querySelector('label[for="circular-nav-toggle"]');
+         let lastToggleValue = toggle.checked;
+         let labelTimeout = null;
+
+         // Update status text and send config on toggle, revert on error
+         async function updateStatusAndSend() {
+            const newValue = toggle.checked;
+            status.textContent = newValue ? '(On)' : '(Off)';
+            try {
+               const resp = await fetch('/api/configuration_presets_circular_navigation', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ state: newValue })
+               });
+               if (!resp.ok) throw new Error('Network error');
+               const result = await resp.json();
+               if (result.ack !== 'ok') throw new Error('Server error');
+               lastToggleValue = newValue; // Update last known good value
+            } catch (e) {
+               toggle.checked = lastToggleValue; // Revert to previous value
+               status.textContent = lastToggleValue ? '(On)' : '(Off)';
+               const originalLabel = label.textContent;
+               label.textContent = 'Error';
+               clearTimeout(labelTimeout);
+               labelTimeout = setTimeout(() => {
+                  label.textContent = originalLabel;
+               }, 1500);
+            }
+         }
+         toggle.addEventListener('change', updateStatusAndSend);
+         // Initialize toggle and lastToggleValue from backend config
+         (async () => {
+            try {
+               const resp = await fetch('/api/configuration', { method: 'GET' });
+               if (resp.ok) {
+                  const data = await resp.json();
+                  if (typeof data['circular navigation'] === 'boolean') {
+                     toggle.checked = data['circular navigation'];
+                     lastToggleValue = toggle.checked;
+                     status.textContent = toggle.checked ? '(On)' : '(Off)';
+                  }
+               }
+            } catch (e) { }
+         })();
+
+         // Load config
+         loadBtn.addEventListener('click', async () => {
+            try {
+               const resp = await fetch('/api/configuration', { method: 'GET' });
+               if (!resp.ok) throw new Error('Failed to load config');
+               const data = await resp.json();
+               if (typeof data['circular navigation'] === 'boolean') {
+                  toggle.checked = data['circular navigation'];
+                  lastToggleValue = toggle.checked;
+                  status.textContent = toggle.checked ? '(On)' : '(Off)';
+               }
+               loadBtn.textContent = 'Loaded!';
+               setTimeout(() => loadBtn.textContent = 'Load', 1200);
+            } catch (e) {
+               loadBtn.textContent = 'Error';
+               setTimeout(() => loadBtn.textContent = 'Load', 1200);
+            }
+         });
+
+         // Save config
+         saveBtn.addEventListener('click', async () => {
+            try {
+               const body = JSON.stringify({ 'circular navigation': toggle.checked });
+               const resp = await fetch('/api/configuration', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body
+               });
+               if (!resp.ok) throw new Error('Failed to save config');
+               const result = await resp.json();
+               if (result.ack === 'ok') {
+                  saveBtn.textContent = 'Saved!';
+                  setTimeout(() => saveBtn.textContent = 'Save', 1200);
+               } else {
+                  throw new Error('NOK');
+               }
+            } catch (e) {
+               saveBtn.textContent = 'Error';
+               setTimeout(() => saveBtn.textContent = 'Save', 1200);
+            }
+         });
+      </script>
    </main>
 </body>
 

@@ -1,11 +1,68 @@
 from flask import Flask, request, send_from_directory, jsonify
+import threading
 
 app = Flask(__name__, static_folder=".")
 
+# Simple in-memory config for demonstration
+CONFIG = {"circular navigation": False}
+CONFIG_LOCK = threading.Lock()
 
-# Endpoint to return 512 DMX values for a preset
+
+# --- New Configuration API Endpoints ---
+@app.route("/api/configuration_presets_circular_navigation", methods=["POST"])
+def api_config_presets_circular_navigation():
+    data = request.get_json(force=True)
+    print(
+        f"POST /api/configuration_presets_circular_navigation: received state={data.get('state')}"
+    )
+    if not isinstance(data, dict) or "state" not in data:
+        return jsonify({"ack": "nok"}), 400
+    with CONFIG_LOCK:
+        CONFIG["circular navigation"] = bool(data["state"])
+    return jsonify({"ack": "ok"})
+
+
+# Combined GET and POST for /api/configuration
+@app.route("/api/configuration", methods=["GET", "POST"])
+def api_configuration():
+    if request.method == "GET":
+        with CONFIG_LOCK:
+            return jsonify(
+                {"circular navigation": CONFIG.get("circular navigation", False)}
+            )
+    elif request.method == "POST":
+        data = request.get_json(force=True)
+        if not isinstance(data, dict) or "circular navigation" not in data:
+            return jsonify({"ack": "nok"}), 400
+        with CONFIG_LOCK:
+            CONFIG["circular navigation"] = bool(data["circular navigation"])
+        return jsonify({"ack": "ok"})
+
+
+# --- Configuration Endpoints ---
+@app.route("/api/load_config", methods=["POST"])
+def api_load_config():
+    print("POST /api/load_config")
+    with CONFIG_LOCK:
+        return jsonify(
+            {"circular navigation": CONFIG.get("circular navigation", False)}
+        )
+
+
+@app.route("/api/save_config", methods=["POST"])
+def api_save_config():
+    print("POST /api/save_config")
+    data = request.get_json(force=True)
+    if not isinstance(data, dict) or "circular navigation" not in data:
+        return jsonify({"ack": "nok"}), 400
+    with CONFIG_LOCK:
+        CONFIG["circular navigation"] = bool(data["circular navigation"])
+    return jsonify({"ack": "ok"})
+
+
 @app.route("/api/get_preset_values/<int:x>", methods=["GET"])
 def get_preset_values(x):
+    print(f"GET /api/get_preset_values/{x}")
     # TODO: Replace with real preset data lookup
     # For now, return a dummy array with some nonzero values for demonstration
     values = [0] * 512
@@ -49,9 +106,9 @@ PRESET_NAMES = {
 PRESET_ACTIVATIONS = [True] + [False] * (len(PRESET_NAMES) - 1)
 
 
-# GET endpoint to return all preset names and activations as a single array of objects
 @app.route("/api/presets", methods=["GET"])
 def api_presets():
+    print("GET /api/presets")
     names = list(PRESET_NAMES.values())
     activations = PRESET_ACTIVATIONS
     presets = [
@@ -78,22 +135,28 @@ def move_preset_down(x):
 @app.route("/api/delete_preset/<int:x>", methods=["POST"])
 def delete_preset(x):
     print(f"Delete preset: {x}")
-    # TODO: Implement logic to delete preset
     return api_presets()
 
 
 @app.route("/api/insert_preset_at/<int:x>", methods=["POST"])
 def insert_preset_at(x):
     print(f"Insert preset at: {x}")
-    # TODO: Implement logic to insert preset
     return api_presets()
 
 
-@app.route("/preset_active/<int:x>/<int:state>", methods=["POST"])
-def preset_active(x, state):
-    print(f"Set preset {x} active: {state}")
-    # TODO: Implement logic to set preset active/inactive
+@app.route("/api/swap_preset_activation/<int:x>/<int:state>", methods=["POST"])
+def preset_swap_active(x, state):
+    print(f"Swap preset activation {x} to {state}")
+    # TODO: Update PRESET_ACTIVATIONS[x-1] = bool(state)
     return api_presets()
+
+
+# Endpoint to set a DMX value for a preset
+@app.route("/api/preset_value/<int:preset>/<int:index>/<int:value>", methods=["POST"])
+def set_preset_value(preset, index, value):
+    # TODO: Implement logic to update the DMX value for the given preset and index
+    print(f"Set DMX value: preset={preset}, index={index}, value={value}")
+    return jsonify({"index": index, "value": value})
 
 
 # Example: all presets inactive except the first
@@ -113,13 +176,15 @@ def api_blackout():
     return "<div id='preset-label'>Blackout</div>"
 
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def index():
+    print("GET /")
     return send_from_directory(".", "index.html")
 
 
-@app.route("/<path:path>")
+@app.route("/<path:path>", methods=["GET"])
 def static_files(path):
+    print(f"GET /{path}")
     return send_from_directory(".", path)
 
 

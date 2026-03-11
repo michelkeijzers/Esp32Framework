@@ -15,9 +15,9 @@
          <h1 class="title-colored no-margin">DMX Controller</h1>
          <span class="version-colored version-label">Version 0.1.0</span>
       </div>
-      <div class="subtitle-row">
-         <button onclick="window.location.href='index.html'" class="home-btn">Home</button>
-         <h2 style="margin: 0;">DMX Presets</h2>
+      <div class="subtitle-row" style="margin: 10px;">
+         <button onclick="window.location.href='index.html'" class="home-btn" style="position: relative; left: -12rem">Home</button>
+         <h2 style="margin: 1rem;">DMX Presets</h2>
       </div>
       <div class="preset-table-wrapper">
          <table class="preset-table">
@@ -82,7 +82,7 @@
                   // Active checkbox
                   row.querySelector('.active-checkbox').addEventListener('change', async (e) => {
                      const checked = e.target.checked ? 1 : 0;
-                     await sendPresetAction(`/preset_active/${i + 1}/${checked}`);
+                     await sendPresetAction(`/api/swap_preset_activation/${i + 1}/${checked}`);
                   });
                });
             } catch (err) {
@@ -127,7 +127,7 @@
                   });
                   row.querySelector('.active-checkbox').addEventListener('change', async (e) => {
                      const checked = e.target.checked ? 1 : 0;
-                     await sendPresetAction(`/preset_active/${i + 1}/${checked}`);
+                     await sendPresetAction(`/api/swap_preset_activation/${i + 1}/${checked}`);
                   });
                });
             } catch (err) {
