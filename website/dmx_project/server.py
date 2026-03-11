@@ -1,7 +1,55 @@
+# --- Imports ---
 from flask import Flask, request, send_from_directory, jsonify
 import threading
 
+# --- Flask App ---
 app = Flask(__name__, static_folder=".")
+
+
+# --- Node Status Endpoint ---
+@app.route("/api/status", methods=["GET"])
+def api_status():
+    # Example: 3 nodes with different values
+    nodes = [
+        {
+            "name": "Master",
+            "role": "Master",
+            "slave_sequence": 1,
+            "status_watchdog": "OK",
+            "last_communication": "2026-03-11 14:23:01",
+            "uptime": "3h 12m",
+            "firmware_version": "v1.2.3",
+            "config_version": "cfg-2026-03-10",
+            "mac_address": "24:6F:28:AA:BB:CC",
+            "ip_address": "192.168.1.101",
+        },
+        {
+            "name": "Slave",
+            "role": "Slave",
+            "slave_sequence": 2,
+            "status_watchdog": "ERROR",
+            "last_communication": "2026-03-11 14:25:10",
+            "uptime": "2h 45m",
+            "firmware_version": "v1.2.2",
+            "config_version": "cfg-2026-03-09",
+            "mac_address": "24:6F:28:DD:EE:FF",
+            "ip_address": "192.168.1.102",
+        },
+        {
+            "name": "Backup",
+            "role": "Slave",
+            "slave_sequence": 3,
+            "status_watchdog": "OK",
+            "last_communication": "2026-03-11 14:26:30",
+            "uptime": "1h 10m",
+            "firmware_version": "v1.2.1",
+            "config_version": "cfg-2026-03-08",
+            "mac_address": "24:6F:28:11:22:33",
+            "ip_address": "192.168.1.103",
+        },
+    ]
+    return jsonify(nodes)
+
 
 # Simple in-memory config for demonstration
 CONFIG = {"circular navigation": False}

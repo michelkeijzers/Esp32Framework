@@ -213,6 +213,51 @@ Example response (JSON):
 { "ack": "ok" }
 ```
 
+
+# Status Page
+
+## Get Node Status
+
+**Endpoint:** `GET /api/status`  
+**Description:** Returns an array of all ESP32 nodes with their current status and metadata. Used to display the status dashboard in the web UI.
+
+Example request:
+
+```
+GET /api/status
+```
+
+Example response (JSON):
+
+```json
+[
+  {
+    "name": "Master",
+    "role": "Master",
+    "slave_sequence": 1,
+    "status_watchdog": "OK",
+    "last_communication": "2026-03-11 14:23:01",
+    "uptime": "3h 12m",
+    "firmware_version": "v1.2.3",
+    "config_version": "cfg-2026-03-10",
+    "mac_address": "24:6F:28:AA:BB:CC",
+    "ip_address": "192.168.1.101"
+  },
+  {
+    "name": "Slave",
+    "role": "Slave",
+    "slave_sequence": 2,
+    "status_watchdog": "ERROR",
+    "last_communication": "2026-03-11 14:25:10",
+    "uptime": "2h 45m",
+    "firmware_version": "v1.2.2",
+    "config_version": "cfg-2026-03-09",
+    "mac_address": "24:6F:28:DD:EE:FF",
+    "ip_address": "192.168.1.102"
+  },
+]
+```
+
 # General Notes
 
 - All API endpoints are under the `/api/` prefix.
