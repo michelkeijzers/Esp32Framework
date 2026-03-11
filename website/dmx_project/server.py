@@ -3,6 +3,23 @@ from flask import Flask, request, send_from_directory, jsonify
 app = Flask(__name__, static_folder=".")
 
 
+# Endpoint to return 512 DMX values for a preset
+@app.route("/api/get_preset_values/<int:x>", methods=["GET"])
+def get_preset_values(x):
+    # TODO: Replace with real preset data lookup
+    # For now, return a dummy array with some nonzero values for demonstration
+    values = [0] * 512
+    if 1 <= x <= 20:
+        # Example: set some values for demonstration
+        values[0] = 134
+        values[1] = 34
+        values[2] = 68
+        values[3] = 128
+        values[10] = 255
+        values[100] = 77
+    return jsonify(values)
+
+
 # Preset names mapping
 # Preset names mapping
 PRESET_NAMES = {

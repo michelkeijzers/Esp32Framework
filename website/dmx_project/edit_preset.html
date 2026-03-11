@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Edit Preset</title>
+   <link rel="stylesheet" href="pico.min.css">
+   <link rel="stylesheet" href="custom.css">
+</head>
+
+<body>
+   <main class="container">
+      <div class="header-flex">
+         <h1 class="title-colored no-margin">DMX Controller</h1>
+         <span class="version-colored version-label">Version 0.1.0</span>
+      </div>
+      <div class="subtitle-row">
+         <button onclick="window.location.href='index.html'" class="home-btn">Home</button>
+         <button onclick="window.location.href='presets.html'" class="home-btn back-btn">Back</button>
+         <h2 style="margin: 0;">Edit Preset</h2>
+      </div>
+      <form id="edit-preset-form" style="max-width: 400px; margin: 2rem auto 0 auto;">
+         <div class="preset-row">
+            <label for="preset-name-input" class="preset-label" id="preset-label">Preset Name:</label>
+            <input type="text" id="preset-name-input" name="preset-name" value="" required class="preset-name-input">
+         </div>
+      </form>
+      <div id="dmx-grid" class="dmx-grid"></div>
+      <script>
+         // Get query string parameter
+         function getQueryParam(name) {
+            const url = new URL(window.location.href);
+            return url.searchParams.get(name);
+         }
+         document.addEventListener('DOMContentLoaded', () => {
+            const presetName = getQueryParam('name');
+            const presetNumber = getQueryParam('number');
+            if (presetName) {
+               document.getElementById('preset-name-input').value = presetName;
+            }
+            if (presetNumber) {
+               document.getElementById('preset-label').textContent = `${presetNumber}: Preset Name:`;
+            }
+
+            // Fetch DMX values from backend
+            async function renderDMXGrid(presetNumber) {
+               const grid = document.getElementById('dmx-grid');
+               grid.innerHTML = '<div style="color:#888;">Loading DMX values...</div>';
+               try {
+                  const resp = await fetch(`/api/get_preset_values/${presetNumber}`);
+                  if (!resp.ok) throw new Error('Failed to fetch DMX values');
+                  const dmxValues = await resp.json();
+                  let html = '<div class="dmx-grid-table">';
+                  for (let row = 0; row < 128; row++) {
+                     html += '<div class="dmx-grid-row">';
+                     for (let col = 0; col < 4; col++) {
+                        const idx = row * 4 + col;
+                        const val = dmxValues[idx];
+                        html += `<span class="dmx-pair"><span class="dmx-idx">[${idx}]</span> <span class="dmx-val${val ? ' dmx-nonzero' : ''}" data-idx="${idx}" data-val="${val}" style="cursor:pointer;">${val}</span></span>`;
+                     }
+                     html += '</div>';
+                  }
+                  html += '</div>';
+                  grid.innerHTML = html;
+                  // Add click listeners to all DMX value spans
+                  grid.querySelectorAll('.dmx-val').forEach(span => {
+                     span.addEventListener('click', function () {
+                        const idx = this.getAttribute('data-idx');
+                        const val = this.getAttribute('data-val');
+                        const presetNumber = getQueryParam('number');
+                        window.location.href = `edit_value.html?number=${presetNumber}&index=${idx}&value=${val}`;
+                     });
+                  });
+               } catch (err) {
+                  grid.innerHTML = '<div style="color:#f33;">Failed to load DMX values.</div>';
+               }
+            }
+            if (presetNumber) {
+               renderDMXGrid(presetNumber);
+            }
+         });
+      </script>
+      <script>
+         // Get query string parameter
+         function getQueryParam(name) {
+            const url = new URL(window.location.href);
+            return url.searchParams.get(name);
+         }
+         document.addEventListener('DOMContentLoaded', () => {
+            const presetName = getQueryParam('name');
+            const presetNumber = getQueryParam('number');
+            if (presetName) {
+               document.getElementById('preset-name-input').value = presetName;
+            }
+            if (presetNumber) {
+               document.getElementById('preset-label').textContent = `${presetNumber}: Preset Name:`;
+            }
+         });
+      </script>
+   </main>
+</body>
+
+</html>

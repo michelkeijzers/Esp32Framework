@@ -47,7 +47,7 @@
                   const row = document.createElement('tr');
                   row.innerHTML = `
                         <td>${i + 1}</td>
-                        <td class="preset-name">${preset.name}</td>
+                        <td class="preset-name clickable-preset">${preset.name}</td>
                                     <td class="edit-col">
                                        <div class="edit-btn-row">
                                           <button class="small-btn up-btn" title="Move Up">↑</button>
@@ -74,6 +74,10 @@
                   // Insert
                   row.querySelector('.insert-btn').addEventListener('click', async () => {
                      await sendPresetAction(`/api/insert_preset_at/${i + 1}`);
+                  });
+                  // Preset name click: open edit page with number and name
+                  row.querySelector('.preset-name').addEventListener('click', () => {
+                     window.location.href = `edit_preset.html?number=${i + 1}&name=${encodeURIComponent(preset.name)}`;
                   });
                   // Active checkbox
                   row.querySelector('.active-checkbox').addEventListener('change', async (e) => {

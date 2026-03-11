@@ -83,26 +83,23 @@ Example response: See Get Presets example response above, with the specified pre
 **Endpoint:** `POST /api/move_preset_down/<preset_index>`  
 **Description:** Moves the preset at the given index down by one position. Returns the updated preset list.
 
-Example request:
+Example: 
 
 ```
 POST /api/move_preset_down/1
 ```
-
-Example response: See Get Preset example response above, with the specified presets move down by one position. For example, if "Warm White" was at index 2 and is moved down, it would swap places with "Party Mode".
+Response: See Get Preset example response above, with the specified presets move down by one position. For example, if "Warm White" was at index 2 and is moved down, it would swap places with "Party Mode".
 
 ## Delete Preset
 
 **Endpoint:** `POST /api/delete_preset/<preset_index>`  
 **Description:** Deletes the preset at the given index. Returns the updated preset list.
 
-Example request:
+Example:
 
 ```
 POST /api/delete_preset/2
 ```
-
-Example response: See Get Preset example response above, with the specified preset being deleted.
 
 ## Insert Preset At
 
@@ -115,21 +112,16 @@ Example request:
 POST /api/insert_preset_at/1
 ```
 
-Example response: See Get Preset example response above, with an empty preset being inserted at the selected position.
-
 ## Set Preset Active
 
 **Endpoint:** `POST /preset_active/<preset_index>/<state>`  
 **Description:** Sets the active state of the preset at the given index. Returns the updated preset list. `state` is 1 for active, 0 for inactive.
 
-Example request:
+Example:
 
 ```
 POST /api/preset_activate/2/1
-```
-
-Example response: See Get Preset example response above, with the updated activation state of the preset.
-
+Response: See Get Preset example response above, with the updated activation state of the preset.
 ```
 
 # General Notes
@@ -138,3 +130,27 @@ Example response: See Get Preset example response above, with the updated activa
 - For production/embedded (ESP32) use, all responses should be JSON unless otherwise noted.
 - Extend this contract as new features/endpoints are added.
 ```
+
+# DMX Edit DMX Value Page
+
+## Preset Value
+
+**Endpoint:** `POST /api/preset_value/<preset>/<index>/<value>`
+**Description:** Set the DMX value for a specific preset and channel.
+
+Example request: 
+
+```
+POST /api/preset_value/2/45/128
+Response:
+{
+  "status": "ok",
+  "preset": 2,
+  "index": 45,
+  "value": 128
+}
+```
+
+---
+
+Add this to your API documentation as the contract for updating a DMX value via POST.
