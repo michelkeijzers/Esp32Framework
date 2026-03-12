@@ -1,3 +1,19 @@
+/* Home screen: black buttons and gap */
+.big-bold-btn {
+  background: #111 !important;
+  color: #fff !important;
+  border: 1.5px solid #222 !important;
+  font-weight: bold;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem !important;
+  transition: background 0.2s, color 0.2s;
+}
+
+.big-bold-btn:hover,
+.big-bold-btn:focus {
+  background: #222 !important;
+  color: #fff !important;
+}
 /* Red status for watchdog error */
 .status-error {
   color: #fff;

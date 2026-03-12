@@ -310,10 +310,11 @@ Example response (JSON):
 
 # Initialization Page
 
+
 ## Opening page
 
 **Endpoint:** `GET /api/nodes_info`  
-**Description:** Returns an array of all nodes with their names and current IP addresses. Used to display and edit node IPs in the Initialization page.
+**Description:** Returns an array of all nodes with their names and current MAC addresses. Used to display and edit node MACs in the Initialization page.
 **Returns:** `200 OK` with JSON array of nodes.
 
 Example request:
@@ -326,17 +327,17 @@ Example response (JSON):
 
 ```json
 [
-  { "name": "Master", "ip_address": "192.168.1.100" },
-  { "name": "Webserver", "ip_address": "192.168.1.101" },
-  { "name": "GPIO Slave", "ip_address": "192.168.1.102" },
-  { "name": "Display Slave", "ip_address": "192.168.1.103" }
+  { "name": "Master", "mac_address": "24:6F:28:AA:BB:CC" },
+  { "name": "Webserver", "mac_address": "24:6F:28:BB:CC:DD" },
+  { "name": "GPIO Slave", "mac_address": "24:6F:28:CC:DD:EE" },
+  { "name": "Display Slave", "mac_address": "24:6F:28:DD:EE:FF" }
 ]
 ```
 
 ## Save Button
 
 **Endpoint:** `POST /api/nodes_info`  
-**Description:** Updates the IP addresses for all nodes. Expects a JSON array of IP addresses (in the same order as returned by GET). Returns ack/nack.
+**Description:** Updates the MAC addresses for all nodes. Expects a JSON array of MAC addresses (in the same order as returned by GET). Returns ack/nack. Only valid MAC addresses are accepted.
 **Returns:** `200 OK` with `{ "ack": "ok" }` on success; `400 Bad Request` with `{ "ack": "nok" }` on error.
 
 Example request:
@@ -344,7 +345,7 @@ Example request:
 ```json
 POST /api/nodes_info
 
-["192.168.1.100", "192.168.1.101", "192.168.1.102", "192.168.1.103"]
+["24:6F:28:AA:BB:CC", "24:6F:28:BB:CC:DD", "24:6F:28:CC:DD:EE", "24:6F:28:DD:EE:FF"]
 ```
 
 Example response (JSON):
@@ -353,21 +354,22 @@ Example response (JSON):
 { "ack": "ok" }
 ```
 
-## Reset System Button
+## Reboot Button
 
-**Endpoint:** `POST /api/reset_system`  
-**Description:** Triggers a system reset or restart action. No request body or response is required. Used by the Reset System button on the Initialization page.
+**Endpoint:** `POST /api/reboot`  
+**Description:** Triggers a system reboot action. No request body or response is required. Used by the Reboot button on the Initialization page.
 **Returns:** `204 No Content` on success.
 
 Example request:
 
 ```
-POST /api/reset_system
+POST /api/reboot
 ```
 
 Example response:
 
 204 No Content
+
 
 # Security Page
 
@@ -389,6 +391,25 @@ Example request (URL + JSON):
 ```json
 POST /api/esp_now_key
 ["a1", "b2", "c3", "d4", "e5", "f6", "07", "18", "29", "3a", "4b", "5c", "6d", "7e", "8f", "90"]
+```
+
+**Response (JSON):**
+
+```json
+{"ack": "ok"}
+```
+
+## Send Wi-Fi Password
+
+**Endpoint:** `POST /api/wifi_password`  
+**Description:** Sends the Wi-Fi password from the web UI to the backend. The password is a string (WPA2: 8-63 characters). The backend must validate and securely store or forward the password.
+**Returns:** `200 OK` with `{ "ack": "ok" }` on success; `400 Bad Request` with `{ "ack": "nok" }` on error.
+
+Example request (URL + JSON):
+
+```json
+POST /api/wifi_password
+{ "password": "mysecretwifi" }
 ```
 
 **Response (JSON):**

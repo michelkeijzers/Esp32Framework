@@ -169,6 +169,21 @@ def api_save_config():
     return jsonify({"ack": "ok"})
 
 
+@app.route("/api/wifi_password", methods=["POST"])
+def api_wifi_password():
+    data = request.get_json(force=True)
+    # Expecting { "password": "..." }
+    if not isinstance(data, dict) or "password" not in data:
+        return jsonify({"ack": "nok"}), 400
+    password = data["password"]
+    # WPA2 password must be 8-63 chars
+    if not isinstance(password, str) or not (8 <= len(password) <= 63):
+        return jsonify({"ack": "nok"}), 400
+    print(f"[SECURITY] Received Wi-Fi password: (hidden, length={len(password)})")
+    # Here you would securely store or forward the password
+    return jsonify({"ack": "ok"})
+
+
 # ...existing code...
 # Save preset endpoint (must be after app is defined)
 @app.route("/api/save_preset/<int:preset_number>", methods=["PUT"])
@@ -322,30 +337,36 @@ def api_send():
 @app.route("/api/nodes_info", methods=["GET", "POST"])
 def api_nodes_info():
     if request.method == "GET":
-        # Mocked node info: name and ip_address for each node
+        # Mocked node info: name and mac_address for each node
         nodes = [
-            {"name": "Master", "ip_address": "192.168.1.100"},
-            {"name": "Webserver", "ip_address": "192.168.1.101"},
-            {"name": "GPIO Slave", "ip_address": "192.168.1.102"},
-            {"name": "Display Slave", "ip_address": "192.168.1.103"},
+            {"name": "Master", "mac_address": "24:6F:28:AA:BB:CC"},
+            {"name": "Webserver", "mac_address": "24:6F:28:BB:CC:DD"},
+            {"name": "GPIO Slave", "mac_address": "24:6F:28:CC:DD:EE"},
+            {"name": "Display Slave", "mac_address": "24:6F:28:DD:EE:FF"},
         ]
         return jsonify(nodes)
     elif request.method == "POST":
         data = request.get_json(force=True)
         print("POST /api/nodes_info: received data=", data)
-        # Here you would save the IPs to persistent storage or config
-        # For now, just acknowledge receipt
         if not isinstance(data, list):
-            return jsonify({"ack": "nok", "error": "Expected a list of IPs"}), 400
-        # Optionally, validate IP format here
+            return (
+                jsonify({"ack": "nok", "error": "Expected a list of MAC addresses"}),
+                400,
+            )
+        mac_regex = r"^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$"
+        import re
+
+        if not all(isinstance(mac, str) and re.match(mac_regex, mac) for mac in data):
+            return jsonify({"ack": "nok", "error": "Invalid MAC address format"}), 400
+        # Here you would save the MACs to persistent storage or config
         return jsonify({"ack": "ok"})
 
 
-# --- Reset System Endpoint ---
-@app.route("/api/reset_system", methods=["POST"])
-def api_reset_system():
-    print("POST /api/reset_system called")
-    # Here you would trigger a system reset or send a command to hardware
+# --- Reboot Endpoint ---
+@app.route("/api/reboot", methods=["POST"])
+def api_reboot():
+    print("POST /api/reboot called")
+    # Here you would trigger a system reboot or send a command to hardware
     return ("", 204)  # No Content
 
 

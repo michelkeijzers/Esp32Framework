@@ -23,14 +23,13 @@
             style="background: #111; color: #eee; border-radius: 1rem; padding: 2rem 2.5rem; min-width: 340px; box-shadow: 0 0 12px #000a; max-width: 500px;">
             <form id="nodes-form">
                <div style="margin-bottom:1.5rem;">
-                  <label style="font-weight:bold;">Node IP Addresses:</label>
+                  <label style="font-weight:bold;">Node MAC Addresses:</label>
                   <div id="nodes-fields"></div>
                </div>
                <button type="submit"
                   style="background:#1fa750; color:#fff; font-weight:bold; border-radius:0.5rem; padding:0.7rem 2.2rem; font-size:1.1rem; border:none; box-shadow:0 2px 8px #0002; cursor:pointer;">Save</button>
                <button type="button" class="reset-btn"
-                  style="background:#c00; color:#fff; font-weight:bold; border-radius:0.5rem; padding:0.7rem 2.2rem; font-size:1.1rem; border:none; box-shadow:0 2px 8px #0002; cursor:pointer; margin-top:2rem; margin-left:1rem;">Reset
-                  System</button>
+                  style="background:#c00; color:#fff; font-weight:bold; border-radius:0.5rem; padding:0.7rem 2.2rem; font-size:1.1rem; border:none; box-shadow:0 2px 8px #0002; cursor:pointer; margin-top:2rem; margin-left:1rem;">Reboot</button>
             </form>
             <script>
                window.addEventListener('DOMContentLoaded', function () {
@@ -41,24 +40,52 @@
                         fields.innerHTML = '';
                         nodes.forEach((node, idx) => {
                            fields.innerHTML += `
-                                                      <div class="node-row" style="display:flex; align-items:center; margin-bottom:1rem;">
-                                                         <span style="min-width:120px;">${node.name}:</span>
-                                                         <input class="ip-input" type="text" name="node-ip-${idx}" value="${node.ip_address || ''}" placeholder="IP address" style="width:180px; margin-left:1rem;">
-                                                      </div>
-                                                   `;
+                                             <div class="node-row" style="display:flex; align-items:center; margin-bottom:1rem;">
+                                                 <span style="min-width:120px;">${node.name}:</span>
+                                                 <div style="display:flex; flex-direction:column;">
+                                                     <input class="mac-input" type="text" name="node-mac-${idx}" value="${node.mac_address || ''}" placeholder="MAC address (e.g. 24:6F:28:AA:BB:CC)" style="width:320px; margin-left:1rem;" pattern="^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$" required>
+                                                    <span class="mac-error" style="color:#ff5c5c; font-size:0.95em; margin-left:1rem; display:none;">Format incorrect</span>
+                                                 </div>
+                                             </div>
+                                        `;
                         });
+
+                        // Validation logic for MACs
+                        const macRegex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
+                        const macInputs = fields.querySelectorAll('input.mac-input');
+                        const macErrors = fields.querySelectorAll('span.mac-error');
+                        const saveBtn = document.querySelector('button[type="submit"]');
+
+                        function validateAllMacs() {
+                           let allValid = true;
+                           macInputs.forEach((input, i) => {
+                              const val = input.value.trim();
+                              if (!macRegex.test(val)) {
+                                 macErrors[i].style.display = '';
+                                 allValid = false;
+                              } else {
+                                 macErrors[i].style.display = 'none';
+                              }
+                           });
+                           saveBtn.disabled = !allValid;
+                        }
+
+                        macInputs.forEach(input => {
+                           input.addEventListener('input', validateAllMacs);
+                        });
+                        // Initial validation
+                        validateAllMacs();
                         // Attach submit handler after fields are rendered
                         document.getElementById('nodes-form').onsubmit = function (e) {
                            e.preventDefault();
-                           const ipInputs = fields.querySelectorAll('input[type="text"]');
-                           const ipAddresses = Array.from(ipInputs).map(input => input.value.trim());
-                           const saveBtn = this.querySelector('button[type="submit"]');
+                           const macAddresses = Array.from(macInputs).map(input => input.value.trim());
+                           if (saveBtn.disabled) return;
                            const originalText = saveBtn.textContent;
                            const originalBg = saveBtn.style.background;
                            fetch('/api/nodes_info', {
                               method: 'POST',
                               headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify(ipAddresses)
+                              body: JSON.stringify(macAddresses)
                            }).then(resp => {
                               if (resp.ok) {
                                  saveBtn.textContent = 'Saved!';
@@ -84,12 +111,12 @@
                               }, 2000);
                            });
                         };
-                        // Attach click handler for Reset System button
+                        // Attach click handler for Reboot button
                         const resetBtn = document.querySelector('.reset-btn');
                         if (resetBtn) {
                            resetBtn.addEventListener('click', function () {
-                              if (window.confirm('Are you sure to reset the system?')) {
-                                 fetch('/api/reset_system', { method: 'POST' });
+                              if (window.confirm('Are you sure to reboot the system?')) {
+                                 fetch('/api/reboot', { method: 'POST' });
                               }
                            });
                         }
