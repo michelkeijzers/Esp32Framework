@@ -26,6 +26,7 @@ def event_stream():
                 {
                     "name": "Master",
                     "role": "Master",
+                    "slave_type": "Webserver",
                     "slave_sequence": 1,
                     "status_watchdog": "OK",
                     "last_communication": master_last_comm,
@@ -38,6 +39,7 @@ def event_stream():
                 {
                     "name": "Slave",
                     "role": "Slave",
+                    "slave_type": "Webserver",
                     "slave_sequence": 2,
                     "status_watchdog": "ERROR",
                     "last_communication": "2026-03-11 14:25:10",
@@ -50,6 +52,7 @@ def event_stream():
                 {
                     "name": "Backup",
                     "role": "Slave",
+                    "slave_type": "MIDI",
                     "slave_sequence": 3,
                     "status_watchdog": "OK",
                     "last_communication": "2026-03-11 14:26:30",
@@ -81,6 +84,7 @@ def api_status():
         {
             "name": "Master",
             "role": "Master",
+            "slave_type": "Webserver",
             "slave_sequence": 1,
             "status_watchdog": "OK",
             "last_communication": "2026-03-11 14:23:01",
@@ -93,6 +97,7 @@ def api_status():
         {
             "name": "Slave",
             "role": "Slave",
+            "slave_type": "Webserver",
             "slave_sequence": 2,
             "status_watchdog": "ERROR",
             "last_communication": "2026-03-11 14:25:10",
@@ -105,6 +110,7 @@ def api_status():
         {
             "name": "Backup",
             "role": "Slave",
+            "slave_type": "MIDI",
             "slave_sequence": 3,
             "status_watchdog": "OK",
             "last_communication": "2026-03-11 14:26:30",

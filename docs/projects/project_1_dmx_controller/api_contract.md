@@ -284,6 +284,7 @@ Example response (JSON):
   {
     "name": "Master",
     "role": "Master",
+    "slave_type": "Webserver",
     "slave_sequence": 1,
     "status_watchdog": "OK",
     "last_communication": "2026-03-11 14:23:01",
@@ -296,6 +297,7 @@ Example response (JSON):
   {
     "name": "Slave",
     "role": "Slave",
+    "slave_type": "DMX",
     "slave_sequence": 2,
     "status_watchdog": "ERROR",
     "last_communication": "2026-03-11 14:25:10",
@@ -306,6 +308,19 @@ Example response (JSON):
     "ip_address": "192.168.1.102"
   },
 ]
+# Node object fields:
+Each node object contains:
+  - name: string
+  - role: string
+  - slave_type: string (e.g. "Webserver", "DMX", "MIDI")
+  - slave_sequence: integer
+  - status_watchdog: string
+  - last_communication: string
+  - uptime: string
+  - firmware_version: string
+  - config_version: string
+  - mac_address: string
+  - ip_address: string
 ```
 
 # Nodes Page

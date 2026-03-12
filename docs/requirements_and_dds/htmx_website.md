@@ -2,19 +2,20 @@
 
 # Pages
 
-**REQ-HTMX-100:** The webserver will be divided in pages. Some pages will be generic between projects. Below are the pages mentioned for a particular project:
+**REQ-HTMX-100:** The webserver is divided into multiple pages, with a mix of generic and application-specific content:
+	- Application-specific pages
+	- Configuration: project-specific configuration options
+	- Status: status of all nodes (master and slaves)
+	- Initialization: initialization process for all nodes
+	- Security: ESP-NOW key management
+	- Logging: system logs
+	- Nodes: unified node management (status, MAC, firmware, etc.)
+	- Manual: static HTML manual, ready for custom content
 
-- Application specific pages
-- Configuration: this page is different per application, but the page should exist and show the configuration of the project.
-- Status: this page is equal for all applications, shows the status of all slaves and the master.
-- Initialization: this page is equal for all applications, shows the initialization process of the slaves and master.
-- Security: this page is equal for all applications, shows the security settings and allows to change the ESP-NOW key.
-- Logging: this page is equal for all applications, shows the logs of the system.
-- Firmware: this page is equal for all applications, shows the firmware versions of all slaves and the master.
-- Manual: this page is different per application, but the page should exist and show the manual of the project.
+**Note:** The global Firmware page/button has been removed. Firmware updates are now performed per-node from the Nodes page only, with chunked upload and live progress.
 
-**Rationale:** The structure needs to be clear for users and developers. Some pages are generic and can be reused across projects, while others are application specific and need to be customized.
-**Alternative considered:** A single page with all information and configuration options — rejected, would be too cluttered and less user-friendly. Only application specific pages without generic pages — rejected, would make it harder for users to find common information and configuration options across different projects.
+**Rationale:** Clear structure for users and developers, with reusable generic pages and customizable application-specific pages.
+**Alternative considered:** Single-page design (too cluttered), or only application-specific pages (harder to find common features).
 
 **REQ-HTMX-110:** Header: The header of each page shall show the name of the project, the version number, and for non Home pages,a Home button and a sub title. For multi level pages, a Back button shall be shown in the header to go back to the previous page. The header is consistent across all pages.<br/>
 **Rationale:** A consistent header provides a clear structure and navigation for users across all pages. The Home button allows users to easily return to the main page, while the Back button provides a way to navigate back through multi-level pages without losing context.<br/>
@@ -32,21 +33,42 @@
 
 # Nodes
 
-**REQ-HTMX-400:** The Nodes page shall show the status of all slaves and the master, including their connection status, IP addresses, and any relevant metrics or information specific to the project. The following information is shown:
-- Node number and name
-- Role (Master, , Remote, Slave type)
-- Slave sequence number: number of the slave for that type; only for slaves
-- Status: OK/NOK
-- Last communication: time since last message received from that slave
-- Uptime: time since the node booted
-- Firmware version: the firmware version of the node
-- Firmware update button: a button to trigger an OTA update for that node, only if the node is a webserver slave and is connected to a router in STA mode
-- Configuration version: the version of the configuration that the node is using, to detect if the node has an outdated configuration after a change
-- MAC address: the MAC address of the node, to detect if the node is recognized by the master and for routing purposes
-- Save button for MAC address: a button to save the MAC address of the node in the master, only for webserver slaves and remotes, to allow users to easily update the MAC addresses for routing without needing to reflash firmware
-- IP address: the IP address of the node, to detect if the node is connected to the network and for routing purposes (only for Webserver slaves and remotes)
-**Rationale:** Providing a comprehensive status page allows users to easily monitor the health and performance of the system, quickly identify any issues, and understand the current state of all components. This is essential for effective troubleshooting and maintenance.<br/>
-**Alternative considered:** No status page or a very minimal status page with limited information — rejected, would make it harder for users to monitor the system and identify issues, leading to a poorer user experience and more difficult maintenance. 
+**REQ-HTMX-400:** The Nodes page provides unified management for all nodes (master and slaves), including:
+
+	- Node number and name
+	- Role (Master, Remote, Slave type)
+	- Slave sequence number (for slaves)
+	- Status (OK/NOK)
+	- Last communication time
+	- Uptime
+	- Firmware version
+	- Per-node firmware update button (chunked upload, live progress, retries, no checksum)
+	- Configuration version
+	- MAC address (editable, with Save button)
+	- IP address (for webserver slaves/remotes)
+
+**Design:** Firmware upload uses chunked POSTs (4KB), with frontend retry logic and a live progress bar. No checksum is used; TCP ensures integrity. During upload, SSE status updates are buffered to prevent UI glitches.
+
+**Rationale:** Comprehensive, actionable node management and monitoring in one place.
+**Alternative considered:** Minimal or split node management/status (less user-friendly, harder to maintain).
+# Firmware Update
+
+**REQ-HTMX-410:** Firmware updates are performed per-node from the Nodes page. The upload is chunked (4KB per chunk), with retries and live progress. No checksum is used; TCP ensures integrity. After all chunks, a finalize call is made. The UI buffers SSE status updates during upload to prevent UI glitches.
+
+**Rationale:** Robust, user-friendly firmware update process that works reliably in browser and embedded environments.
+**Alternative considered:** Global firmware page (removed), or single-shot upload (less reliable for large files).
+# Manual Page
+
+**REQ-HTMX-420:** The Manual page is a static HTML page, ready for custom user manual/help content. No Back button or placeholder text is shown by default.
+
+**Rationale:** Allows for project-specific documentation in a consistent, styled format.
+**Alternative considered:** Markdown or dynamic/manual content (less control over layout/styling).
+# Development and Testing
+
+**REQ-HTMX-430:** The webserver and website are developed and tested locally using a Python/Flask mock server, with all ESP32-specific calls mocked. The final target is an ESP32 webserver (ESP-IDF), serving the same static files and API contract.
+
+**Rationale:** Enables rapid development, debugging, and UI testing before deploying to hardware.
+**Alternative considered:** Direct-to-ESP32 development (slower, harder to debug).
 
 # Security 
 
