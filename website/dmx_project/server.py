@@ -1,6 +1,7 @@
 # --- Logging SSE Endpoint ---
 import datetime
 
+import base64
 
 import time
 import threading
@@ -10,6 +11,8 @@ from flask import Flask, request, send_from_directory, jsonify, Response
 # --- Flask App ---
 app = Flask(__name__, static_folder=".")
 
+# --- Firmware upload state (in-memory, per node) ---
+firmware_uploads = {}
 
 # --- SSE: Node Status Stream ---
 def event_stream():
@@ -317,9 +320,7 @@ def api_blackout():
     return "<div id='preset-label'>Blackout</div>"
 
 
-# --- Firmware upload state (in-memory, per node) ---
-import base64
-firmware_uploads = {}
+
 
 # --- Firmware upload endpoints ---
 
@@ -451,7 +452,7 @@ def api_logging():
         except GeneratorExit:
             print("[SSE] Logging client disconnected.")
     return Response(log_stream(), mimetype="text/event-stream")
-# --- Imports ---
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
