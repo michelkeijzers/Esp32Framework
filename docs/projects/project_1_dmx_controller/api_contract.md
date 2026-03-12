@@ -308,8 +308,7 @@ Example response (JSON):
 ]
 ```
 
-# Initialization Page
-
+# Nodes Page
 
 ## Opening page
 
@@ -370,6 +369,61 @@ Example response:
 
 204 No Content
 
+## Firmware Update 
+
+**Endpoint:**  POST /api/firmware_chunk/{node_idx}
+**Description:** Upload a chunk of firmware for a given node (4KB per chunk). The frontend splits the firmware .bin file into 4KB chunks and sends them sequentially. After all chunks are sent, the frontend calls the finalize endpoint to assemble and flash the firmware.
+- Request body (JSON):
+  - `chunk`: integer, chunk index (starting from 0)
+  - `data`: string, base64-encoded binary chunk
+- Response (JSON):
+  - `{ "ack": "ok" }` on success
+  - `{ "ack": "nok", "error": "..." }` on error
+
+
+1. User selects .bin file in the Nodes page UI. JavaScript splits the file into 4KB chunks.
+2. For each chunk, POST to `/api/firmware_chunk/{node_idx}` with chunk index and base64 data. No checksum is used; TCP ensures integrity.
+3. The UI handles retries for failed chunks and shows a live progress bar.
+4. After all chunks, POST to `/api/firmware_finish/{node_idx}`.
+5. On success, the UI shows "Firmware updated!" for that node.
+
+**Note:** During firmware upload, the frontend buffers live status updates (SSE) to prevent UI re-renders from interrupting the progress bar and button state. The latest status is rendered after upload completes.
+
+Example request:
+```json
+POST /api/firmware_chunk/1
+{
+  "chunk": 0,
+  "data": "base64-encoded-chunk-data..."
+}
+
+```
+
+Example response (JSON):
+
+```json
+{ "ack": "ok" }
+```
+
+### POST /api/firmware_finish/{node_idx}
+
+**Endpoint:** `POST /api/firmware_finish/{node_idx}`  
+**Description:** Finalize firmware upload for a node, assemble and flash firmware.
+- Request body: (empty)
+- Response (JSON):
+  - `{ "ack": "ok" }` on success
+  - `{ "ack": "nok", "error": "..." }` on error
+
+Example request:
+
+```
+POST /api/firmware_finish/1
+```
+Example response (JSON):
+
+```json
+{ "ack": "ok" }
+```
 
 # Security Page
 
@@ -445,30 +499,3 @@ GET /api/logging
 - The connection is closed when the page is unloaded.
 
 # General Notes
-
-
-## Firmware Update (Chunked Upload)
-
-### POST /api/firmware_chunk/{node_idx}
-
-- Upload a chunk of firmware for a given node (4KB per chunk recommended).
-- Request body (JSON):
-  - `chunk`: integer, chunk index (starting from 0)
-  - `data`: string, base64-encoded binary chunk
-- Response (JSON):
-  - `{ "ack": "ok" }` on success
-  - `{ "ack": "nok", "error": "..." }` on error
-
-### POST /api/firmware_finish/{node_idx}
-
-- Finalize firmware upload for a node, assemble and flash firmware.
-- Request body: (empty)
-- Response (JSON):
-  - `{ "ack": "ok" }` on success
-  - `{ "ack": "nok", "error": "..." }` on error
-
-#### Example upload flow:
-1. User selects .bin file in UI, JS splits into 4KB chunks.
-2. For each chunk, POST to `/api/firmware_chunk/{node_idx}` with chunk index and base64 data.
-3. After all chunks, POST to `/api/firmware_finish/{node_idx}`.
-4. On success, UI shows "Firmware updated!".

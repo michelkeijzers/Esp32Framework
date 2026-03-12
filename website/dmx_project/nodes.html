@@ -34,6 +34,8 @@
          let eventSource = null;
          let activeFirmwareUploads = 0;
          let latestNodesSnapshot = null;
+            // Store per-node firmware update result and timestamp
+            let firmwareUpdateStatus = {}; // { [idx]: { status: 'ok'|'error', until: timestamp } }
          function renderNodes(nodes) {
             const container = document.getElementById('nodes-container');
             // --- Preserve focus and cursor position ---
@@ -71,6 +73,30 @@
                   </div>
                `;
             });
+            // Restore firmware update button state if needed
+            setTimeout(() => {
+               Object.entries(firmwareUpdateStatus).forEach(([idx, info]) => {
+                  if (Date.now() < info.until) {
+                     const btn = container.querySelector(`.fw-update-btn[data-idx='${idx}']`);
+                     if (btn) {
+                        if (info.status === 'ok') {
+                           btn.textContent = 'Firmware updated!';
+                           btn.style.backgroundColor = '#1fa750';
+                        } else if (info.status === 'error') {
+                           btn.textContent = 'Error!';
+                           btn.style.backgroundColor = '#c00';
+                        }
+                        btn.disabled = false;
+                        setTimeout(() => {
+                           if (btn.textContent !== 'Uploading...') {
+                              btn.textContent = 'Update Firmware';
+                              btn.style.backgroundColor = '';
+                           }
+                        }, info.until - Date.now());
+                     }
+                  }
+               });
+            }, 10);
             // Restore focus and cursor position if editing a MAC input
             if (focusIdx !== null) {
                const newInput = container.querySelector(`.mac-input[data-idx='${focusIdx}']`);
@@ -195,6 +221,8 @@
                   }
 
                   function finishUpload(success) {
+                     // Store status for 2 seconds for this node
+                     firmwareUpdateStatus[idx] = { status: success ? 'ok' : 'error', until: Date.now() + 2000 };
                      closeUploadSession();
                      if (success) {
                         btn.textContent = 'Firmware updated!';
@@ -209,6 +237,10 @@
                         btn.disabled = false;
                         progressLabel.style.display = 'none';
                         progressLabel.textContent = '0% (0/0 Chunks)';
+                        // Remove status after timeout
+                        if (firmwareUpdateStatus[idx] && Date.now() >= firmwareUpdateStatus[idx].until) {
+                           delete firmwareUpdateStatus[idx];
+                        }
                      }, 1800);
                   }
 
