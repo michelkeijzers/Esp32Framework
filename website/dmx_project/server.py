@@ -312,10 +312,60 @@ def select_preset(x):
     return f"<div id='preset-label'>{preset_name}</div>"
 
 
-@app.route("/api/blackout", methods=["POST"])
 def api_blackout():
     print("/api/blackout called")
     return "<div id='preset-label'>Blackout</div>"
+
+
+# --- Firmware upload state (in-memory, per node) ---
+import base64
+firmware_uploads = {}
+
+# --- Firmware upload endpoints ---
+
+@app.route('/api/firmware_chunk/<int:node_idx>', methods=['POST'])
+def firmware_chunk(node_idx):
+    data = request.get_json()
+    chunk_num = data.get('chunk')
+    b64 = data.get('data')
+    print(f"[FW] Received chunk: node={node_idx}, chunk={chunk_num}, b64len={len(b64) if b64 else 0}")
+    if b64 is None or chunk_num is None:
+        print(f"[FW] Error: missing data (b64={b64 is not None}, chunk_num={chunk_num})")
+        return {'ack': 'nok', 'error': 'missing data'}, 400
+    try:
+        chunk_bytes = base64.b64decode(b64)
+    except Exception as e:
+        print(f"[FW] Error: base64 decode failed: {e}")
+        return {'ack': 'nok', 'error': 'base64 decode failed'}, 400
+    if node_idx not in firmware_uploads:
+        firmware_uploads[node_idx] = {}
+    firmware_uploads[node_idx][chunk_num] = chunk_bytes
+    print(f"[FW] Stored chunk {chunk_num} for node {node_idx} (size={len(chunk_bytes)})")
+    return {'ack': 'ok'}
+
+
+@app.route('/api/firmware_finish/<int:node_idx>', methods=['POST'])
+def firmware_finish(node_idx):
+    print(f"[FW] Finalizing firmware upload for node {node_idx}")
+    if node_idx not in firmware_uploads:
+        print(f"[FW] Error: no upload for node {node_idx}")
+        return {'ack': 'nok', 'error': 'no upload'}, 400
+    chunks = firmware_uploads[node_idx]
+    if not chunks:
+        print(f"[FW] Error: no chunks for node {node_idx}")
+        return {'ack': 'nok', 'error': 'no chunks'}, 400
+    try:
+        ordered = [chunks[i] for i in sorted(chunks)]
+        fw_data = b''.join(ordered)
+        fw_path = f'firmware_upload_node{node_idx}.bin'
+        with open(fw_path, 'wb') as f:
+            f.write(fw_data)
+        print(f"[FW] Firmware written to {fw_path} (size={len(fw_data)})")
+        del firmware_uploads[node_idx]
+        return {'ack': 'ok'}
+    except Exception as e:
+        print(f"[FW] Error during finalize: {e}")
+        return {'ack': 'nok', 'error': str(e)}, 500
 
 
 @app.route("/", methods=["GET"])

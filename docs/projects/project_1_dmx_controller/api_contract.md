@@ -446,6 +446,29 @@ GET /api/logging
 
 # General Notes
 
-- All API endpoints are under the `/api/` prefix.
-- For production/embedded (ESP32) use, all responses should be JSON unless otherwise noted.
-- Extend this contract as new features/endpoints are added.
+
+## Firmware Update (Chunked Upload)
+
+### POST /api/firmware_chunk/{node_idx}
+
+- Upload a chunk of firmware for a given node (4KB per chunk recommended).
+- Request body (JSON):
+  - `chunk`: integer, chunk index (starting from 0)
+  - `data`: string, base64-encoded binary chunk
+- Response (JSON):
+  - `{ "ack": "ok" }` on success
+  - `{ "ack": "nok", "error": "..." }` on error
+
+### POST /api/firmware_finish/{node_idx}
+
+- Finalize firmware upload for a node, assemble and flash firmware.
+- Request body: (empty)
+- Response (JSON):
+  - `{ "ack": "ok" }` on success
+  - `{ "ack": "nok", "error": "..." }` on error
+
+#### Example upload flow:
+1. User selects .bin file in UI, JS splits into 4KB chunks.
+2. For each chunk, POST to `/api/firmware_chunk/{node_idx}` with chunk index and base64 data.
+3. After all chunks, POST to `/api/firmware_finish/{node_idx}`.
+4. On success, UI shows "Firmware updated!".

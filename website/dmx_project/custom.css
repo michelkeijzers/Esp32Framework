@@ -1,3 +1,14 @@
+/* Firmware upload progress bar styling */
+.fw-progress-bar {
+  height: 18px;
+  background: #222;
+  border-radius: 8px;
+  border: 1.5px solid #1fa750;
+  margin-top: 0.7em;
+  margin-bottom: 0.5em;
+  width: 100%;
+  accent-color: #1fa750;
+}
 /* Home screen: black buttons and gap */
 .big-bold-btn {
   background: #111 !important;

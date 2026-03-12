@@ -22,17 +22,17 @@
 
 # Configuration
 
-**REQ-HTMX-250:** The configuration page has a Load and Save button. Each changed setting is send to the webserver and takes in effect immediately. When the Load button is used, the website settings are overwritten. When the Save button is pressed, all settings are stored in NVS. For a successful Load or Save, the button changes temporarily in Loaded! or Saved!. In case of an error, the button changes to Error! temporarily. In case of a specific setting cannot be changed, the label of the setting will be temporarily changed into Error!.<br/>
+**REQ-HTMX-300:** The configuration page has a Load and Save button. Each changed setting is send to the webserver and takes in effect immediately. When the Load button is used, the website settings are overwritten. When the Save button is pressed, all settings are stored in NVS. For a successful Load or Save, the button changes temporarily in Loaded! or Saved!. In case of an error, the button changes to Error! temporarily. In case of a specific setting cannot be changed, the label of the setting will be temporarily changed into Error!.<br/>
 **Rationale:** Provides a clear and immediate feedback to the user about the success or failure of their actions, improving the user experience and making it easier to understand the state of the system. Immediate effect of changes allows for quick testing and iteration without needing to reload the page or restart the system.<br/>
 **Alternative considered:** No feedback on Load/Save actions — rejected, would leave users uncertain about whether their actions were successful. Changes only take effect after a page reload or system restart — rejected, would slow down the configuration process and make it less user-friendly.
 
-**REQ-HTMX-260:** The configuration page shall have its configurations in different panes, named according to the category of the settings. Each pane can be expanded or collapsed to show or hide the settings within it.<br/>
+**REQ-HTMX-310:** The configuration page shall have its configurations in different panes, named according to the category of the settings. Each pane can be expanded or collapsed to show or hide the settings within it.<br/>
 **Rationale:** Organizing settings into categorized panes improves the user experience by reducing clutter and making it easier for users to find and focus on specific settings. The ability to expand or collapse panes allows users to customize their view and focus on the settings that are relevant to them at any given time.<br/>
 **Alternative considered:** All settings shown in a single list without categorization or collapsible panes — rejected, would be overwhelming and make it difficult for users to find specific settings, especially as the number of settings grows.
 
-# Status
+# Nodes
 
-**REQ-HTMX-300:** The status page shall show the status of all slaves and the master, including their connection status, IP addresses, and any relevant metrics or information specific to the project. The following information is shown:
+**REQ-HTMX-400:** The Nodes page shall show the status of all slaves and the master, including their connection status, IP addresses, and any relevant metrics or information specific to the project. The following information is shown:
 - Node number and name
 - Role (Master, , Remote, Slave type)
 - Slave sequence number: number of the slave for that type; only for slaves
@@ -40,35 +40,25 @@
 - Last communication: time since last message received from that slave
 - Uptime: time since the node booted
 - Firmware version: the firmware version of the node
+- Firmware update button: a button to trigger an OTA update for that node, only if the node is a webserver slave and is connected to a router in STA mode
 - Configuration version: the version of the configuration that the node is using, to detect if the node has an outdated configuration after a change
 - MAC address: the MAC address of the node, to detect if the node is recognized by the master and for routing purposes
+- Save button for MAC address: a button to save the MAC address of the node in the master, only for webserver slaves and remotes, to allow users to easily update the MAC addresses for routing without needing to reflash firmware
 - IP address: the IP address of the node, to detect if the node is connected to the network and for routing purposes (only for Webserver slaves and remotes)
 **Rationale:** Providing a comprehensive status page allows users to easily monitor the health and performance of the system, quickly identify any issues, and understand the current state of all components. This is essential for effective troubleshooting and maintenance.<br/>
 **Alternative considered:** No status page or a very minimal status page with limited information — rejected, would make it harder for users to monitor the system and identify issues, leading to a poorer user experience and more difficult maintenance. 
 
-# Initialization
-
-**REQ-HTMX-350:** The initialization page shall shows the MAC address of all nodes, a way to change the MAC addresses and a Save button. Also, the system can be restarted here.<br/>
-**Rationale:** The initialization page provides a clear overview of all nodes in the system and their MAC addresses, which are crucial for routing and communication. Allowing users to change MAC addresses and save them provides flexibility in network configuration without needing to modify firmware. The ability to restart the system from this page allows users to easily apply changes and troubleshoot issues.<br/>
-**Alternative considered:** No initialization page or a very minimal initialization page without MAC address management — rejected, would make it harder for users to manage their network configuration and apply changes, leading to a less flexible and more difficult to maintain system.
-
 # Security 
 
-**REQ-HTMX-400:** The security page shall show the current ESP-NOW security key and allow users to change it. When the key is changed, it is sent to the master to be spread to all slaves.<br/>
+**REQ-HTMX-500:** The security page shall show the current ESP-NOW security key and allow users to change it. When the key is changed, it is sent to the master to be spread to all slaves.<br/>
 **Rationale:** The security page provides users with visibility into the current security settings of the system and allows them to easily update the ESP-NOW security key without needing to modify firmware. Sending the new key to the master for distribution ensures that all nodes in the system are updated with the new key, maintaining secure communication across the network.<br/>
 **Alternative considered:** No security page or a security page without the ability to change the ESP-NOW key — rejected, would limit users' ability to manage their security settings and require firmware changes to update the key, which is less user-friendly and reduces security if the firmware is shared.
 
 # Logging 
 
-**REQ-HTMX-450:** The logging page shall show the logs of the system, including messages sent and received, errors, and other relevant events. Logs can be filtered by node, role, or message type.<br/>
+**REQ-HTMX-600:** The logging page shall show the logs of the system, including messages sent and received, errors, and other relevant events. Logs can be filtered by node, role, or message type.<br/>
 **Rationale:** The logging page provides users with valuable insights into the operation of the system, allowing them to monitor communication, identify errors, and understand the behavior of the system. The ability to filter logs by node, role, or message type helps users quickly find relevant information and troubleshoot issues more effectively.<br/>
 **Alternative considered:** No logging page or a logging page without filtering options — rejected, would make it harder for users to monitor the system and identify issues, leading to a poorer user experience and more difficult troubleshooting.
-
-# Firmware
-
-**REQ-HTMX-500:** Firmware version of all slaves shall be visible in the Htmx UI.<br/>
-**Rationale:** Firmware versions need to be visible for debugging, monitoring, and ensuring compatibility across the system.<br/>
-**Alternative considered:** No firmware version visibility — rejected, would make debugging and monitoring more difficult.
 
 # ERROR HANDLING
 
