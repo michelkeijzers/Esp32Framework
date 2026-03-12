@@ -1,3 +1,4 @@
+
 # DMX Controller API Contract
 
 This document describes the API contract between the frontend (web UI) and the backend (Flask server or ESP32 webserver) for the DMX controller project.
@@ -8,6 +9,7 @@ This document describes the API contract between the frontend (web UI) and the b
 
 **Endpoint:** `POST /api/select_preset/<preset_number>`<br/>
 **Description:** Selects a DMX preset by number (1-20). The backend will look up the preset name and return it.
+**Returns:** `200 OK` with `{ "preset_name": "..." }` on success; `400 Bad Request` on invalid preset.
 **Website Page:** Control page, press Preset button.
 
 Example request:
@@ -26,6 +28,7 @@ Example response (JSON):
 
 **Endpoint:** `POST /api/blackout`<br/>
 **Description:** Activates blackout mode (all DMX light off). It is a special preset with a fixed name "Blackout".
+**Returns:** `200 OK` with `{ "preset_name": "Blackout" }` on success.
 **Website Page:** Control page, press Blackout button.
 
 Example request:
@@ -46,6 +49,7 @@ Example response (JSON):
 
 **Endpoint:** `GET /api/presets`  
 **Description:** Returns an array of all DMX presets with their names and active states to display the full Presets list. The backend (Flask or ESP32) provides the current names and activation status.
+**Returns:** `200 OK` with JSON array of presets.
 **Website Page:** Presets page, when page is opened.
 
 Example request:
@@ -65,10 +69,34 @@ Example response (JSON):
 ]
 ```
 
+## Save Preset
+
+**Endpoint:** `PUT /api/save_preset/<preset_number>`  
+**Description:** Saves the current preset (name and DMX values) for the given preset number. Expects the updated preset data in the request body (JSON). Returns ack/nack.
+**Returns:** `200 OK` with `{ "ack": "ok" }` on success; `400 Bad Request` with `{ "ack": "nok" }` on error.
+
+Example request:
+
+```
+PUT /api/save_preset/2
+
+{
+  "name": "Cool Blue",
+  "dmx_values": [0, 128, 255, ...]
+}
+```
+
+Example response (JSON):
+
+```json
+{ "ack": "ok" }
+```
+
 ## Move Preset Up
 
-**Endpoint:** `POST /api/move_preset_up/<preset_index>`  
+**Endpoint:** `PUT /api/move_preset_up/<preset_index>`  
 **Description:** Moves the preset at the given index up by one position. Returns the updated preset list.
+**Returns:** `200 OK` with updated preset list; `400 Bad Request` on invalid index.
 
 Example request:
 
@@ -80,8 +108,9 @@ Example response: See Get Presets example response above, with the specified pre
 
 ## Move Preset Down
 
-**Endpoint:** `POST /api/move_preset_down/<preset_index>`  
+**Endpoint:** `PUT /api/move_preset_down/<preset_index>`  
 **Description:** Moves the preset at the given index down by one position. Returns the updated preset list.
+**Returns:** `200 OK` with updated preset list; `400 Bad Request` on invalid index.
 
 Example:
 
@@ -93,8 +122,9 @@ Example response: See Get Preset example response above, with the specified pres
 
 ## Delete Preset
 
-**Endpoint:** `POST /api/delete_preset/<preset_index>`  
+**Endpoint:** `DELETE /api/delete_preset/<preset_index>`  
 **Description:** Deletes the preset at the given index. Returns the updated preset list.
+**Returns:** `200 OK` with updated preset list; `400 Bad Request` on invalid index.
 
 Example:
 
@@ -106,8 +136,9 @@ Example response: See Get Preset example response above, with the specified pres
 
 ## Insert Preset At
 
-**Endpoint:** `POST /api/insert_preset_at/<preset_index>`  
+**Endpoint:** `PUT /api/insert_preset_at/<preset_index>`  
 **Description:** Inserts a new preset at the given index. Returns the updated preset list.
+**Returns:** `200 OK` with updated preset list; `400 Bad Request` on invalid index.
 
 Example:
 
@@ -119,8 +150,9 @@ Example response: See Get Preset example response above, with an empty preset be
 
 ## Swap Preset Activation
 
-**Endpoint:** `POST /api/swap_preset_activation/<preset_index>`<br/>
+**Endpoint:** `PUT /api/swap_preset_activation/<preset_index>`<br/>
 **Description:** Swaps the preset activation of the preset at the given index. Returns the updated preset list.
+**Returns:** `200 OK` with updated preset list; `400 Bad Request` on invalid index or state.
 
 Example request:
 
@@ -134,8 +166,9 @@ Example response: See Get Preset example response above, with the updated activa
 
 ## Preset Value
 
-**Endpoint:** `POST /api/preset_value/<preset>/<index>/<value>`<br/>
+**Endpoint:** `PUT /api/preset_value/<preset>/<index>/<value>`<br/>
 **Description:** Set the DMX value for a specific preset and channel.
+**Returns:** `200 OK` with `{ "index": ..., "value": ... }` on success; `400 Bad Request` on invalid input.
 
 Example request:
 
@@ -158,6 +191,7 @@ Example response (JSON):
 
 **Endpoint:** `GET /api/configuration`<br/>
 **Description:** Returns all configuration settings as a JSON object. Used to load configuration in the UI.
+**Returns:** `200 OK` with JSON object of config.
 
 Example request:
 
@@ -175,8 +209,9 @@ Example response (JSON):
 
 ## Save Button
 
-**Endpoint:** `POST /api/configuration`<br/>
+**Endpoint:** `PUT /api/configuration`<br/>
 **Description:** Saves all configuration settings. Expects a JSON object with all config fields. Returns ack ("ok"/"nok").
+**Returns:** `200 OK` with `{ "ack": "ok" }` on success; `400 Bad Request` with `{ "ack": "nok" }` on error.
 
 Example request (URL + JSON):
 
@@ -196,8 +231,9 @@ Example response (JSON):
 
 ## Presets/Circular Navigation Checkbox
 
-**Endpoint:** `POST /api/configuration_presets_circular_navigation`<br/>
+**Endpoint:** `PUT /api/configuration_presets_circular_navigation`<br/>
 **Description:** Sets the circular navigation boolean for presets. Expects `{ "state": true|false }` in the request body. Returns ack/nack.
+**Returns:** `200 OK` with `{ "ack": "ok" }` on success; `400 Bad Request` with `{ "ack": "nok" }` on error.
 
 Example request (URL + JSON):
 
@@ -220,6 +256,20 @@ Example response (JSON):
 
 **Endpoint:** `GET /api/status`  
 **Description:** Returns an array of all ESP32 nodes with their current status and metadata. Used to display the status dashboard in the web UI.
+**Returns:** `200 OK` with JSON array of node status.
+
+## Node Status Stream (SSE)
+
+**Endpoint:** `GET /api/status/stream`  
+**Description:** Streams real-time node status updates using Server-Sent Events (SSE). Each event contains the latest array of node status objects. Used for live updates on the Status page.
+**Returns:** `200 OK` with `Content-Type: text/event-stream` and a stream of JSON arrays. Connection remains open while the page is active.
+
+Example event:
+
+```
+event: status
+data: [{ "name": "Master", ... }, ...]
+```
 
 Example request:
 
@@ -264,6 +314,7 @@ Example response (JSON):
 
 **Endpoint:** `GET /api/nodes_info`  
 **Description:** Returns an array of all nodes with their names and current IP addresses. Used to display and edit node IPs in the Initialization page.
+**Returns:** `200 OK` with JSON array of nodes.
 
 Example request:
 
@@ -286,6 +337,7 @@ Example response (JSON):
 
 **Endpoint:** `POST /api/nodes_info`  
 **Description:** Updates the IP addresses for all nodes. Expects a JSON array of IP addresses (in the same order as returned by GET). Returns ack/nack.
+**Returns:** `200 OK` with `{ "ack": "ok" }` on success; `400 Bad Request` with `{ "ack": "nok" }` on error.
 
 Example request:
 
@@ -305,6 +357,7 @@ Example response (JSON):
 
 **Endpoint:** `POST /api/reset_system`  
 **Description:** Triggers a system reset or restart action. No request body or response is required. Used by the Reset System button on the Initialization page.
+**Returns:** `204 No Content` on success.
 
 Example request:
 
@@ -322,6 +375,7 @@ Example response:
 
 **Endpoint:** `POST /api/esp_now_key`  
 **Description:** Sends the ESP-NOW security key from the web UI to the backend. The key is a 16-byte (uint8_t) array, scrambled using a fixed permutation for security and reversibility. The backend must descramble the key using the same order.
+**Returns:** `200 OK` with `{ "ack": "ok" }` on success; `400 Bad Request` with `{ "ack": "nok" }` on error.
 
 **Scramble order (index mapping):**
 

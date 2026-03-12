@@ -1,8 +1,71 @@
-from flask import Flask, request, send_from_directory, jsonify
+# --- Imports ---
+
+import time
 import threading
+import json
+from flask import Flask, request, send_from_directory, jsonify, Response
 
 # --- Flask App ---
 app = Flask(__name__, static_folder=".")
+
+
+# --- SSE: Node Status Stream ---
+def event_stream():
+    import datetime
+
+    try:
+        while True:
+            # Update master's last_communication every 2 seconds
+            master_last_comm = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            nodes = [
+                {
+                    "name": "Master",
+                    "role": "Master",
+                    "slave_sequence": 1,
+                    "status_watchdog": "OK",
+                    "last_communication": master_last_comm,
+                    "uptime": "3h 12m",
+                    "firmware_version": "v1.2.3",
+                    "config_version": "cfg-2026-03-10",
+                    "mac_address": "24:6F:28:AA:BB:CC",
+                    "ip_address": "192.168.1.101",
+                },
+                {
+                    "name": "Slave",
+                    "role": "Slave",
+                    "slave_sequence": 2,
+                    "status_watchdog": "ERROR",
+                    "last_communication": "2026-03-11 14:25:10",
+                    "uptime": "2h 45m",
+                    "firmware_version": "v1.2.2",
+                    "config_version": "cfg-2026-03-09",
+                    "mac_address": "24:6F:28:DD:EE:FF",
+                    "ip_address": "192.168.1.102",
+                },
+                {
+                    "name": "Backup",
+                    "role": "Slave",
+                    "slave_sequence": 3,
+                    "status_watchdog": "OK",
+                    "last_communication": "2026-03-11 14:26:30",
+                    "uptime": "1h 10m",
+                    "firmware_version": "v1.2.1",
+                    "config_version": "cfg-2026-03-08",
+                    "mac_address": "24:6F:28:11:22:33",
+                    "ip_address": "192.168.1.103",
+                },
+            ]
+            sse_message = f"event: status\ndata: {json.dumps(nodes)}\n\n"
+            print(f"[SSE] Sending: {sse_message.strip()}")
+            yield sse_message
+            time.sleep(2)
+    except GeneratorExit:
+        print("[SSE] Client disconnected, stopping event stream.")
+
+
+@app.route("/api/status/stream")
+def api_status_stream():
+    return Response(event_stream(), mimetype="text/event-stream")
 
 
 # --- Node Status Endpoint ---
@@ -56,7 +119,7 @@ CONFIG_LOCK = threading.Lock()
 
 
 # --- New Configuration API Endpoints ---
-@app.route("/api/configuration_presets_circular_navigation", methods=["POST"])
+@app.route("/api/configuration_presets_circular_navigation", methods=["PUT"])
 def api_config_presets_circular_navigation():
     data = request.get_json(force=True)
     print(
@@ -69,15 +132,14 @@ def api_config_presets_circular_navigation():
     return jsonify({"ack": "ok"})
 
 
-# Combined GET and POST for /api/configuration
-@app.route("/api/configuration", methods=["GET", "POST"])
+@app.route("/api/configuration", methods=["GET", "PUT"])
 def api_configuration():
     if request.method == "GET":
         with CONFIG_LOCK:
             return jsonify(
                 {"circular navigation": CONFIG.get("circular navigation", False)}
             )
-    elif request.method == "POST":
+    elif request.method == "PUT":
         data = request.get_json(force=True)
         if not isinstance(data, dict) or "circular navigation" not in data:
             return jsonify({"ack": "nok"}), 400
@@ -104,6 +166,22 @@ def api_save_config():
         return jsonify({"ack": "nok"}), 400
     with CONFIG_LOCK:
         CONFIG["circular navigation"] = bool(data["circular navigation"])
+    return jsonify({"ack": "ok"})
+
+
+# ...existing code...
+# Save preset endpoint (must be after app is defined)
+@app.route("/api/save_preset/<int:preset_number>", methods=["PUT"])
+def save_preset(preset_number):
+    data = request.get_json(force=True)
+    # Basic validation
+    if not isinstance(data, dict) or "name" not in data or "dmx_values" not in data:
+        return jsonify({"ack": "nok"}), 400
+    # Here you would save the preset name and DMX values to your storage
+    print(
+        f"Saving preset {preset_number}: name={data['name']}, dmx_values[0:4]={data['dmx_values'][:4]} ..."
+    )
+    # Simulate success
     return jsonify({"ack": "ok"})
 
 
@@ -165,33 +243,33 @@ def api_presets():
 
 
 # --- DMX Preset Actions (stubs, update logic as needed) ---
-@app.route("/api/move_preset_up/<int:x>", methods=["POST"])
+@app.route("/api/move_preset_up/<int:x>", methods=["PUT"])
 def move_preset_up(x):
     print(f"Move preset up: {x}")
     # TODO: Implement logic to move preset up
     return api_presets()
 
 
-@app.route("/api/move_preset_down/<int:x>", methods=["POST"])
+@app.route("/api/move_preset_down/<int:x>", methods=["PUT"])
 def move_preset_down(x):
     print(f"Move preset down: {x}")
     # TODO: Implement logic to move preset down
     return api_presets()
 
 
-@app.route("/api/delete_preset/<int:x>", methods=["POST"])
+@app.route("/api/delete_preset/<int:x>", methods=["DELETE"])
 def delete_preset(x):
     print(f"Delete preset: {x}")
     return api_presets()
 
 
-@app.route("/api/insert_preset_at/<int:x>", methods=["POST"])
+@app.route("/api/insert_preset_at/<int:x>", methods=["PUT"])
 def insert_preset_at(x):
     print(f"Insert preset at: {x}")
     return api_presets()
 
 
-@app.route("/api/swap_preset_activation/<int:x>/<int:state>", methods=["POST"])
+@app.route("/api/swap_preset_activation/<int:x>/<int:state>", methods=["PUT"])
 def preset_swap_active(x, state):
     print(f"Swap preset activation {x} to {state}")
     # TODO: Update PRESET_ACTIVATIONS[x-1] = bool(state)
@@ -199,7 +277,7 @@ def preset_swap_active(x, state):
 
 
 # Endpoint to set a DMX value for a preset
-@app.route("/api/preset_value/<int:preset>/<int:index>/<int:value>", methods=["POST"])
+@app.route("/api/preset_value/<int:preset>/<int:index>/<int:value>", methods=["PUT"])
 def set_preset_value(preset, index, value):
     # TODO: Implement logic to update the DMX value for the given preset and index
     print(f"Set DMX value: preset={preset}, index={index}, value={value}")

@@ -22,10 +22,55 @@
       </div>
 
       <form id="edit-preset-form" style="max-width: 400px; margin: 2rem auto 0 auto;">
-         <div class="preset-row">
+         <div class="preset-row" style="display: flex; align-items: center; gap: 1rem; margin-left: -7.5rem;">
             <label for="preset-name-input" class="preset-label" id="preset-label">Preset Name:</label>
-            <input type="text" id="preset-name-input" name="preset-name" value="" required class="preset-name-input">
+            <input type="text" id="preset-name-input" name="preset-name" value="" required class="preset-name-input" style="width: 600px;">
+            <button id="save-preset-btn" type="button" style="margin-left: 0.5rem; background: #080; color: #fff;">Save</button>
          </div>
+            <script>
+               document.getElementById('save-preset-btn').onclick = async function () {
+                  const presetNumber = getQueryParam('number');
+                  const presetName = document.getElementById('preset-name-input').value;
+                  // Collect DMX values from grid (if available)
+                  let dmxValues = [];
+                  const grid = document.getElementById('dmx-grid');
+                  if (grid) {
+                     const spans = grid.querySelectorAll('.dmx-val');
+                     for (let i = 0; i < spans.length; ++i) {
+                        dmxValues.push(parseInt(spans[i].textContent, 10) || 0);
+                     }
+                  }
+                  const btn = document.getElementById('save-preset-btn');
+                  try {
+                     const resp = await fetch(`/api/save_preset/${presetNumber}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name: presetName, dmx_values: dmxValues })
+                     });
+                     if (!resp.ok) throw new Error('Request failed');
+                     const result = await resp.json();
+                     if (result.ack === 'ok') {
+                        btn.textContent = 'Saved!';
+                        btn.style.background = '#080';
+                        btn.style.color = '#fff';
+                        setTimeout(() => {
+                           btn.textContent = 'Save';
+                           btn.style.background = '';
+                           btn.style.color = '';
+                        }, 1200);
+                     } else throw new Error('Server error');
+                  } catch (e) {
+                     btn.textContent = 'Error!';
+                     btn.style.background = '#a00';
+                     btn.style.color = '#fff';
+                     setTimeout(() => {
+                        btn.textContent = 'Save';
+                        btn.style.background = '';
+                        btn.style.color = '';
+                     }, 1200);
+                  }
+               };
+            </script>
       </form>
 
       <div id="dmx-grid" class="dmx-grid"></div>
@@ -71,7 +116,8 @@
                         const idx = this.getAttribute('data-idx');
                         const val = this.getAttribute('data-val');
                         const presetNumber = getQueryParam('number');
-                        window.location.href = `edit_value.html?number=${presetNumber}&index=${idx}&value=${val}`;
+                        const presetName = getQueryParam('name');
+                        window.location.href = `edit_value.html?number=${presetNumber}&index=${idx}&value=${val}${presetName ? `&name=${encodeURIComponent(presetName)}` : ''}`;
                      });
                   });
                } catch (err) {

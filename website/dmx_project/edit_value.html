@@ -186,7 +186,7 @@
                const idx = getQueryParam('index');
                const val = input.value;
                if (!presetNumber || !idx || val === '' || isNaN(val) || val < 0 || val > 255) return;
-               await fetch(`/api/preset_value/${presetNumber}/${idx}/${val}`, { method: 'POST' });
+               await fetch(`/api/preset_value/${presetNumber}/${idx}/${val}`, { method: 'PUT' });
                let url = 'edit_preset.html';
                url += `?number=${encodeURIComponent(presetNumber)}`;
                if (presetName) url += `&name=${encodeURIComponent(presetName)}`;

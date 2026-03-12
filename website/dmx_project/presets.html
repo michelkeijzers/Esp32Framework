@@ -92,7 +92,9 @@
 
          async function sendPresetAction(url) {
             try {
-               const response = await fetch(url, { method: 'POST' });
+               let method = 'PUT';
+               if (url.startsWith('/api/delete_preset/')) method = 'DELETE';
+               const response = await fetch(url, { method });
                if (!response.ok) throw new Error('Request failed');
                // Always expect the updated preset list as response
                const presets = await response.json();

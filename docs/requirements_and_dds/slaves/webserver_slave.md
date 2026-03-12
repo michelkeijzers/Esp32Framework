@@ -35,6 +35,8 @@
 **Rationale:** Allows for flexible deployment — can connect to existing Wi-Fi or create its own network for direct connection.<br/>
 **Alternative considered:** AP only or STA only — rejected, would limit deployment options.
 
+TODO: REQ the webserver stops sending SSE messages when the SSE connection is closed.
+
 # Security
 
 **REQ-SEC-600:** Webserver authentication is not enabled by default — deferred, acceptable for hobby use.<br/>
@@ -44,6 +46,12 @@
 **REQ-SEC-610:** Webserver shall provide a means to change the static security key and able to message it to the master to spread.<br/>
 **Rationale:** Allows users to set their own encryption key without needing to modify and reflash firmware, improving security and usability.<br/>
 **Alternative considered:** Hardcoded key in firmware — rejected, would require firmware changes to update key and reduce security if firmware is shared. Key configuration via web interface — rejected, adds complexity and requires webserver slave to be involved in key management, which is not ideal for a generic master that should not have project specific logic.
+
+TODO:
+- WPA2
+- Password, scramble like esp-now key
+- no https (too hard)
+- APSTA mode with same key for AP and STA
 
 # OTA Updates
 

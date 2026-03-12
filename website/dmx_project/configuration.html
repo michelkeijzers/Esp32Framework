@@ -51,7 +51,7 @@
             status.textContent = newValue ? '(On)' : '(Off)';
             try {
                const resp = await fetch('/api/configuration_presets_circular_navigation', {
-                  method: 'POST',
+                  method: 'PUT',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ state: newValue })
                });
@@ -110,7 +110,7 @@
             try {
                const body = JSON.stringify({ 'circular navigation': toggle.checked });
                const resp = await fetch('/api/configuration', {
-                  method: 'POST',
+                  method: 'PUT',
                   headers: { 'Content-Type': 'application/json' },
                   body
                });
