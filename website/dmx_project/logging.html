@@ -18,9 +18,32 @@
          <button onclick="window.location.href='index.html'" class="home-btn">Home</button>
          <h2 style="margin: 0;">Logging</h2>
       </div>
-      <p>This page will display logs and logging options.</p>
-      <button onclick="window.location.href='index.html'">Back</button>
+      <div style="margin-top: 2em;">
+         <textarea id="logbox" rows="20" style="width:100%; font-family:monospace; font-size:1em; resize:vertical;" readonly></textarea>
+      </div>
    </main>
+   <script>
+      let eventSource = null;
+      function appendLog(line) {
+         const logbox = document.getElementById('logbox');
+         logbox.value += line + '\n';
+         logbox.scrollTop = logbox.scrollHeight;
+      }
+      function startLogStream() {
+         eventSource = new EventSource('/api/logging');
+         eventSource.onmessage = function (e) {
+            appendLog(e.data);
+         };
+         eventSource.onerror = function () {
+            appendLog('[Connection lost]');
+            eventSource.close();
+         };
+      }
+      window.addEventListener('DOMContentLoaded', startLogStream);
+      window.addEventListener('beforeunload', function () {
+         if (eventSource) eventSource.close();
+      });
+   </script>
 </body>
 
 </html>

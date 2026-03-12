@@ -1,4 +1,6 @@
-# --- Imports ---
+# --- Logging SSE Endpoint ---
+import datetime
+
 
 import time
 import threading
@@ -387,6 +389,19 @@ def api_esp_now_key():
         )
     return jsonify({"ack": "ok"})
 
+@app.route("/api/logging")
+def api_logging():
+    def log_stream():
+        try:
+            while True:
+                now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                print(f"[SSE] Sent log line: {now}")
+                yield f"data: {now}\n\n"
+                time.sleep(1)
+        except GeneratorExit:
+            print("[SSE] Logging client disconnected.")
+    return Response(log_stream(), mimetype="text/event-stream")
+# --- Imports ---
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)

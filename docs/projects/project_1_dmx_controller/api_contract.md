@@ -418,6 +418,32 @@ POST /api/wifi_password
 {"ack": "ok"}
 ```
 
+
+# Logging Page
+
+## Logging Stream (SSE)
+
+**Endpoint:** `GET /api/logging`  
+**Description:** Streams real-time log lines using Server-Sent Events (SSE). 
+**Returns:** `200 OK` with `Content-Type: text/event-stream` and a stream of log lines. Connection remains open while the page is active.
+
+Example event:
+
+```
+data: 2026-03-12 15:42:10
+```
+
+Example request:
+
+```
+GET /api/logging
+```
+
+**Frontend behavior:**
+- The Logging page opens a connection to `/api/logging` using EventSource.
+- Each received line is appended to a large textarea for live display.
+- The connection is closed when the page is unloaded.
+
 # General Notes
 
 - All API endpoints are under the `/api/` prefix.
