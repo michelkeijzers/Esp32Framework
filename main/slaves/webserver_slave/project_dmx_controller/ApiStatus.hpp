@@ -11,6 +11,7 @@ public:
     ~ApiStatus();
 
     esp_err_t get_status_handler(httpd_req_t *req);
+    esp_err_t get_status_stream_handler(httpd_req_t *req);
 
 private:
     IEspHttpServer& espHttpServer_;

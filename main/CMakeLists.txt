@@ -7,6 +7,12 @@ idf_component_register(
         "slaves/webserver_slave/project_dmx_controller/ApiConfig.cpp"
         "slaves/webserver_slave/project_dmx_controller/ApiPresets.cpp"
         "slaves/webserver_slave/project_dmx_controller/ApiStatus.cpp"
+        "slaves/webserver_slave/project_dmx_controller/ApiPresetValues.cpp"
+        "slaves/webserver_slave/project_dmx_controller/ApiNodes.cpp"
+        "slaves/webserver_slave/project_dmx_controller/ApiSystem.cpp"
+        "slaves/webserver_slave/project_dmx_controller/ApiFirmware.cpp"
+        "slaves/webserver_slave/project_dmx_controller/ApiSecurity.cpp"
+        "slaves/webserver_slave/project_dmx_controller/ApiLogging.cpp"
         "slaves/webserver_slave/project_dmx_controller/WebserverSlave.cpp"
     INCLUDE_DIRS
         "."

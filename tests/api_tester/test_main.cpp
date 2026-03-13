@@ -3,6 +3,12 @@
 #include "ApiPresets.hpp"
 #include "ApiConfig.hpp"
 #include "ApiStatus.hpp"
+#include "ApiPresetValues.hpp"
+#include "ApiNodes.hpp"
+#include "ApiSystem.hpp"
+#include "ApiFirmware.hpp"
+#include "ApiSecurity.hpp"
+#include "ApiLogging.hpp"
 #include <iostream>
 #include <cassert>
 
@@ -13,6 +19,12 @@ int main() {
     ApiPresets apiPresets(mockServer);
     ApiConfig apiConfig(mockServer);
     ApiStatus apiStatus(mockServer);
+    ApiPresetValues apiPresetValues(mockServer);
+    ApiNodes apiNodes(mockServer);
+    ApiSystem apiSystem(mockServer);
+    ApiFirmware apiFirmware(mockServer);
+    ApiSecurity apiSecurity(mockServer);
+    ApiLogging apiLogging(mockServer);
 
     // Register endpoint handler using the real ApiPresets handler
     mockServer.registerHandler("PUT", "/api/save_preset/2", [&apiPresets](const std::string& body) {

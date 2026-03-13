@@ -1,10 +1,16 @@
 
-#include "../esp/IEspHttpServer.hpp"
-#include "../esp/esp_http_server_if.hpp"
+#include "../../../esp/IEspHttpServer.hpp"
+#include "../../../esp/esp_http_server_if.hpp"
 
 class ApiConfig;
 class ApiPresets;
+class ApiPresetValues;
 class ApiStatus;
+class ApiNodes;
+class ApiSystem;
+class ApiFirmware;
+class ApiSecurity;
+class ApiLogging;
 
 class WebserverSlave
 {
@@ -22,7 +28,13 @@ private:
 
     ApiConfig* apiConfig_;
     ApiPresets* apiPresets_;
+    ApiPresetValues* apiPresetValues_;
     ApiStatus* apiStatus_;
+    ApiNodes* apiNodes_;
+    ApiSystem* apiSystem_;
+    ApiFirmware* apiFirmware_;
+    ApiSecurity* apiSecurity_;
+    ApiLogging* apiLogging_;
 
     void register_endpoints();
 };

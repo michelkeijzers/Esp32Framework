@@ -13,6 +13,7 @@ public:
 
     esp_err_t get_config_handler(httpd_req_t *req);
     esp_err_t put_config_handler(httpd_req_t *req);
+    esp_err_t set_circular_navigation_handler(httpd_req_t *req);
 
 private:
     IEspHttpServer& espHttpServer_;

@@ -11,6 +11,12 @@ add_executable(api_tester
     ../../main/slaves/webserver_slave/project_dmx_controller/ApiPresets.cpp
     ../../main/slaves/webserver_slave/project_dmx_controller/ApiConfig.cpp
     ../../main/slaves/webserver_slave/project_dmx_controller/ApiStatus.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/ApiPresetValues.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/ApiNodes.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/ApiSystem.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/ApiFirmware.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/ApiSecurity.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/ApiLogging.cpp
 )
 
 # Define UNIT_TEST for test build
