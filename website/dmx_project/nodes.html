@@ -18,8 +18,12 @@
          <button onclick="window.location.href='index.html'" class="home-btn">Home</button>
          <h2 style="margin: 0;">Nodes</h2>
       </div>
-      <button id="reboot-btn"
-         style="display:block; margin: 2.5rem auto 1.2rem auto; background:#c00; color:#fff; font-weight:bold; border-radius:0.5rem; padding:0.8rem 2.5rem; font-size:1.1rem; border:none; box-shadow:0 2px 8px #0002; cursor:pointer;">Reboot</button>
+      <div style="display: flex; justify-content: center; gap: 1.5rem; margin: 2.5rem auto 1.2rem auto;">
+         <button id="reboot-btn"
+            style="background:#c00; color:#fff; font-weight:bold; border-radius:0.5rem; padding:0.8rem 2.5rem; font-size:1.1rem; border:none; box-shadow:0 2px 8px #0002; cursor:pointer;">Reboot</button>
+         <button id="factory-reset-btn"
+            style="background:#c00; color:#fff; font-weight:bold; border-radius:0.5rem; padding:0.8rem 2.5rem; font-size:1.1rem; border:none; box-shadow:0 2px 8px #0002; cursor:pointer;">Factory Reset</button>
+      </div>
       <div id="nodes-container" style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; margin-top: 2.5rem;"></div>
       <script>
          function arrayBufferToBase64(buffer) {
@@ -333,6 +337,34 @@
                      setTimeout(() => {
                         rebootBtn.textContent = originalText;
                         rebootBtn.disabled = false;
+                     }, 1800);
+                  });
+            });
+            const factoryResetBtn = document.getElementById('factory-reset-btn');
+            factoryResetBtn.addEventListener('click', function () {
+               const originalText = factoryResetBtn.textContent;
+               factoryResetBtn.textContent = 'Resetting...';
+               factoryResetBtn.disabled = true;
+               fetch('/api/factory_reset', { method: 'POST' })
+                  .then(r => r.json())
+                  .then(resp => {
+                     if (resp.ack === 'ok') {
+                        factoryResetBtn.textContent = 'Reset Completed!';
+                        factoryResetBtn.style.backgroundColor = '#1fa750';
+                     } else {
+                        factoryResetBtn.textContent = 'Error!';
+                        factoryResetBtn.style.backgroundColor = '#c00';
+                     }
+                  })
+                  .catch(() => {
+                     factoryResetBtn.textContent = 'Error!';
+                     factoryResetBtn.style.backgroundColor = '#c00';
+                  })
+                  .finally(() => {
+                     setTimeout(() => {
+                        factoryResetBtn.textContent = originalText;
+                        factoryResetBtn.style.backgroundColor = '#c00';
+                        factoryResetBtn.disabled = false;
                      }, 1800);
                   });
             });

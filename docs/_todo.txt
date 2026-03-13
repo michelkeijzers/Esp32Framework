@@ -1,0 +1,2 @@
+In control page: only show the first 20 ACTIVE presets
+

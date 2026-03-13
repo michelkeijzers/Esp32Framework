@@ -1,4 +1,3 @@
-# --- Logging SSE Endpoint ---
 import datetime
 
 import base64
@@ -13,6 +12,7 @@ app = Flask(__name__, static_folder=".")
 
 # --- Firmware upload state (in-memory, per node) ---
 firmware_uploads = {}
+
 
 # --- SSE: Node Status Stream ---
 def event_stream():
@@ -326,10 +326,7 @@ def api_blackout():
     return "<div id='preset-label'>Blackout</div>"
 
 
-
-
 # --- Firmware upload endpoints ---
-
 @app.route('/api/firmware_chunk/<int:node_idx>', methods=['POST'])
 def firmware_chunk(node_idx):
     data = request.get_json()
@@ -446,6 +443,7 @@ def api_esp_now_key():
         )
     return jsonify({"ack": "ok"})
 
+
 @app.route("/api/logging")
 def api_logging():
     def log_stream():
@@ -458,6 +456,19 @@ def api_logging():
         except GeneratorExit:
             print("[SSE] Logging client disconnected.")
     return Response(log_stream(), mimetype="text/event-stream")
+
+
+@app.route("/api/factory_reset", methods=["POST"])
+def api_factory_reset():
+    # Here you would add logic to perform a factory reset (e.g., clear config, reset NVS, etc.)
+    # For demo, just return ok
+    try:
+        # TODO: Implement actual factory reset logic
+        print("[API] Factory reset requested!")
+        return jsonify({"ack": "ok"})
+    except Exception as e:
+        print(f"[API] Factory reset error: {e}")
+        return jsonify({"ack": "nok"}), 500
 
 
 if __name__ == "__main__":

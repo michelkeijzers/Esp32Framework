@@ -1,4 +1,3 @@
-
 # DMX Controller API Contract
 
 This document describes the API contract between the frontend (web UI) and the backend (Flask server or ESP32 webserver) for the DMX controller project.
@@ -383,6 +382,25 @@ POST /api/reboot
 Example response:
 
 204 No Content
+
+## Factory Reset
+
+**Endpoint:** `POST /api/factory_reset`<br/>
+**Description:** Performs a factory reset on the webserver (clears configuration, resets to defaults, may reboot).<br/>
+**Returns:** `200 OK` with `{ "ack": "ok" }` on success; `{ "ack": "nok" }` on failure.<br/>
+**Website Page:** Nodes page, press Factory Reset button.
+
+Example request:
+
+```
+POST /api/factory_reset
+```
+
+Example response (JSON):
+
+```json
+{ "ack": "ok" }
+```
 
 ## Firmware Update 
 
