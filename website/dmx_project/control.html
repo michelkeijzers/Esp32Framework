@@ -22,7 +22,7 @@
       </div>
          <div style="margin-bottom: 1.2rem;">
             <button id="blackout-btn" class="big-bold-btn selectable-btn"
-               style="background-color: #222; color: #fff; width: 100%; max-width: 300px; margin: 0 auto; display: block; font-size: 1.3rem; font-weight: bold; margin-bottom: 1.2rem;">Blackout</button>
+               style="background-color: #222; color: #fff; width: 100%; margin: 10px auto; display: block; font-size: 1.3rem; font-weight: bold; margin-bottom: 1.2rem;">Blackout</button>
          </div>
          <div class="preset-grid" id="preset-grid" style="display: flex; flex-direction: column;"></div>
          <script>
@@ -39,10 +39,8 @@
                handleSelect(e);
             });
             blackoutBtn.addEventListener('click', function (e) {
-               // Optionally, send blackout action to backend here
-               if (window.htmx) {
-                  htmx.ajax('POST', '/api/blackout', { target: '#preset-grid' });
-               }
+                // Send blackout action to backend, but do n                    abel or text
+                fetch('/api/blackout', { method: 'POST' });
             });
 
                      // Render active presets 4 per row

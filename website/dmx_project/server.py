@@ -322,9 +322,13 @@ def select_preset(x):
     return f"<div id='preset-label'>{preset_name}</div>"
 
 
+
+# --- Blackout Endpoint ---
+@app.route("/api/blackout", methods=["POST"])
 def api_blackout():
     print("/api/blackout called")
-    return "<div id='preset-label'>Blackout</div>"
+    # Here you would trigger the blackout action (e.g., set all DMX values to 0)
+    return jsonify({"preset_name": "Blackout"})
 
 
 # --- Firmware upload endpoints ---
@@ -471,11 +475,12 @@ def api_factory_reset():
         print(f"[API] Factory reset error: {e}")
         return jsonify({"ack": "nok"}), 500
 
+
 # --- Active Preset Numbers Endpoint ---
 @app.route("/api/active_preset_numbers", methods=["GET"])
 def api_active_preset_numbers():
     # Example: return all active preset numbers (simulate with 1, 2, 5, 7, 10, 12, 15, 18, 20)
-    active_presets = [1, 2, 5, 7, 10, 12, 15, 18, 20]
+    active_presets = [1, 2, 5, 7, 10, 12, 13, 15, 18, 20]
     return jsonify(active_presets)
 
 
