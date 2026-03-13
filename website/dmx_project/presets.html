@@ -24,7 +24,7 @@
                <tr>
                   <th>Id</th>
                   <th>Name</th>
-                  <th>Edit</th>
+                  <th class="edit-col">Edit</th>
                   <th>Active</th>
                </tr>
             </thead>
@@ -47,15 +47,15 @@
                   row.innerHTML = `
                         <td>${i + 1}</td>
                         <td class="preset-name clickable-preset">${preset.name}</td>
-                                    <td class="edit-col">
-                                       <div class="edit-btn-row">
-                                          <button class="small-btn up-btn" title="Move Up">↑</button>
-                                          <button class="small-btn down-btn" title="Move Down">↓</button>
-                                          <button class="small-btn delete-btn" title="Delete">✕</button>
-                                          <button class="small-btn insert-btn" title="Insert">＋</button>
-                                       </div>
-                                    </td>
-                                    <td class="active-col"><input type="checkbox" class="active-checkbox" ${preset.active ? 'checked' : ''} /></td>
+                        <td class="edit-col">
+                           <div class="edit-btn-row">
+                              <button class="small-btn up-btn" title="Move Up">↑</button>
+                              <button class="small-btn down-btn" title="Move Down">↓</button>
+                              <button class="small-btn delete-btn" title="Delete">✕</button>
+                              <button class="small-btn insert-btn" title="Insert">＋</button>
+                           </div>
+                        </td>
+                        <td class="active-col"><div class="active-checkbox-wrapper"><input type="checkbox" class="active-checkbox" ${preset.active ? 'checked' : ''} /></div></td>
                      `;
                   tbody.appendChild(row);
                   // Up
@@ -104,13 +104,15 @@
                   row.innerHTML = `
                         <td>${i + 1}</td>
                         <td class="preset-name">${preset.name}</td>
-                        <td>
-                          <button class="small-btn up-btn" title="Move Up">↑</button>
-                          <button class="small-btn down-btn" title="Move Down">↓</button>
-                          <button class="small-btn delete-btn" title="Delete">✕</button>
-                          <button class="small-btn insert-btn" title="Insert">＋</button>
+                        <td class="edit-col">
+                          <div class="edit-btn-row">
+                            <button class="small-btn up-btn" title="Move Up">↑</button>
+                            <button class="small-btn down-btn" title="Move Down">↓</button>
+                            <button class="small-btn delete-btn" title="Delete">✕</button>
+                            <button class="small-btn insert-btn" title="Insert">＋</button>
+                          </div>
                         </td>
-                        <td><input type="checkbox" class="active-checkbox" ${preset.active ? 'checked' : ''} /></td>
+                        <td class="active-col"><div class="active-checkbox-wrapper"><input type="checkbox" class="active-checkbox" ${preset.active ? 'checked' : ''} /></div></td>
                      `;
                   tbody.appendChild(row);
                   // Re-attach listeners for new rows

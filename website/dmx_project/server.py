@@ -322,7 +322,6 @@ def select_preset(x):
     return f"<div id='preset-label'>{preset_name}</div>"
 
 
-
 # --- Blackout Endpoint ---
 @app.route("/api/blackout", methods=["POST"])
 def api_blackout():
