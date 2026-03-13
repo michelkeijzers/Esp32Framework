@@ -1,3 +1,4 @@
+
 import datetime
 
 import base64
@@ -469,6 +470,13 @@ def api_factory_reset():
     except Exception as e:
         print(f"[API] Factory reset error: {e}")
         return jsonify({"ack": "nok"}), 500
+
+# --- Active Preset Numbers Endpoint ---
+@app.route("/api/active_preset_numbers", methods=["GET"])
+def api_active_preset_numbers():
+    # Example: return all active preset numbers (simulate with 1, 2, 5, 7, 10, 12, 15, 18, 20)
+    active_presets = [1, 2, 5, 7, 10, 12, 15, 18, 20]
+    return jsonify(active_presets)
 
 
 if __name__ == "__main__":

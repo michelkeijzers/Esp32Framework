@@ -1,2 +1,1 @@
-In control page: only show the first 20 ACTIVE presets
-
+In control page: only show Active presets (use GET /api/active_preset_numbers)

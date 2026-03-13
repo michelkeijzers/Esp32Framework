@@ -1,8 +1,28 @@
+
 # DMX Controller API Contract
 
 This document describes the API contract between the frontend (web UI) and the backend (Flask server or ESP32 webserver) for the DMX controller project.
 
 # Control Page
+
+## Get Active Preset Numbers
+
+**Endpoint:** `GET /api/active_preset_numbers`  
+**Description:** Returns an array of all active preset numbers to display only active presets on the Control page. The backend (Flask or ESP32) provides the current active preset numbers.
+**Returns:** `200 OK` with JSON array of preset numbers.
+**Website Page:** Control page, when page is opened.
+
+Example request:
+
+```
+GET /api/active_preset_numbers
+```
+
+Example response (JSON):
+
+```json
+[1, 2, 5, 7, 10, 12, 15, 18, 20]
+```
 
 ## Select Preset
 

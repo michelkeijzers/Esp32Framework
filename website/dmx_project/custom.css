@@ -334,6 +334,13 @@
   background: yellow !important;
   color: #222 !important;
 }
+.selected-btn:active,
+.selected-btn:focus {
+  background: yellow !important;
+  color: #222 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
 .container #result {
   display: none;
 }
