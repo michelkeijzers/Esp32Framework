@@ -11,6 +11,7 @@
 // Stand-in types for non-ESP32 platforms
 struct httpd_req {};
 
+#define HTTPD_RESP_USE_STRLEN -1
 struct httpd_req_t {
     std::string response;
     std::string content_type;
