@@ -28,19 +28,13 @@ Example response (JSON):
 
 **Endpoint:** `POST /api/select_preset/<preset_number>`<br/>
 **Description:** Selects a DMX preset by number (1-20). The backend will look up the preset name and return it.
-**Returns:** `200 OK` with `{ "preset_name": "..." }` on success; `400 Bad Request` on invalid preset.
+**Returns:** `200 OK` on success; `400 Bad Request` on invalid preset.
 **Website Page:** Control page, press Preset button.
 
 Example request:
 
 ```
 POST /api/select_preset/1
-```
-
-Example response (JSON):
-
-```json
-{ "preset_name": "Warm White" }
 ```
 
 ## Blackout
@@ -181,7 +175,25 @@ POST /api/swap_preset_activation/2/1
 
 Example response: See Get Preset example response above, with the updated activation state of the preset.
 
-# DMX Edit DMX Value Page
+# Edit Preset
+
+## Preset Values
+
+**Endpoint:** `GET /api/preset_values/<preset_number>`<br/>
+**Description:** Returns an array of 512 DMX values (0–255) for the specified preset number. Used to display or edit all DMX channel values for a given preset in the frontend.<br/>
+**Returns:**: 200 if preset number exists, 400 otherwise.
+
+**Example request:**
+```
+GET /api/preset_values/2
+```
+
+**Example response:**
+```json
+[0, 128, 255, 0, 0, ..., 0]
+```
+
+# Edit Value Page
 
 ## Preset Value
 

@@ -1,5 +1,23 @@
 $kind: http-request
-name: 'Get Presets'
+name: Get Presets
 method: GET
-url: '{{base_url}}/api/presets'
+url: "{{base_url}}/api/presets"
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"Status code is 200\", function () {\r
+
+      \    pm.response.to.have.status(200);\r
+
+      });\r
+
+      \r
+
+      pm.test(\"Response is an array\", function () {\r
+
+      \    var jsonData = pm.response.json();\r
+
+      \    pm.expect(Array.isArray(jsonData)).to.be.true;\r
+
+      });"
+    language: text/javascript
 order: 1000

@@ -160,27 +160,6 @@ def api_configuration():
         return jsonify({"ack": "ok"})
 
 
-# --- Configuration Endpoints ---
-@app.route("/api/load_config", methods=["POST"])
-def api_load_config():
-    print("POST /api/load_config")
-    with CONFIG_LOCK:
-        return jsonify(
-            {"circular navigation": CONFIG.get("circular navigation", False)}
-        )
-
-
-@app.route("/api/save_config", methods=["POST"])
-def api_save_config():
-    print("POST /api/save_config")
-    data = request.get_json(force=True)
-    if not isinstance(data, dict) or "circular navigation" not in data:
-        return jsonify({"ack": "nok"}), 400
-    with CONFIG_LOCK:
-        CONFIG["circular navigation"] = bool(data["circular navigation"])
-    return jsonify({"ack": "ok"})
-
-
 @app.route("/api/wifi_password", methods=["POST"])
 def api_wifi_password():
     data = request.get_json(force=True)
@@ -212,9 +191,9 @@ def save_preset(preset_number):
     return jsonify({"ack": "ok"})
 
 
-@app.route("/api/get_preset_values/<int:x>", methods=["GET"])
-def get_preset_values(x):
-    print(f"GET /api/get_preset_values/{x}")
+@app.route("/api/preset_values/<int:x>", methods=["GET"])
+def preset_values(x):
+    print(f"GET /api/preset_values/{x}")
     # TODO: Replace with real preset data lookup
     # For now, return a dummy array with some nonzero values for demonstration
     values = [0] * 512
@@ -229,7 +208,6 @@ def get_preset_values(x):
     return jsonify(values)
 
 
-# Preset names mapping
 # Preset names mapping
 PRESET_NAMES = {
     "1": "Warm White",
@@ -318,8 +296,7 @@ PRESET_ACTIVATIONS = [True] + [False] * (len(PRESET_NAMES) - 1)
 @app.route("/api/select_preset/<int:x>", methods=["POST"])
 def select_preset(x):
     print(f"/api/select_preset/{x} called")
-    preset_name = PRESET_NAMES.get(str(x), str(x))
-    return f"<div id='preset-label'>{preset_name}</div>"
+    return "", 200
 
 
 # --- Blackout Endpoint ---
@@ -327,7 +304,7 @@ def select_preset(x):
 def api_blackout():
     print("/api/blackout called")
     # Here you would trigger the blackout action (e.g., set all DMX values to 0)
-    return jsonify({"preset_name": "Blackout"})
+    return "", 200
 
 
 # --- Firmware upload endpoints ---
@@ -386,12 +363,6 @@ def index():
 def static_files(path):
     print(f"GET /{path}")
     return send_from_directory(".", path)
-
-
-@app.route("/api/send", methods=["POST"])
-def api_send():
-    print("POST data:", request.form)
-    return f"<div id='result'>Received: {request.form.get('dmx-value')}</div>"
 
 
 @app.route("/api/nodes_info", methods=["GET", "POST"])

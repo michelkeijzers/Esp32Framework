@@ -247,36 +247,6 @@
   height: 22px;
   margin: 0;
   display: block;
-  appearance: none;
-  -webkit-appearance: none;
-  background: #222;
-  border: 2px solid #888;
-  border-radius: 4px;
-  position: relative;
-  cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
-}
-.preset-table .active-checkbox:checked {
-  border-color: #ffe600;
-  background: #ffe600;
-}
-.preset-table .active-checkbox:after {
-  content: '';
-  display: block;
-  position: absolute;
-  left: 6px;
-  top: 2px;
-  width: 6px;
-  height: 12px;
-  border: solid #222;
-  border-width: 0 3px 3px 0;
-  opacity: 0;
-  transform: rotate(45deg) scale(0.7);
-  transition: opacity 0.2s, transform 0.2s;
-}
-.preset-table .active-checkbox:checked:after {
-  opacity: 1;
-  transform: rotate(45deg) scale(1);
 }
 
 .preset-table td.active-col {

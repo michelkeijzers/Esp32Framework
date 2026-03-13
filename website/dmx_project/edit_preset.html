@@ -94,7 +94,7 @@
                const grid = document.getElementById('dmx-grid');
                grid.innerHTML = '<div style="color:#888;">Loading DMX values...</div>';
                try {
-                  const resp = await fetch(`/api/get_preset_values/${presetNumber}`);
+                  const resp = await fetch(`/api/preset_values/${presetNumber}`);
                   if (!resp.ok) throw new Error('Failed to fetch DMX values');
                   const dmxValues = await resp.json();
                   let html = '<div class="dmx-grid-table">';
