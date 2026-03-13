@@ -1,0 +1,10 @@
+$kind: http-request
+name: 'Send ESP-NOW Key'
+method: POST
+url: '{{base_url}}/api/esp_now_key'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: '["a1", "b2", "c3", "d4", "e5", "f6", "07", "18", "29", "3a", "4b", "5c", "6d", "7e", "8f", "90"]'

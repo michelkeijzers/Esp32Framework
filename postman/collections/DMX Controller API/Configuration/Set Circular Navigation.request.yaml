@@ -1,0 +1,14 @@
+$kind: http-request
+name: 'Set Circular Navigation'
+method: PUT
+url: '{{base_url}}/api/configuration_presets_circular_navigation'
+order: 3000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "state": true
+    }

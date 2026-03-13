@@ -1,0 +1,17 @@
+$kind: http-request
+name: 'Save Nodes Info'
+method: POST
+url: '{{base_url}}/api/nodes_info'
+order: 2000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    [
+      "24:6F:28:AA:BB:CC",
+      "24:6F:28:BB:CC:DD",
+      "24:6F:28:CC:DD:EE",
+      "24:6F:28:DD:EE:FF"
+    ]

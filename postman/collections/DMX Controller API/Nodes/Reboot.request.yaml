@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Reboot'
+method: POST
+url: '{{base_url}}/api/reboot'
+order: 3000

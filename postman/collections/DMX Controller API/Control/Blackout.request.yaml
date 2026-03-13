@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Blackout'
+method: POST
+url: '{{base_url}}/api/blackout'
+order: 3000

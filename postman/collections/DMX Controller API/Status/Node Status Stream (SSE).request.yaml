@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Node Status Stream (SSE)'
+method: GET
+url: '{{base_url}}/api/status/stream'
+order: 2000

@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Get Configuration'
+method: GET
+url: '{{base_url}}/api/configuration'
+order: 1000

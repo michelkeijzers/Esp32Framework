@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Get Presets'
+method: GET
+url: '{{base_url}}/api/presets'
+order: 1000

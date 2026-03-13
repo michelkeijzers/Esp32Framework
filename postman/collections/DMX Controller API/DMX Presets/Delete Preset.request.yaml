@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Delete Preset'
+method: DELETE
+url: '{{base_url}}/api/delete_preset/2'
+order: 5000

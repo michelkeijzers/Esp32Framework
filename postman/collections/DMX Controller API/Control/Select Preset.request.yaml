@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Select Preset'
+method: POST
+url: '{{base_url}}/api/select_preset/1'
+order: 2000

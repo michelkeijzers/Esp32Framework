@@ -1,0 +1,4 @@
+$kind: http-request
+name: 'Firmware Finish'
+method: POST
+url: '{{base_url}}/api/firmware_finish/1'

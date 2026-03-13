@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Move Preset Down'
+method: PUT
+url: '{{base_url}}/api/move_preset_down/1'
+order: 4000

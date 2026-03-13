@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Get Node Status'
+method: GET
+url: '{{base_url}}/api/status'
+order: 1000

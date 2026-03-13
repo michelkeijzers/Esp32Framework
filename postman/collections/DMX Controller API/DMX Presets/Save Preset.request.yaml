@@ -1,0 +1,15 @@
+$kind: http-request
+name: 'Save Preset'
+method: PUT
+url: '{{base_url}}/api/save_preset/2'
+order: 2000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Cool Blue",
+      "dmx_values": [0, 128, 255]
+    }

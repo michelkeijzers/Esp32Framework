@@ -1,0 +1,4 @@
+$kind: http-request
+name: 'Logging Stream (SSE)'
+method: GET
+url: '{{base_url}}/api/logging'

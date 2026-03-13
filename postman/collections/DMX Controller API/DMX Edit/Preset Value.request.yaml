@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Preset Value'
+method: PUT
+url: '{{base_url}}/api/preset_value/2/45/128'
+order: 1000

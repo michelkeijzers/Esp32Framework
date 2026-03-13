@@ -1,0 +1,7 @@
+$kind: collection
+name: DMX Controller API
+description: API collection for controlling DMX lighting systems including presets, configuration, nodes, and security management.
+variables:
+  - key: base_url
+    value: 'http://192.168.1.101'
+    description: Base URL for the DMX Controller API

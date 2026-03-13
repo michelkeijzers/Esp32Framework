@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Swap Preset Activation'
+method: PUT
+url: '{{base_url}}/api/swap_preset_activation/2'
+order: 7000

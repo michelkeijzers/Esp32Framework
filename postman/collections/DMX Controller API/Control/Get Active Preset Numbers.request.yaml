@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Get Active Preset Numbers'
+method: GET
+url: '{{base_url}}/api/active_preset_numbers'
+order: 1000

@@ -1,0 +1,6 @@
+name: New Environment
+values:
+  - key: base_url
+    value: 'http://192.168.1.101'
+    enabled: true
+    type: default

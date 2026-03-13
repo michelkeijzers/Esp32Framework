@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Factory Reset'
+method: POST
+url: '{{base_url}}/api/factory_reset'
+order: 4000
