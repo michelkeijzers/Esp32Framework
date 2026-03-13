@@ -4,11 +4,18 @@ project(api_tester)
 set(CMAKE_CXX_STANDARD 17)
 
 
+
 add_executable(api_tester
     test_main.cpp
     TestHttpServerAdapter.cpp
     MockEspHttpServer.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/ApiPresets.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/ApiConfig.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/ApiStatus.cpp
 )
+
+# Define UNIT_TEST for test build
+target_compile_definitions(api_tester PRIVATE UNIT_TEST)
 
 # Add include directories for main/esp and project_dmx_controller
 target_include_directories(api_tester PRIVATE

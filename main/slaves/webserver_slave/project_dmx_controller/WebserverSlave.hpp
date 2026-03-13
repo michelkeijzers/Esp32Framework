@@ -1,6 +1,6 @@
 
-#include "../esp/EspHttpServer.hpp"
-#include "esp_http_server.h"
+#include "../esp/IEspHttpServer.hpp"
+#include "../esp/esp_http_server_if.hpp"
 
 class WebserverSlave
 {

@@ -1,9 +1,9 @@
 
-#include "api_presets.cpp"
-#include "api_config.cpp"
-#include "api_status.cpp"
+#include "ApiPresets.cpp"
+#include "ApiConfig.cpp"
+#include "ApiStatus.cpp"
 
-#include "webserver_slave.hpp"
+#include "WebserverSlave.hpp"
 
 WebserverSlave::WebserverSlave(IEspHttpServer& espHttpServer) 
 : espHttpServer_(espHttpServer) 
@@ -38,21 +38,21 @@ void WebserverSlave::register_endpoints()
     httpd_uri_t presets_uri = {
         .uri = "/api/presets",
         .method = HTTP_GET,
-        .handler = get_presets_handler,
+        .handler = ApiPresets::get_presets_handler,
         .user_ctx = NULL};
     httpd_register_uri_handler(server, &presets_uri);
     // Register Config endpoints
     httpd_uri_t config_uri = {
         .uri = "/api/configuration",
         .method = HTTP_GET,
-        .handler = get_config_handler,
+        .handler = ApiConfig::get_config_handler,
         .user_ctx = NULL};
     httpd_register_uri_handler(server, &config_uri);
     // Register Status endpoints
     httpd_uri_t status_uri = {
         .uri = "/api/status",
         .method = HTTP_GET,
-        .handler = get_status_handler,
+        .handler = ApiStatus::get_status_handler,
         .user_ctx = NULL};
     httpd_register_uri_handler(server, &status_uri);
     // ... Register more endpoints as needed ...

@@ -11,12 +11,12 @@
 #if defined(BUILD_MASTER)
 #include "master/master.hpp"
 #elif defined(BUILD_WEBSERVER_SLAVE)
-#include "slaves/webserver_slave/project_dmx_controller/webserver_slave.hpp"
+#include "slaves/webserver_slave/project_dmx_controller/WebserverSlave.hpp"
 #else 
 // Other slaves
 #endif // BUILD
 
-#include "esp/IEspHttpServer.hpp"
+#include "esp/EspHttpServer.hpp"
 
 
 // #define BUILD_MASTER 0
