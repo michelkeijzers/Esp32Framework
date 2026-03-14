@@ -1,7 +1,44 @@
-
 # DMX Controller API Contract
 
 This document describes the API contract between the frontend (web UI) and the backend (Flask server or ESP32 webserver) for the DMX controller project.
+
+# Table of Contents
+
+- [Control Page](#control-page)
+  - [Get Active Preset Numbers](#get-active-preset-numbers)
+  - [Select Preset](#select-preset)
+  - [Blackout](#blackout)
+- [DMX Presets Page](#dmx-presets-page)
+  - [Get Presets](#get-presets)   
+  - [Save Preset](#save-preset)
+  - [Move Preset Up](#move-preset-up)
+  - [Move Preset Down](#move-preset-down)
+  - [Delete Preset](#delete-preset) 
+  - [Insert Preset At](#insert-preset-at)
+  - [Swap Preset Activation](#swap-preset-activation)
+- [Edit Preset](#edit-preset)
+  - [Preset Values](#preset-values)
+- [Edit Value Page](#edit-value-page)
+  - [Preset Value](#preset-value) 
+- [Configuration Page](#configuration-page)
+  - [Load Button](#load-button) 
+  - [Save Button](#save-button)
+  - [Presets/Circular Navigation Checkbox](#presetscircular-navigation-checkbox)
+- [Status Page](#status-page)
+  - [Get Node Status](#get-node-status) 
+  - [Node Status Stream (SSE)](#node-status-stream-sse)
+- [Nodes Page](#nodes-page)
+  - [Opening page](#opening-page)
+  - [Save Button](#save-button-1)
+  - [Reboot Button](#reboot-button)
+  - [Factory Reset](#factory-reset)
+  - [Firmware Update](#firmware-update)
+- [Security Page](#security-page)
+  - [Send ESP-NOW Security Key](#send-esp-now-security-key) 
+  - [Send Wi-Fi Password](#send-wi-fi-password)
+- [Logging Page](#logging-page)
+  - [Logging Stream (SSE)](#logging-stream-sse) 
+
 
 # Control Page
 
@@ -107,70 +144,70 @@ Example response (JSON):
 
 ## Move Preset Up
 
-**Endpoint:** `PUT /api/move_preset_up/<preset_index>`  
+**Endpoint:** `PUT /api/presets/<preset_index>/move_up`  
 **Description:** Moves the preset at the given index up by one position. Returns the updated preset list.
 **Returns:** `200 OK` with updated preset list; `400 Bad Request` on invalid index.
 
 Example request:
 
 ```
-POST /api/move_preset_up/2
+PUT /api/presets/2/move_up
 ```
 
 Example response: See Get Presets example response above, with the specified preset moved up by one position. For example, if "Party Mode" was at index 2 and is moved up, it would swap places with "Cool Blue".
 
 ## Move Preset Down
 
-**Endpoint:** `PUT /api/move_preset_down/<preset_index>`  
+**Endpoint:** `PUT /api/presets/<preset_index>/move_down`  
 **Description:** Moves the preset at the given index down by one position. Returns the updated preset list.
 **Returns:** `200 OK` with updated preset list; `400 Bad Request` on invalid index.
 
 Example:
 
 ```
-POST /api/move_preset_down/1
+PUT /api/presets/1/move_down
 ```
 
 Example response: See Get Preset example response above, with the specified presets move down by one position. For example, if "Warm White" was at index 2 and is moved down, it would swap places with "Party Mode".
 
 ## Delete Preset
 
-**Endpoint:** `DELETE /api/delete_preset/<preset_index>`  
+**Endpoint:** `DELETE /api/presets/<preset_index>`  
 **Description:** Deletes the preset at the given index. Returns the updated preset list.
 **Returns:** `200 OK` with updated preset list; `400 Bad Request` on invalid index.
 
 Example:
 
 ```
-POST /api/delete_preset/2
+DELETE /api/presets/2
 ```
 
 Example response: See Get Preset example response above, with the specified preset being deleted.
 
 ## Insert Preset At
 
-**Endpoint:** `PUT /api/insert_preset_at/<preset_index>`  
+**Endpoint:** `POST /api/presets/<preset_index>/insert_at`  
 **Description:** Inserts a new preset at the given index. Returns the updated preset list.
 **Returns:** `200 OK` with updated preset list; `400 Bad Request` on invalid index.
 
 Example:
 
 ```
-POST /api/insert_preset_at/1
+POST /api/presets/1/insert_at
 ```
 
 Example response: See Get Preset example response above, with an empty preset being inserted at the selected position.
 
 ## Swap Preset Activation
 
-**Endpoint:** `PUT /api/swap_preset_activation/<preset_index>`<br/>
+**Endpoint:** `PUT /api/presets/<preset_index>/swap_activation`<br/>
 **Description:** Swaps the preset activation of the preset at the given index. Returns the updated preset list.
 **Returns:** `200 OK` with updated preset list; `400 Bad Request` on invalid index or state.
 
 Example request:
 
 ```
-POST /api/swap_preset_activation/2/1
+PUT /api/presets/2/swap_activation
 ```
 
 Example response: See Get Preset example response above, with the updated activation state of the preset.

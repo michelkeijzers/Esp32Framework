@@ -9,6 +9,7 @@
 #include "ApiFirmware.hpp"
 #include "ApiSecurity.hpp"
 #include "ApiLogging.hpp"
+x
 
 WebserverSlave::WebserverSlave(IEspHttpServer& espHttpServer)
     : espHttpServer_(espHttpServer)
@@ -220,41 +221,41 @@ void WebserverSlave::register_endpoints()
         .user_ctx = apiPresets_};
     httpd_register_uri_handler(server, &save_preset_uri);
 
-    // PUT /api/move_preset_up/*
+    // PUT /api/presets/*/move_up
     httpd_uri_t move_preset_up_uri = {
-        .uri = "/api/move_preset_up/*",
+        .uri = "/api/presets/*/move_up",
         .method = HTTP_PUT,
         .handler = move_preset_up_handler_static,
         .user_ctx = apiPresets_};
     httpd_register_uri_handler(server, &move_preset_up_uri);
 
-    // PUT /api/move_preset_down/*
+    // PUT /api/presets/*/move_down
     httpd_uri_t move_preset_down_uri = {
-        .uri = "/api/move_preset_down/*",
+        .uri = "/api/presets/*/move_down",
         .method = HTTP_PUT,
         .handler = move_preset_down_handler_static,
         .user_ctx = apiPresets_};
     httpd_register_uri_handler(server, &move_preset_down_uri);
 
-    // DELETE /api/delete_preset/*
+    // DELETE /api/presets/*
     httpd_uri_t delete_preset_uri = {
-        .uri = "/api/delete_preset/*",
+        .uri = "/api/presets/*",
         .method = HTTP_DELETE,
         .handler = delete_preset_handler_static,
         .user_ctx = apiPresets_};
     httpd_register_uri_handler(server, &delete_preset_uri);
 
-    // PUT /api/insert_preset_at/*
+    // POST /api/presets/*/insert_at
     httpd_uri_t insert_preset_at_uri = {
-        .uri = "/api/insert_preset_at/*",
-        .method = HTTP_PUT,
+        .uri = "/api/presets/*/insert_at",
+        .method = HTTP_POST,
         .handler = insert_preset_at_handler_static,
         .user_ctx = apiPresets_};
     httpd_register_uri_handler(server, &insert_preset_at_uri);
 
-    // PUT /api/swap_preset_activation/*
+    // PUT /api/presets/*/swap_activation
     httpd_uri_t swap_preset_activation_uri = {
-        .uri = "/api/swap_preset_activation/*",
+        .uri = "/api/presets/*/swap_activation",
         .method = HTTP_PUT,
         .handler = swap_preset_activation_handler_static,
         .user_ctx = apiPresets_};

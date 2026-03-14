@@ -50,3 +50,16 @@ check firewall setting:
 - Apply to all profiles (Domain, Private, Public)
 - Name: “Flask Web Server 8080” (or similar)
 - Save and restart your Flask server if needed.
+
+# ESP32 Build and API Tester Shortcut
+
+You can build the ESP32 project and run the API tester with a single shortcut key:
+
+**Press F8** to:
+- Build the ESP32 project (same as clicking the wrench button or pressing Ctrl+E, B with the ESP-IDF extension)
+- Build and run the API tester in `tests/api_tester` (runs `cmake --build build && .\build\Debug\api_tester.exe`)
+
+Alternatively, you can use `Ctrl+Shift+B` (or open the Command Palette and select `Run Build Task...`) and choose **ESP32: Build All + Run API Tester** from the task list.
+
+The keybinding is defined in `.vscode/keybindings.json` and the tasks are in `.vscode/tasks.json`.
+
