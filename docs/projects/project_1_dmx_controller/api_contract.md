@@ -49,6 +49,13 @@ This document describes the API contract between the frontend (web UI) and the b
 **Returns:** `200 OK` with JSON array of preset numbers.
 **Website Page:** Control page, when page is opened.
 
+**Request Specification:**
+No request parameters or body required.
+
+**Response Specification:**
+Array of integers representing active preset numbers:
+- Each element (integer, required) – Preset number (1-20) that is currently active
+
 Example request:
 
 ```
@@ -65,13 +72,25 @@ Example response (JSON):
 
 **Endpoint:** `POST /api/select_preset/<preset_number>`<br/>
 **Description:** Selects a DMX preset by number (1-20). The backend will look up the preset name and return it.
-**Returns:** `200 OK` on success; `400 Bad Request` on invalid preset.
+**Returns:** `200 OK` with JSON response containing the selected preset name; `400 Bad Request` on invalid preset (preset_number not in 1-20 range).
 **Website Page:** Control page, press Preset button.
+
+**Request Specification:**
+- **URL Parameter:** `preset_number` (required, integer 1-20)
+
+**Response Specification:**
+- `preset_name` (string, required) – Name of the selected preset (e.g., "Warm White")
 
 Example request:
 
 ```
 POST /api/select_preset/1
+```
+
+Example response:
+
+```json
+{ "preset_name": "Warm White" }
 ```
 
 ## Blackout
@@ -80,6 +99,12 @@ POST /api/select_preset/1
 **Description:** Activates blackout mode (all DMX light off). It is a special preset with a fixed name "Blackout".
 **Returns:** `200 OK` with `{ "preset_name": "Blackout" }` on success.
 **Website Page:** Control page, press Blackout button.
+
+**Request Specification:**
+No request body required.
+
+**Response Specification:**
+- `preset_name` (string, required) – Name of the blackout preset (always "Blackout")
 
 Example request:
 
@@ -99,8 +124,13 @@ Example response (JSON):
 
 **Endpoint:** `GET /api/presets`  
 **Description:** Returns an array of all DMX presets with their names and active states to display the full Presets list. The backend (Flask or ESP32) provides the current names and activation status.
-**Returns:** `200 OK` with JSON array of presets.
+**Returns:** `200 OK` with JSON array of preset objects.
 **Website Page:** Presets page, when page is opened.
+
+**Response Specification:**
+Array of preset objects, each containing:
+- `name` (string, required) – Name of the preset (e.g., "Warm White")
+- `active` (boolean, required) – Whether the preset is currently active
 
 Example request:
 
@@ -115,7 +145,6 @@ Example response (JSON):
   { "name": "Warm White", "active": true },
   { "name": "Cool Blue", "active": false },
   { "name": "Party Mode", "active": false }
-  // ... more presets ...
 ]
 ```
 
@@ -125,6 +154,15 @@ Example response (JSON):
 **Description:** Saves the current preset (name and DMX values) for the given preset number. Expects the updated preset data in the request body (JSON). Returns ack/nack.
 **Returns:** `200 OK` with `{ "ack": "ok" }` on success; `400 Bad Request` with `{ "ack": "nok" }` on error.
 
+**Request Specification:**
+- **URL Parameter:** `preset_number` (required, integer 1-20)
+- **Body:** JSON object containing:
+  - `name` (string, required) – Name of the preset (e.g., "Cool Blue")
+  - `dmx_values` (array of integers, required) – Array of 512 DMX channel values (0–255)
+
+**Response Specification:**
+- `ack` (string, required) – "ok" on success, "nok" on failure
+
 Example request:
 
 ```
@@ -132,7 +170,7 @@ PUT /api/save_preset/2
 
 {
   "name": "Cool Blue",
-  "dmx_values": [0, 128, 255, ...]
+  "dmx_values": [0, 128, 255, 0, 0, ..., 0]
 }
 ```
 
@@ -148,13 +186,27 @@ Example response (JSON):
 **Description:** Moves the preset at the given index up by one position. Returns the updated preset list.
 **Returns:** `200 OK` with updated preset list; `400 Bad Request` on invalid index.
 
+**Request Specification:**
+- **URL Parameter:** `preset_index` (required, integer 0-based index)
+
+**Response Specification:**
+Array of preset objects (same as Get Presets) with presets reordered after the move.
+
 Example request:
 
 ```
 PUT /api/presets/2/move_up
 ```
 
-Example response: See Get Presets example response above, with the specified preset moved up by one position. For example, if "Party Mode" was at index 2 and is moved up, it would swap places with "Cool Blue".
+Example response (JSON):
+
+```json
+[
+  { "name": "Warm White", "active": true },
+  { "name": "Party Mode", "active": false },
+  { "name": "Cool Blue", "active": false }
+]
+```
 
 ## Move Preset Down
 
@@ -162,13 +214,27 @@ Example response: See Get Presets example response above, with the specified pre
 **Description:** Moves the preset at the given index down by one position. Returns the updated preset list.
 **Returns:** `200 OK` with updated preset list; `400 Bad Request` on invalid index.
 
-Example:
+**Request Specification:**
+- **URL Parameter:** `preset_index` (required, integer 0-based index)
+
+**Response Specification:**
+Array of preset objects (same as Get Presets) with presets reordered after the move.
+
+Example request:
 
 ```
 PUT /api/presets/1/move_down
 ```
 
-Example response: See Get Preset example response above, with the specified presets move down by one position. For example, if "Warm White" was at index 2 and is moved down, it would swap places with "Party Mode".
+Example response (JSON):
+
+```json
+[
+  { "name": "Warm White", "active": true },
+  { "name": "Party Mode", "active": false },
+  { "name": "Cool Blue", "active": false }
+]
+```
 
 ## Delete Preset
 
@@ -176,13 +242,26 @@ Example response: See Get Preset example response above, with the specified pres
 **Description:** Deletes the preset at the given index. Returns the updated preset list.
 **Returns:** `200 OK` with updated preset list; `400 Bad Request` on invalid index.
 
-Example:
+**Request Specification:**
+- **URL Parameter:** `preset_index` (required, integer 0-based index)
+
+**Response Specification:**
+Array of preset objects (same as Get Presets) with the specified preset removed.
+
+Example request:
 
 ```
 DELETE /api/presets/2
 ```
 
-Example response: See Get Preset example response above, with the specified preset being deleted.
+Example response (JSON):
+
+```json
+[
+  { "name": "Warm White", "active": true },
+  { "name": "Cool Blue", "active": false }
+]
+```
 
 ## Insert Preset At
 
@@ -190,19 +269,48 @@ Example response: See Get Preset example response above, with the specified pres
 **Description:** Inserts a new preset at the given index. Returns the updated preset list.
 **Returns:** `200 OK` with updated preset list; `400 Bad Request` on invalid index.
 
-Example:
+**Request Specification:**
+- **URL Parameter:** `preset_index` (required, integer 0-based index)
+- **Body:** JSON object containing:
+  - `name` (string, optional) – Name of the new preset (default: empty string)
+  - `dmx_values` (array of integers, optional) – DMX values for new preset (default: all zeros)
 
-```
+**Response Specification:**
+Array of preset objects (same as Get Presets) with the new preset inserted at the specified index.
+
+Example request:
+
+```json
 POST /api/presets/1/insert_at
+
+{
+  "name": "New Preset",
+  "dmx_values": [0, 0, 0, ..., 0]
+}
 ```
 
-Example response: See Get Preset example response above, with an empty preset being inserted at the selected position.
+Example response (JSON):
+
+```json
+[
+  { "name": "Warm White", "active": true },
+  { "name": "New Preset", "active": false },
+  { "name": "Cool Blue", "active": false },
+  { "name": "Party Mode", "active": false }
+]
+```
 
 ## Swap Preset Activation
 
 **Endpoint:** `PUT /api/presets/<preset_index>/swap_activation`<br/>
-**Description:** Swaps the preset activation of the preset at the given index. Returns the updated preset list.
-**Returns:** `200 OK` with updated preset list; `400 Bad Request` on invalid index or state.
+**Description:** Toggles the activation state of the preset at the given index. Returns the updated preset list.
+**Returns:** `200 OK` with updated preset list; `400 Bad Request` on invalid index.
+
+**Request Specification:**
+- **URL Parameter:** `preset_index` (required, integer 0-based index)
+
+**Response Specification:**
+Array of preset objects (same as Get Presets) with the activation state of the specified preset toggled.
 
 Example request:
 
@@ -210,7 +318,15 @@ Example request:
 PUT /api/presets/2/swap_activation
 ```
 
-Example response: See Get Preset example response above, with the updated activation state of the preset.
+Example response (JSON):
+
+```json
+[
+  { "name": "Warm White", "active": true },
+  { "name": "Cool Blue", "active": false },
+  { "name": "Party Mode", "active": true }
+]
+```
 
 # Edit Preset
 
@@ -218,7 +334,15 @@ Example response: See Get Preset example response above, with the updated activa
 
 **Endpoint:** `GET /api/preset_values/<preset_number>`<br/>
 **Description:** Returns an array of 512 DMX values (0–255) for the specified preset number. Used to display or edit all DMX channel values for a given preset in the frontend.<br/>
-**Returns:**: 200 if preset number exists, 400 otherwise.
+**Returns:** `200 OK` with JSON array of DMX values if preset exists; `400 Bad Request` if preset not found.
+
+**Request Specification:**
+- **URL Parameter:** `preset_number` (required, integer 1-20)
+
+**Response Specification:**
+Array of 512 integers (0-255), where each element represents a DMX channel value:
+- Index 0-511 represents DMX channels 1-512
+- Each value is an integer 0-255 representing the intensity/brightness
 
 **Example request:**
 ```
@@ -227,7 +351,7 @@ GET /api/preset_values/2
 
 **Example response:**
 ```json
-[0, 128, 255, 0, 0, ..., 0]
+[0, 128, 255, 0, 0, 64, 192, ..., 0]
 ```
 
 # Edit Value Page
@@ -235,19 +359,31 @@ GET /api/preset_values/2
 ## Preset Value
 
 **Endpoint:** `PUT /api/preset_value/<preset>/<index>/<value>`<br/>
-**Description:** Set the DMX value for a specific preset and channel.
-**Returns:** `200 OK` with `{ "index": ..., "value": ... }` on success; `400 Bad Request` on invalid input.
+**Description:** Sets the DMX value for a specific preset and channel.
+**Returns:** `200 OK` with updated value object on success; `400 Bad Request` on invalid input (out of range values or invalid preset).
+
+**Request Specification:**
+- **URL Parameters:**
+  - `preset` (required, integer 1-20) – Preset number
+  - `index` (required, integer 0-511) – DMX channel index (0-based, 512 total channels)
+  - `value` (required, integer 0-255) – DMX intensity value
+
+**Response Specification:**
+- `index` (integer, required) – The DMX channel index that was updated
+- `value` (integer, required) – The new DMX value (0-255)
+- `preset` (integer, required) – The preset number
 
 Example request:
 
 ```
-POST /api/preset_value/2/45/128
+PUT /api/preset_value/2/45/128
 ```
 
 Example response (JSON):
 
 ```json
 {
+  "preset": 2,
   "index": 45,
   "value": 128
 }
@@ -260,6 +396,10 @@ Example response (JSON):
 **Endpoint:** `GET /api/configuration`<br/>
 **Description:** Returns all configuration settings as a JSON object. Used to load configuration in the UI.
 **Returns:** `200 OK` with JSON object of config.
+
+**Response Specification:**
+JSON object containing all configuration settings:
+- `circular navigation` (boolean, required) – Enable/disable circular navigation for preset lists
 
 Example request:
 
@@ -281,10 +421,17 @@ Example response (JSON):
 **Description:** Saves all configuration settings. Expects a JSON object with all config fields. Returns ack ("ok"/"nok").
 **Returns:** `200 OK` with `{ "ack": "ok" }` on success; `400 Bad Request` with `{ "ack": "nok" }` on error.
 
+**Request Specification:**
+JSON object containing configuration fields to save:
+- `circular navigation` (boolean, required) – Enable/disable circular navigation for preset lists
+
+**Response Specification:**
+- `ack` (string, required) – Acknowledgment status ("ok" on success, "nok" on failure)
+
 Example request (URL + JSON):
 
 ```json
-POST /api/configuration
+PUT /api/configuration
 
 {
   "circular navigation": false
@@ -303,10 +450,17 @@ Example response (JSON):
 **Description:** Sets the circular navigation boolean for presets. Expects `{ "state": true|false }` in the request body. Returns ack/nack.
 **Returns:** `200 OK` with `{ "ack": "ok" }` on success; `400 Bad Request` with `{ "ack": "nok" }` on error.
 
+**Request Specification:**
+JSON object containing the circular navigation state:
+- `state` (boolean, required) – Enable (true) or disable (false) circular navigation
+
+**Response Specification:**
+- `ack` (string, required) – Acknowledgment status ("ok" on success, "nok" on failure)
+
 Example request (URL + JSON):
 
 ```json
-POST /api/configuration_presets_circular_navigation
+PUT /api/configuration_presets_circular_navigation
 
 { "state": true }
 ```
@@ -324,7 +478,21 @@ Example response (JSON):
 
 **Endpoint:** `GET /api/status`  
 **Description:** Returns an array of all ESP32 nodes with their current status and metadata. Used to display the status dashboard in the web UI.
-**Returns:** `200 OK` with JSON array of node status.
+**Returns:** `200 OK` with JSON array of node status objects.
+
+**Response Specification:**
+Array of node objects, each containing:
+- `name` (string, required) – Node identifier (e.g., "Master", "Slave")
+- `role` (string, required) – Role of the node (e.g., "Master", "Slave")
+- `slave_type` (string, required) – Type of slave (e.g., "Webserver", "DMX", "MIDI")
+- `slave_sequence` (integer, required) – Sequence number of the slave (1-based)
+- `status_watchdog` (string, required) – Watchdog status (e.g., "OK", "ERROR", "TIMEOUT")
+- `last_communication` (string, required) – ISO 8601 timestamp of last communication
+- `uptime` (string, required) – Human-readable uptime (e.g., "3h 12m")
+- `firmware_version` (string, required) – Version string (e.g., "v1.2.3")
+- `config_version` (string, required) – Configuration version (e.g., "cfg-2026-03-10")
+- `mac_address` (string, required) – MAC address in format XX:XX:XX:XX:XX:XX
+- `ip_address` (string, required) – IPv4 address (e.g., "192.168.1.101")
 
 ## Node Status Stream (SSE)
 
@@ -332,17 +500,22 @@ Example response (JSON):
 **Description:** Streams real-time node status updates using Server-Sent Events (SSE). Each event contains the latest array of node status objects. Used for live updates on the Status page.
 **Returns:** `200 OK` with `Content-Type: text/event-stream` and a stream of JSON arrays. Connection remains open while the page is active.
 
-Example event:
-
-```
-event: status
-data: [{ "name": "Master", ... }, ...]
-```
+**Response Specification:**
+Server-sent events (one per update) containing an array of node objects (same structure as Get Node Status endpoint). Each event includes:
+- `event` (string) – Event type identifier ("status")
+- `data` (JSON array) – Array of node status objects
 
 Example request:
 
 ```
-GET /api/status
+GET /api/status/stream
+```
+
+Example event:
+
+```
+event: status
+data: [{ "name": "Master", "role": "Master", "slave_type": "Webserver", "slave_sequence": 1, "status_watchdog": "OK", "last_communication": "2026-03-11 14:23:01", "uptime": "3h 12m", "firmware_version": "v1.2.3", "config_version": "cfg-2026-03-10", "mac_address": "24:6F:28:AA:BB:CC", "ip_address": "192.168.1.101" }, { "name": "Slave", "role": "Slave", "slave_type": "DMX", "slave_sequence": 2, "status_watchdog": "ERROR", "last_communication": "2026-03-11 14:25:10", "uptime": "2h 45m", "firmware_version": "v1.2.2", "config_version": "cfg-2026-03-09", "mac_address": "24:6F:28:DD:EE:FF", "ip_address": "192.168.1.102" }]
 ```
 
 Example response (JSON):
@@ -399,6 +572,11 @@ Each node object contains:
 **Description:** Returns an array of all nodes with their names and current MAC addresses. Used to display and edit node MACs in the Initialization page.
 **Returns:** `200 OK` with JSON array of nodes.
 
+**Response Specification:**
+Array of node objects, each containing:
+- `name` (string, required) – Node identifier (e.g., "Master", "Webserver")
+- `mac_address` (string, required) – MAC address in format XX:XX:XX:XX:XX:XX
+
 Example request:
 
 ```
@@ -422,6 +600,13 @@ Example response (JSON):
 **Description:** Updates the MAC addresses for all nodes. Expects a JSON array of MAC addresses (in the same order as returned by GET). Returns ack/nack. Only valid MAC addresses are accepted.
 **Returns:** `200 OK` with `{ "ack": "ok" }` on success; `400 Bad Request` with `{ "ack": "nok" }` on error.
 
+**Request Specification:**
+Array of MAC address strings (one per node, in the same order as GET /api/nodes_info):
+- Each element (string, required) – MAC address in format XX:XX:XX:XX:XX:XX
+
+**Response Specification:**
+- `ack` (string, required) – Acknowledgment status ("ok" on success, "nok" on failure)
+
 Example request:
 
 ```json
@@ -442,6 +627,12 @@ Example response (JSON):
 **Description:** Triggers a system reboot action. No request body or response is required. Used by the Reboot button on the Initialization page.
 **Returns:** `204 No Content` on success.
 
+**Request Specification:**
+No request body required.
+
+**Response Specification:**
+No response body. HTTP status 204 No Content indicates success.
+
 Example request:
 
 ```
@@ -450,7 +641,9 @@ POST /api/reboot
 
 Example response:
 
+```
 204 No Content
+```
 
 ## Factory Reset
 
@@ -458,6 +651,12 @@ Example response:
 **Description:** Performs a factory reset on the webserver (clears configuration, resets to defaults, may reboot).<br/>
 **Returns:** `200 OK` with `{ "ack": "ok" }` on success; `{ "ack": "nok" }` on failure.<br/>
 **Website Page:** Nodes page, press Factory Reset button.
+
+**Request Specification:**
+No request body required.
+
+**Response Specification:**
+- `ack` (string, required) – Acknowledgment status ("ok" on success, "nok" on failure)
 
 Example request:
 
@@ -473,16 +672,22 @@ Example response (JSON):
 
 ## Firmware Update 
 
-**Endpoint:**  POST /api/firmware_chunk/{node_idx}
+### POST /api/firmware_chunk/{node_idx}
+
+**Endpoint:** `POST /api/firmware_chunk/{node_idx}`  
 **Description:** Upload a chunk of firmware for a given node (4KB per chunk). The frontend splits the firmware .bin file into 4KB chunks and sends them sequentially. After all chunks are sent, the frontend calls the finalize endpoint to assemble and flash the firmware.
-- Request body (JSON):
-  - `chunk`: integer, chunk index (starting from 0)
-  - `data`: string, base64-encoded binary chunk
-- Response (JSON):
-  - `{ "ack": "ok" }` on success
-  - `{ "ack": "nok", "error": "..." }` on error
 
+**Request Specification:**
+- **URL Parameter:** `node_idx` (required, integer) – Node index
+- **Body:** JSON object containing:
+  - `chunk` (integer, required) – Chunk index (starting from 0)
+  - `data` (string, required) – Base64-encoded binary chunk data
 
+**Response Specification:**
+- `ack` (string, required) – Acknowledgment status ("ok" on success, "nok" on failure)
+- `error` (string, optional) – Error message if ack is "nok"
+
+**Upload Process:**
 1. User selects .bin file in the Nodes page UI. JavaScript splits the file into 4KB chunks.
 2. For each chunk, POST to `/api/firmware_chunk/{node_idx}` with chunk index and base64 data. No checksum is used; TCP ensures integrity.
 3. The UI handles retries for failed chunks and shows a live progress bar.
@@ -494,11 +699,11 @@ Example response (JSON):
 Example request:
 ```json
 POST /api/firmware_chunk/1
+
 {
   "chunk": 0,
   "data": "base64-encoded-chunk-data..."
 }
-
 ```
 
 Example response (JSON):
@@ -511,16 +716,21 @@ Example response (JSON):
 
 **Endpoint:** `POST /api/firmware_finish/{node_idx}`  
 **Description:** Finalize firmware upload for a node, assemble and flash firmware.
-- Request body: (empty)
-- Response (JSON):
-  - `{ "ack": "ok" }` on success
-  - `{ "ack": "nok", "error": "..." }` on error
+
+**Request Specification:**
+- **URL Parameter:** `node_idx` (required, integer) – Node index
+- **Body:** (empty, no request body required)
+
+**Response Specification:**
+- `ack` (string, required) – Acknowledgment status ("ok" on success, "nok" on failure)
+- `error` (string, optional) – Error message if ack is "nok"
 
 Example request:
 
 ```
 POST /api/firmware_finish/1
 ```
+
 Example response (JSON):
 
 ```json
@@ -535,17 +745,20 @@ Example response (JSON):
 **Description:** Sends the ESP-NOW security key from the web UI to the backend. The key is a 16-byte (uint8_t) array, scrambled using a fixed permutation for security and reversibility. The backend must descramble the key using the same order.
 **Returns:** `200 OK` with `{ "ack": "ok" }` on success; `400 Bad Request` with `{ "ack": "nok" }` on error.
 
-**Scramble order (index mapping):**
+**Request Specification:**
+- **Body:** JSON array of 16 hex strings representing scrambled key bytes:
+  - Each element (string, required) – Hex string (e.g., "a1", "b2") representing a key byte
+  - Scramble order (index mapping): [7, 2, 12, 0, 9, 5, 1, 14, 8, 3, 10, 6, 13, 11, 4, 15]
+  - To descramble: `original[scramble_order[i]] = scrambled[i]` for i = 0..15
 
-[7, 2, 12, 0, 9, 5, 1, 14, 8, 3, 10, 6, 13, 11, 4, 15]
-
-- To scramble: `scrambled[i] = original[scramble_order[i]]` for i = 0..15
-- To descramble: `original[scramble_order[i]] = scrambled[i]` for i = 0..15
+**Response Specification:**
+- `ack` (string, required) – Acknowledgment status ("ok" on success, "nok" on failure)
 
 Example request (URL + JSON):
 
 ```json
 POST /api/esp_now_key
+
 ["a1", "b2", "c3", "d4", "e5", "f6", "07", "18", "29", "3a", "4b", "5c", "6d", "7e", "8f", "90"]
 ```
 
@@ -561,10 +774,18 @@ POST /api/esp_now_key
 **Description:** Sends the Wi-Fi password from the web UI to the backend. The password is a string (WPA2: 8-63 characters). The backend must validate and securely store or forward the password.
 **Returns:** `200 OK` with `{ "ack": "ok" }` on success; `400 Bad Request` with `{ "ack": "nok" }` on error.
 
+**Request Specification:**
+- **Body:** JSON object containing:
+  - `password` (string, required) – Wi-Fi password (WPA2: 8-63 characters)
+
+**Response Specification:**
+- `ack` (string, required) – Acknowledgment status ("ok" on success, "nok" on failure)
+
 Example request (URL + JSON):
 
 ```json
 POST /api/wifi_password
+
 { "password": "mysecretwifi" }
 ```
 
@@ -583,11 +804,18 @@ POST /api/wifi_password
 **Description:** Streams real-time log lines using Server-Sent Events (SSE). 
 **Returns:** `200 OK` with `Content-Type: text/event-stream` and a stream of log lines. Connection remains open while the page is active.
 
-Example event:
+**Request Specification:**
+No request parameters or body required.
 
-```
-data: 2026-03-12 15:42:10
-```
+**Response Specification:**
+Server-sent events containing individual log lines:
+- `event` (string) – Event type ("") (default event type for plain text)
+- `data` (string) – Log line containing timestamp and message (e.g., "2026-03-12 15:42:10 [INFO] System initialized")
+
+**Frontend behavior:**
+- The Logging page opens a connection to `/api/logging` using EventSource.
+- Each received line is appended to a large textarea for live display.
+- The connection is closed when the page is unloaded.
 
 Example request:
 
@@ -595,9 +823,12 @@ Example request:
 GET /api/logging
 ```
 
-**Frontend behavior:**
-- The Logging page opens a connection to `/api/logging` using EventSource.
-- Each received line is appended to a large textarea for live display.
-- The connection is closed when the page is unloaded.
+Example event:
+
+```
+data: 2026-03-12 15:42:10 [INFO] System initialized
+data: 2026-03-12 15:42:11 [DEBUG] WebServer started
+data: 2026-03-12 15:42:12 [INFO] All nodes connected
+```
 
 # General Notes
