@@ -11,7 +11,10 @@
                 "close": false
             },
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "IDF_BUILD_CLEAR_SCREEN": "0"
+                }
             },
             "console": "integratedTerminal",
             "problemMatcher": []

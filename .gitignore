@@ -19,3 +19,4 @@ sdkconfig.old
 # Other
 *.csv
 *.json
+website/dmx_project/dist/
