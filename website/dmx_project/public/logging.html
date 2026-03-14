@@ -7,6 +7,9 @@
    <title>Logging</title>
    <link rel="stylesheet" href="pico.min.css">
    <link rel="stylesheet" href="custom.css">
+   <style>
+      .subtitle-row h2 { margin: 0; }
+   </style>
 </head>
 
 <body>
@@ -15,11 +18,22 @@
          <h1 class="title-colored no-margin">DMX Controller</h1>
       </div>
       <div class="subtitle-row">
-         <button onclick="window.location.href='index.html'" class="home-btn">Home</button>
-         <h2 style="margin: 0;">Logging</h2>
+         <button type="button" onclick="window.location.href='../index.html'" class="home-btn">Home</button>
+         <h2>Logging</h2>
       </div>
-      <div style="margin-top: 2em;">
-         <textarea id="logbox" rows="20" style="width:100%; font-family:monospace; font-size:1em; resize:vertical;" readonly></textarea>
+      <style>
+         #logbox {
+            width: 100%;
+            font-family: monospace;
+            font-size: 1em;
+            resize: vertical;
+         }
+         .logbox-container {
+            margin-top: 2em;
+         }
+      </style>
+      <div class="logbox-container">
+         <textarea id="logbox" rows="20" readonly></textarea>
       </div>
    </main>
    <script>

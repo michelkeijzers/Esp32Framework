@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,15 @@
    <link rel="stylesheet" href="pico.min.css">
    <link rel="stylesheet" href="custom.css">
    <script src="htmx.min.js"></script>
-   <!-- No selection logic here; all selection is handled in the body script using pointerdown only -->
+   <style>
+      .subtitle-row { margin-bottom: 1.2rem; }
+      .subtitle-row h2 { margin: 0; }
+      .blackout-container { margin-bottom: 1.2rem; }
+      #blackout-btn {
+         background-color: #222; color: #fff; width: 100%; margin: 10px auto; display: block; font-size: 1.3rem; font-weight: bold; margin-bottom: 1.2rem;
+      }
+      .preset-grid { display: flex; flex-direction: column; }
+   </style>
 </head>
 
 <body>
@@ -17,14 +26,13 @@
          <h1 class="title-colored no-margin">DMX Controller</h1>
       </div>
       <div class="subtitle-row">
-         <button onclick="window.location.href='index.html'" class="home-btn">Home</button>
-         <h2 style="margin: 0;">Control</h2>
+         <button type="button" onclick="window.location.href='../index.html'" class="home-btn">Home</button>
+         <h2>Control</h2>
       </div>
-         <div style="margin-bottom: 1.2rem;">
-            <button id="blackout-btn" class="big-bold-btn selectable-btn"
-               style="background-color: #222; color: #fff; width: 100%; margin: 10px auto; display: block; font-size: 1.3rem; font-weight: bold; margin-bottom: 1.2rem;">Blackout</button>
+         <div class="blackout-container">
+            <button id="blackout-btn" class="big-bold-btn selectable-btn" type="button">Blackout</button>
          </div>
-         <div class="preset-grid" id="preset-grid" style="display: flex; flex-direction: column;"></div>
+         <div class="preset-grid" id="preset-grid"></div>
          <script>
             // Shared selection handler for both Blackout and preset buttons
 
@@ -61,6 +69,7 @@
                            btn.textContent = num;
                            btn.setAttribute('hx-post', `/api/v1/select_preset/${num}`);
                            btn.setAttribute('hx-swap', 'none');
+                           btn.setAttribute('type', 'button');
                            btn.style.flex = '1';
                            btn.addEventListener('pointerdown', handleSelect);
                            rowDiv.appendChild(btn);
@@ -74,4 +83,6 @@
                            // Fallback: show nothing if endpoint fails
                         });
                   </script>
-
+      </main>
+   </body>
+</html>

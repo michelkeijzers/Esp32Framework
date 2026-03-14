@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="custom.css">
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,6 +7,16 @@
    <title>Edit Value</title>
    <link rel="stylesheet" href="pico.min.css">
    <link rel="stylesheet" href="custom.css">
+   <style>
+      .subtitle-row { display: flex; align-items: center; justify-content: flex-end; gap: 0.7rem; }
+      .home-btn.home { position: relative; left: -7rem; }
+      .home-btn.back-btn { position: relative; left: -6rem; }
+      .subtitle-row h2 { text-align: center; display: flex; justify-content: center; position: relative; left: 1.5rem; padding: 0px; }
+      #edit-value-form { display: flex; flex-direction: column; align-items: center; }
+      .dmx-channel-wrapper { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.2rem; }
+      .dmx-channel-input-small { width: 7rem; }
+      .dmx-value-wrapper { display: flex; align-items: flex-start; gap: 0.7rem; margin-bottom: 1.2rem; }
+   </style>
 </head>
 
 <body>
@@ -15,19 +24,18 @@
       <div class="header-flex">
          <h1 class="title-colored no-margin">DMX Controller</h1>
       </div>
-      <div class="subtitle-row" style="display: flex; align-items: center; justify-content: flex-end; gap: 0.7rem;">
-         <button onclick="window.location.href='index.html'" class="home-btn" style="position: relative; left: -7rem">Home</button>
-         <button id="back-btn" class="home-btn back-btn" style="position: relative; left: -6rem">Back</button>
-         <h2 style="text-align: center; display:flex; justify-content: center; position: relative; left: 1.5rem; padding:0px">Edit Value</h2>
+      <div class="subtitle-row">
+         <button type="button" onclick="window.location.href='../index.html'" class="home-btn home">Home</button>
+         <button type="button" id="back-btn" class="home-btn back-btn">Back</button>
+         <h2>Edit Value</h2>
       </div>
-      <form id="edit-value-form" style="display:flex; flex-direction:column; align-items:center;">
-         <div style="display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.2rem;">
+      <form id="edit-value-form">
+         <div class="dmx-channel-wrapper">
             <label for="dmx-channel-input" class="edit-value-label">DMX Channel:</label>
-            <input type="number" id="dmx-channel-input" class="edit-value-input dmx-channel-input-small" style="width: 7rem" min="0" max="512"
-               disabled>
+            <input type="number" id="dmx-channel-input" class="edit-value-input dmx-channel-input-small" min="0" max="512" disabled>
          </div>
          <label for="dmx-value-input" class="edit-value-label">DMX Value:</label>
-         <div style="display: flex; align-items: flex-start; gap: 0.7rem; margin-bottom: 1.2rem;">
+         <div class="dmx-value-wrapper">
             <button type="button" id="dmx-minus-btn" class="dmx-incdec-btn">-</button>
             <input type="number" id="dmx-value-input" name="dmx-value" min="0" max="255" class="edit-value-input" value="" required>
             <button type="button" id="dmx-plus-btn" class="dmx-incdec-btn">+</button>
@@ -51,8 +59,7 @@
          <div class="keypad-row">
             <button type="button" class="keypad-btn" id="keypad-back">&larr;</button>
             <button type="button" class="keypad-btn" data-digit="0">0</button>
-            <button type="button" class="keypad-btn keypad-enter" id="keypad-enter">Enter</button>
-         </div>
+            <button type="submit" class="keypad-btn keypad-enter" id="keypad-enter">Enter</button>
          </div>
       </form>
       <script>

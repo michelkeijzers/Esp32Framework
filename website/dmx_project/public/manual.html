@@ -7,6 +7,11 @@
    <title>Manual</title>
    <link rel="stylesheet" href="pico.min.css">
    <link rel="stylesheet" href="custom.css">
+   <style>
+      .subtitle-row h2 { margin: 0; }
+      .manual-container { margin: 10px; background-color: #000; padding: 20px; border-radius: 8px; }
+      .manual-img { max-width: 100%; height: auto; }
+   </style>
 </head>
 
 <body>
@@ -15,11 +20,11 @@
          <h1 class="title-colored no-margin">DMX Controller</h1>
       </div>
       <div class="subtitle-row">
-         <button onclick="window.location.href='index.html'" class="home-btn">Home</button>
-         <h2 style="margin: 0;">MANUAL</h2>
+         <button type="button" onclick="window.location.href='../index.html'" class="home-btn">Home</button>
+         <h2>MANUAL</h2>
       </div>
    </main>
-   <div style="margin: 10px; background-color: #000; padding: 20px; border-radius: 8px;">
+   <div class="manual-container">
       <h1>Introduction</h1>
       <p>
          This application can be used to define DMX universes, called DMX presets or simply presets as of now.
@@ -54,7 +59,7 @@ overlap with other fixtures, otherwise they will interfere with each other.
 
 <p> On the Control page of the website, the programs can be selected, see the screenshot below.</p>
 
-<img src="images/control_html.png" alt="Control Page" style="max-width: 100%; height: auto;">
+<img src="images/control_html.png" alt="Control Page" class="manual-img">
 
 <p> The blackout button sends 512 zero (0) values to all 512 DMX values, typically turning off all light of the DMX fixtures.</p>
 <p> The current selected preset is displayed in yellow.</p>

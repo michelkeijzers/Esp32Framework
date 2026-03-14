@@ -20,3 +20,4 @@ sdkconfig.old
 *.csv
 *.json
 website/dmx_project/dist/
+node_modules/

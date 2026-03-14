@@ -15,7 +15,7 @@
          <h1 class="title-colored no-margin">DMX Controller</h1>
       </div>
       <div class="subtitle-row">
-         <button onclick="window.location.href='index.html'" class="home-btn">Home</button>
+         <button onclick="window.location.href='../index.html'" class="home-btn">Home</button>
          <h2 style="margin: 0;">Configuration</h2>
       </div>
       <div style="display: flex; gap: 1.2rem; margin-bottom: 1.2rem; margin-top: 1.2rem">
@@ -97,9 +97,17 @@
                   status.textContent = toggle.checked ? '(On)' : '(Off)';
                }
                loadBtn.textContent = 'Loaded!';
-               setTimeout(() => loadBtn.textContent = 'Load', 1200);
+               loadBtn.style.background = '#080';
+               loadBtn.style.color = '#fff';
+               setTimeout(() => {
+                  loadBtn.textContent = 'Load';
+                  loadBtn.style.background = '#a00';
+                  loadBtn.style.color = '#fff';
+               }, 1200);
             } catch (e) {
                loadBtn.textContent = 'Error';
+               loadBtn.style.background = '#a00';
+               loadBtn.style.color = '#fff';
                setTimeout(() => loadBtn.textContent = 'Load', 1200);
             }
          });
@@ -117,12 +125,20 @@
                const result = await resp.json();
                if (result.ack === 'ok') {
                   saveBtn.textContent = 'Saved!';
-                  setTimeout(() => saveBtn.textContent = 'Save', 1200);
+                  saveBtn.style.background = '#080';
+                  saveBtn.style.color = '#fff';
+                  setTimeout(() => {
+                     saveBtn.textContent = 'Save';
+                     saveBtn.style.background = '#a00';
+                     saveBtn.style.color = '#fff';
+                  }, 1200);
                } else {
                   throw new Error('NOK');
                }
             } catch (e) {
                saveBtn.textContent = 'Error';
+               saveBtn.style.background = '#a00';
+               saveBtn.style.color = '#fff';
                setTimeout(() => saveBtn.textContent = 'Save', 1200);
             }
          });

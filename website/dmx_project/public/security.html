@@ -7,6 +7,21 @@
    <title>Security</title>
    <link rel="stylesheet" href="pico.min.css">
    <link rel="stylesheet" href="custom.css">
+   <style>
+      .subtitle-row { display: flex; }
+      .subtitle-row .home-btn { margin-left: 90px; }
+      .subtitle-row h2 { margin: 0; }
+      .security-container { display: flex; flex-direction: column; align-items: center; gap: 2.5rem; margin-top: 2.5rem; }
+      .security-pane { background: #111; color: #eee; border-radius: 1rem; padding: 2rem 2.5rem; box-shadow: 0 0 12px #000a; max-width: 650px; }
+      .espnow-pane { min-width: 420px; }
+      .wifi-pane { min-width: 540px; }
+      .security-label { font-weight: bold; margin-bottom: 1rem; display: block; }
+      .espnow-fields { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; }
+      .wifi-input-wrapper { position: relative; width: 100%; max-width: 500px; margin-bottom: 1.5rem; }
+      .wifi-password-input { width: 100%; background: #222; color: #fff; border: 1px solid #444; border-radius: 0.3rem; font-size: 1.1rem; padding: 0.6rem 2.5rem 0.6rem 1rem; box-sizing: border-box; }
+      .toggle-password-btn { position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; padding: 0; margin: 0; height: 2rem; width: 2rem; display: flex; align-items: center; justify-content: center; }
+      .security-submit-btn { background: #1fa750; color: #fff; font-weight: bold; border-radius: 0.5rem; padding: 0.7rem 2.2rem; font-size: 1.1rem; border: none; box-shadow: 0 2px 8px #0002; cursor: pointer; }
+   </style>
 </head>
 
 <body>
@@ -15,45 +30,36 @@
          <h1 class="title-colored no-margin">DMX Controller</h1>
       </div>
       <div class="subtitle-row">
-         <button onclick="window.location.href='index.html'" class="home-btn" style="margin-left: 90px;">Home</button>
-         <h2 style="margin: 0;">Security</h2>
+         <button type="button" onclick="window.location.href='../index.html'" class="home-btn">Home</button>
+         <h2>Security</h2>
       </div>
-      <div style="display: flex; flex-direction: column; align-items: center; gap: 2.5rem; margin-top: 2.5rem;">
+      <div class="security-container">
          <!-- ESP-NOW Security Key Pane -->
-         <div class="security-pane"
-            style="background: #111; color: #eee; border-radius: 1rem; padding: 2rem 2.5rem; min-width: 420px; box-shadow: 0 0 12px #000a; max-width: 650px;">
+         <div class="security-pane espnow-pane">
             <form id="espnow-key-form" autocomplete="off">
-               <label style="font-weight:bold; margin-bottom:1rem; display:block;">ESP-NOW Security Key</label>
-               <div id="key-fields" style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem;"></div>
-               <button type="submit"
-                  style="background:#1fa750; color:#fff; font-weight:bold; border-radius:0.5rem; padding:0.7rem 2.2rem; font-size:1.1rem; border:none; box-shadow:0 2px 8px #0002; cursor:pointer;">Send
-                  Key</button>
+               <label class="security-label">ESP-NOW Security Key</label>
+               <div id="key-fields" class="espnow-fields"></div>
+               <button type="submit" class="security-submit-btn">Send Key</button>
             </form>
          </div>
          <!-- Wi-Fi Password Pane -->
-         <div class="security-pane"
-            style="background: #111; color: #eee; border-radius: 1rem; padding: 2rem 2.5rem; min-width: 540px; max-width: 650px; box-shadow: 0 0 12px #000a;">
+         <div class="security-pane wifi-pane">
             <form id="wifi-key-form" autocomplete="off">
-               <label style="font-weight:bold; margin-bottom:1rem; display:block;">Wi-Fi Password</label>
-               <div style="position: relative; width: 100%; max-width: 500px; margin-bottom: 1.5rem;">
-                  <input id="wifi-password-input" type="password" minlength="8" maxlength="63" required placeholder="Enter Wi-Fi password"
-                     style="width: 100%; background:#222; color:#fff; border:1px solid #444; border-radius:0.3rem; font-size:1.1rem; padding:0.6rem 2.5rem 0.6rem 1rem; box-sizing: border-box;" />
-                  <button id="toggle-wifi-password" type="button" tabindex="-1" aria-label="Show password"
-                     style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; padding: 0; margin: 0; height: 2rem; width: 2rem; display: flex; align-items: center; justify-content: center;">
+               <label class="security-label">Wi-Fi Password</label>
+               <div class="wifi-input-wrapper">
+                  <input id="wifi-password-input" type="password" minlength="8" maxlength="63" required placeholder="Enter Wi-Fi password" autocomplete="current-password" class="wifi-password-input">
+                  <button id="toggle-wifi-password" type="button" tabindex="-1" aria-label="Show password" class="toggle-password-btn">
                      <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24">
                         <path stroke="#aaa" stroke-width="2" d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z" />
                         <circle cx="12" cy="12" r="3.5" stroke="#aaa" stroke-width="2" />
                      </svg>
                   </button>
                </div>
-               <button type="submit"
-                  style="background:#1fa750; color:#fff; font-weight:bold; border-radius:0.5rem; padding:0.7rem 2.2rem; font-size:1.1rem; border:none; box-shadow:0 2px 8px #0002; cursor:pointer;">Send
-                  Key</button>
+               <button type="submit" class="security-submit-btn">Send Key</button>
                </form>
-               <!-- ...existing code... -->
-               </div>
-               </div>
-               <script type="text/javascript">
+         </div>
+         </div>
+         <script>
                   function validateEspnowKeyFields() {
                      const inputs = keyFields.querySelectorAll('input');
                      let allValid = true;
