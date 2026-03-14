@@ -1,12 +1,4 @@
-In control page: only show Active presets (use GET /api/active_preset_numbers)
 
-
-
-
-2. Consistent HTTP Method Usage
-
-Some endpoints use POST for actions that could be PUT/DELETE (e.g., move_preset_up, delete_preset). Consider aligning with REST conventions.
-3. Explicit Request/Response Schemas
 
 For each endpoint, specify required/optional fields, types, and example values for both requests and responses.
 Use JSON Schema or a similar format for clarity.
