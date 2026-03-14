@@ -5,11 +5,11 @@ This document describes the API contract between the frontend (web UI) and the b
 # Table of Contents
 
 - [Control Page](#control-page)
-  - [Get Active Preset Numbers](#get-active-preset-numbers)
+  - [Active Preset Numbers](#get-active-preset-numbers)
   - [Select Preset](#select-preset)
   - [Blackout](#blackout)
 - [DMX Presets Page](#dmx-presets-page)
-  - [Get Presets](#get-presets)   
+  - [Presets](#get-presets)   
   - [Save Preset](#save-preset)
   - [Move Preset Up](#move-preset-up)
   - [Move Preset Down](#move-preset-down)
@@ -42,7 +42,7 @@ This document describes the API contract between the frontend (web UI) and the b
 
 # Control Page
 
-## Get Active Preset Numbers
+## Active Preset Numbers
 
 **Endpoint:** `GET /api/v1/active_preset_numbers`  
 
@@ -130,7 +130,7 @@ Example response (JSON):
 
 # DMX Presets Page
 
-# Get Presets
+## Presets
 
 **Endpoint:** `GET /api/v1/presets`  
 

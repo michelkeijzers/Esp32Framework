@@ -8,6 +8,15 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(api_tester
     test_main.cpp
     MockEspHttpServer.cpp
+    ApiPresetsTests.cpp
+    ApiStatusTests.cpp
+    ApiConfigTests.cpp
+    ApiFirmwareTests.cpp
+    ApiLoggingTests.cpp
+    ApiNodesTests.cpp
+    ApiPresetValuesTests.cpp
+    ApiSecurityTests.cpp
+    ApiSystemTests.cpp
     ../../main/slaves/webserver_slave/project_dmx_controller/WebserverSlave.cpp
     ../../main/slaves/webserver_slave/project_dmx_controller/ApiPresets.cpp
     ../../main/slaves/webserver_slave/project_dmx_controller/ApiConfig.cpp

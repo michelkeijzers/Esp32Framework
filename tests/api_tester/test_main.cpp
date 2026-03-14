@@ -1,47 +1,67 @@
 
 #include "MockEspHttpServer.hpp"
-#include "ApiPresets.hpp"
-#include "ApiConfig.hpp"
-#include "ApiStatus.hpp"
-#include "ApiPresetValues.hpp"
-#include "ApiNodes.hpp"
-#include "ApiSystem.hpp"
-#include "ApiFirmware.hpp"
-#include "ApiSecurity.hpp"
-#include "ApiLogging.hpp"
 #include "WebserverSlave.hpp"
+#include "ApiPresetsTests.hpp"
+#include "ApiStatusTests.hpp"
+#include "ApiConfigTests.hpp"
+#include "ApiFirmwareTests.hpp"
+#include "ApiLoggingTests.hpp"
+#include "ApiNodesTests.hpp"
+#include "ApiPresetValuesTests.hpp"
+#include "ApiSecurityTests.hpp"
+#include "ApiSystemTests.hpp"
 #include <iostream>
 #include <cassert>
 
 
 int main() {
-    // Create the mock HTTP server
-    MockEspHttpServer mockServer;
+    std::cout << "Starting API Tester - Running all API tests...\n" << std::endl;
     
-    // Create the WebserverSlave which internally creates and manages all API handlers
-    WebserverSlave webserverSlave(mockServer);
-    webserverSlave.start();  // Calls register_endpoints (no-op for unit tests)
+    int testsRun = 0;
+    int testsPassed = 0;
     
-    // For unit tests, directly use the API objects that WebserverSlave creates
-    // In production, the WebserverSlave manages everything through the HTTP server
+    // Run all test classes
+    ApiPresetsTests apiPresetsTests;
+    if (apiPresetsTests.run()) testsPassed++;
+    testsRun++;
     
-    // Create individual API objects to test
-    ApiPresets apiPresets(mockServer);
+    ApiStatusTests apiStatusTests;
+    if (apiStatusTests.run()) testsPassed++;
+    testsRun++;
     
-    // Register endpoint handler using the real ApiPresets handler
-    mockServer.registerHandler("PUT", "/api/v1/save_preset/2", [&apiPresets](const std::string& body) {
-        // Create a minimal httpd_req_t for testing
-        httpd_req_t req{};
-        apiPresets.save_preset_handler(&req);
-        return req.response;
-    });
+    ApiConfigTests apiConfigTests;
+    if (apiConfigTests.run()) testsPassed++;
+    testsRun++;
     
-    // Simulate a request
-    std::string response = mockServer.simulateRequest("PUT", "/api/v1/save_preset/2", "");
-    std::cout << "Response: " << response << std::endl;
-    std::cout << "Expected: {\"ack\":\"ok\"}" << std::endl;
-    assert(response == "{\"ack\":\"ok\"}");
-    std::cout << "Test passed!" << std::endl;
-    return 0;
+    ApiFirmwareTests apiFirmwareTests;
+    if (apiFirmwareTests.run()) testsPassed++;
+    testsRun++;
+    
+    ApiLoggingTests apiLoggingTests;
+    if (apiLoggingTests.run()) testsPassed++;
+    testsRun++;
+    
+    ApiNodesTests apiNodesTests;
+    if (apiNodesTests.run()) testsPassed++;
+    testsRun++;
+    
+    ApiPresetValuesTests apiPresetValuesTests;
+    if (apiPresetValuesTests.run()) testsPassed++;
+    testsRun++;
+    
+    ApiSecurityTests apiSecurityTests;
+    if (apiSecurityTests.run()) testsPassed++;
+    testsRun++;
+    
+    ApiSystemTests apiSystemTests;
+    if (apiSystemTests.run()) testsPassed++;
+    testsRun++;
+    
+    // Summary
+    std::cout << "\n========================================" << std::endl;
+    std::cout << "Test Summary: " << testsPassed << "/" << testsRun << " test suites passed" << std::endl;
+    std::cout << "========================================\n" << std::endl;
+    
+    return (testsPassed == testsRun) ? 0 : 1;
 }
 
