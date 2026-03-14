@@ -1,15 +1,15 @@
 
 #include "WebserverSlave.hpp"
-#include "ApiConfig.hpp"
-#include "ApiPresets.hpp"
-#include "ApiPresetValues.hpp"
-#include "ApiStatus.hpp"
-#include "ApiNodes.hpp"
-#include "ApiSystem.hpp"
-#include "ApiFirmware.hpp"
-#include "ApiSecurity.hpp"
-#include "ApiLogging.hpp"
-#include "StaticFileHandler.hpp"
+#include "Api/ApiConfig.hpp"
+#include "Api/ApiPresets.hpp"
+#include "Api/ApiPresetValues.hpp"
+#include "Api/ApiStatus.hpp"
+#include "Api/ApiNodes.hpp"
+#include "Api/ApiSystem.hpp"
+#include "Api/ApiFirmware.hpp"
+#include "Api/ApiSecurity.hpp"
+#include "Api/ApiLogging.hpp"
+#include "Api/StaticFileHandler.hpp"
 
 #ifndef UNIT_TEST
 #include <cstring>

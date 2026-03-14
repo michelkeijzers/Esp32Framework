@@ -18,25 +18,26 @@ add_executable(api_tester
     ApiSecurityTests.cpp
     ApiSystemTests.cpp
     ../../main/slaves/webserver_slave/project_dmx_controller/WebserverSlave.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/ApiPresets.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/ApiConfig.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/ApiStatus.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/ApiPresetValues.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/ApiNodes.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/ApiSystem.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/ApiFirmware.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/ApiSecurity.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/ApiLogging.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiPresets.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiConfig.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiStatus.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiPresetValues.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiNodes.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiSystem.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiFirmware.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiSecurity.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiLogging.cpp
 )
 
 # Define UNIT_TEST for test build
 target_compile_definitions(api_tester PRIVATE UNIT_TEST)
 
-# Add include directories for main/esp and project_dmx_controller
+# Add include directories for main/esp, project_dmx_controller, and Api subdirectory
 target_include_directories(api_tester PRIVATE
     .
     ../../main/esp
     ../../main/slaves/webserver_slave/project_dmx_controller
+    ../../main/slaves/webserver_slave/project_dmx_controller/Api
 )
 
 # Add additional include directories if needed
