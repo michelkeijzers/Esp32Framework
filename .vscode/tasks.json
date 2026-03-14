@@ -1,0 +1,44 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "ESP32: Build Project (Extension)",
+            "type": "shell",
+            "command": "idf.py build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "close": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "console": "integratedTerminal",
+            "problemMatcher": []
+        },
+        {
+            "label": "Build and Run API Tester",
+            "type": "shell",
+            "command": "cmake --build build && .\\build\\Debug\\api_tester.exe",
+            "options": {
+                "cwd": "${workspaceFolder}/tests/api_tester"
+            },
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "ESP32-IDF: Build your Project",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "ESP32: Build Project (Extension)"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

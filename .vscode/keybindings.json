@@ -1,0 +1,14 @@
+[
+    {
+        "key": "f7",
+        "command": "workbench.action.tasks.runTask",
+        "args": "ESP32-IDF: Build your Project",
+        "when": "true"
+    }
+    {
+        "key": "f8",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Build and Run API Tester",
+        "when": "true"
+    },
+]
