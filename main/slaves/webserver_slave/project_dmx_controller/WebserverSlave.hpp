@@ -1,6 +1,9 @@
 
 #include "../../../esp/IEspHttpServer.hpp"
+
+#ifndef UNIT_TEST
 #include "../../../esp/esp_http_server_if.hpp"
+#endif
 
 class ApiConfig;
 class ApiPresets;
@@ -23,7 +26,11 @@ public:
     void stop();
 
 private:
+#ifndef UNIT_TEST
     httpd_handle_t server;
+#else
+    void* server = nullptr;  // Dummy for unit tests
+#endif
     IEspHttpServer& espHttpServer_;
 
     ApiConfig* apiConfig_;
@@ -37,4 +44,6 @@ private:
     ApiLogging* apiLogging_;
 
     void register_endpoints();
+    void register_endpoints_esp32();
+    void register_endpoints_test();
 };

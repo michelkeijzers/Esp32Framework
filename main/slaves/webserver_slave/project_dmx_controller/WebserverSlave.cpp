@@ -9,7 +9,6 @@
 #include "ApiFirmware.hpp"
 #include "ApiSecurity.hpp"
 #include "ApiLogging.hpp"
-x
 
 WebserverSlave::WebserverSlave(IEspHttpServer& espHttpServer)
     : espHttpServer_(espHttpServer)
@@ -41,22 +40,30 @@ WebserverSlave::~WebserverSlave()
 
 void WebserverSlave::start()
 {
+#ifndef UNIT_TEST
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
     if (httpd_start(&server, &config) == ESP_OK)
     {
         register_endpoints();
     }
+#else
+    // For unit tests, just register endpoints
+    register_endpoints();
+#endif
 }
 
 void WebserverSlave::stop()
 {
+#ifndef UNIT_TEST
     if (server)
     {
         httpd_stop(server);
         server = NULL;
     }
+#endif
 }
 
+#ifndef UNIT_TEST
 // Static handler functions for dispatch - Presets
 static esp_err_t presets_handler_static(httpd_req_t *req) {
     auto* obj = static_cast<ApiPresets*>(req->user_ctx);
@@ -178,9 +185,22 @@ static esp_err_t logging_handler_static(httpd_req_t *req) {
     auto* obj = static_cast<ApiLogging*>(req->user_ctx);
     return obj->logging_handler(req);
 }
+#endif  // UNIT_TEST
 
 void WebserverSlave::register_endpoints()
 {
+#ifndef UNIT_TEST
+    // Register endpoints with ESP-IDF HTTP server
+    register_endpoints_esp32();
+#else
+    // For unit tests, register test handlers with MockEspHttpServer
+    register_endpoints_test();
+#endif
+}
+
+void WebserverSlave::register_endpoints_esp32()
+{
+#ifndef UNIT_TEST
     // GET /api/presets
     httpd_uri_t presets_uri = {
         .uri = "/api/presets",
@@ -388,4 +408,18 @@ void WebserverSlave::register_endpoints()
         .handler = logging_handler_static,
         .user_ctx = apiLogging_};
     httpd_register_uri_handler(server, &logging_uri);
+#endif  // UNIT_TEST
+}
+
+void WebserverSlave::register_endpoints_test()
+{
+#ifdef UNIT_TEST
+    // For unit tests, we need to safely register handlers with MockEspHttpServer
+    // Since we only have IEspHttpServer interface, we need to cast it carefully
+    // This approach allows testing through the WebserverSlave facade
+    
+    // The test harness should register handlers directly with MockEspHttpServer
+    // or modify register_endpoints_test to use the IEspHttpServer's public interface
+    // For now, API objects can be used directly for testing
+#endif
 }
