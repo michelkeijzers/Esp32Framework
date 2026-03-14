@@ -142,7 +142,7 @@
                   saveBtn.disabled = true;
                   const originalText = saveBtn.textContent;
                   const originalBg = saveBtn.style.backgroundColor;
-                  fetch('/api/nodes_info', {
+                  fetch('/api/v1/nodes_info', {
                      method: 'POST',
                      headers: { 'Content-Type': 'application/json' },
                      body: JSON.stringify(nodes.map((n, i) => i == idx ? input.value.trim() : n.mac_address))
@@ -259,7 +259,7 @@
                      reader.onload = function (evt) {
                         const chunkData = evt.target.result;
                         const b64 = arrayBufferToBase64(chunkData);
-                        fetch(`/api/firmware_chunk/${idx}`, {
+                        fetch(`/api/v1/firmware_chunk/${idx}`, {
                            method: 'POST',
                            headers: { 'Content-Type': 'application/json' },
                            body: JSON.stringify({ chunk: chunkNum, data: b64 })
@@ -273,7 +273,7 @@
                               } else {
                                  // All chunks sent, now call firmware_finish
                                  progressLabel.textContent = `100% (${totalChunks}/${totalChunks} Chunks)`;
-                                 fetch(`/api/firmware_finish/${idx}`, { method: 'POST' })
+                                 fetch(`/api/v1/firmware_finish/${idx}`, { method: 'POST' })
                                     .then(r => r.json()).then(resp2 => {
                                        finishUpload(resp2.ack === 'ok');
                                     }).catch(() => {
@@ -309,7 +309,7 @@
             if (eventSource) {
                eventSource.close();
             }
-            eventSource = new EventSource('/api/status/stream');
+            eventSource = new EventSource('/api/v1/status/stream');
             eventSource.addEventListener('status', function (e) {
                try {
                   const nodes = JSON.parse(e.data);
@@ -332,7 +332,7 @@
                const originalText = rebootBtn.textContent;
                rebootBtn.textContent = 'Rebooting...';
                rebootBtn.disabled = true;
-               fetch('/api/reboot', { method: 'POST' })
+               fetch('/api/v1/reboot', { method: 'POST' })
                   .finally(() => {
                      setTimeout(() => {
                         rebootBtn.textContent = originalText;
@@ -345,7 +345,7 @@
                const originalText = factoryResetBtn.textContent;
                factoryResetBtn.textContent = 'Resetting...';
                factoryResetBtn.disabled = true;
-               fetch('/api/factory_reset', { method: 'POST' })
+               fetch('/api/v1/factory_reset', { method: 'POST' })
                   .then(r => r.json())
                   .then(resp => {
                      if (resp.ack === 'ok') {
@@ -379,3 +379,4 @@
 </body>
 
 </html>
+

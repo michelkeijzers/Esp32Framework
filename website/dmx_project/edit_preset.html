@@ -41,7 +41,7 @@
                   }
                   const btn = document.getElementById('save-preset-btn');
                   try {
-                     const resp = await fetch(`/api/save_preset/${presetNumber}`, {
+                     const resp = await fetch(`/api/v1/save_preset/${presetNumber}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ name: presetName, dmx_values: dmxValues })
@@ -94,7 +94,7 @@
                const grid = document.getElementById('dmx-grid');
                grid.innerHTML = '<div style="color:#888;">Loading DMX values...</div>';
                try {
-                  const resp = await fetch(`/api/preset_values/${presetNumber}`);
+                  const resp = await fetch(`/api/v1/preset_values/${presetNumber}`);
                   if (!resp.ok) throw new Error('Failed to fetch DMX values');
                   const dmxValues = await resp.json();
                   let html = '<div class="dmx-grid-table">';
@@ -149,3 +149,4 @@
 </body>
 
 </html>
+

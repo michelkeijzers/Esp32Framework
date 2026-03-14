@@ -40,7 +40,7 @@
             });
             blackoutBtn.addEventListener('click', function (e) {
                 // Send blackout action to backend, but do n                    abel or text
-                fetch('/api/blackout', { method: 'POST' });
+                fetch('/api/v1/blackout', { method: 'POST' });
             });
 
                      // Render active presets 4 per row
@@ -59,7 +59,7 @@
                            const btn = document.createElement('button');
                            btn.className = 'big-bold-btn preset-btn selectable-btn';
                            btn.textContent = num;
-                           btn.setAttribute('hx-post', `/api/select_preset/${num}`);
+                           btn.setAttribute('hx-post', `/api/v1/select_preset/${num}`);
                            btn.setAttribute('hx-swap', 'none');
                            btn.style.flex = '1';
                            btn.addEventListener('pointerdown', handleSelect);
@@ -67,10 +67,11 @@
                            if (window.htmx && typeof htmx.process === 'function') htmx.process(btn);
                         });
                      }
-                     fetch('/api/active_preset_numbers')
+                     fetch('/api/v1/active_preset_numbers')
                         .then(r => r.json())
                         .then(renderActivePresets)
                         .catch(() => {
                            // Fallback: show nothing if endpoint fails
                         });
                   </script>
+

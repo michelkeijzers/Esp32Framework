@@ -29,7 +29,7 @@ int main() {
     ApiPresets apiPresets(mockServer);
     
     // Register endpoint handler using the real ApiPresets handler
-    mockServer.registerHandler("PUT", "/api/save_preset/2", [&apiPresets](const std::string& body) {
+    mockServer.registerHandler("PUT", "/api/v1/save_preset/2", [&apiPresets](const std::string& body) {
         // Create a minimal httpd_req_t for testing
         httpd_req_t req{};
         apiPresets.save_preset_handler(&req);
@@ -37,10 +37,11 @@ int main() {
     });
     
     // Simulate a request
-    std::string response = mockServer.simulateRequest("PUT", "/api/save_preset/2", "");
+    std::string response = mockServer.simulateRequest("PUT", "/api/v1/save_preset/2", "");
     std::cout << "Response: " << response << std::endl;
     std::cout << "Expected: {\"ack\":\"ok\"}" << std::endl;
     assert(response == "{\"ack\":\"ok\"}");
     std::cout << "Test passed!" << std::endl;
     return 0;
 }
+

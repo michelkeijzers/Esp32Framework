@@ -38,7 +38,7 @@
       <script>
          async function fetchAndRenderPresets() {
             try {
-               const response = await fetch('/api/presets');
+               const response = await fetch('/api/v1/presets');
                const presets = await response.json();
                const tbody = document.getElementById('presets-tbody');
                tbody.innerHTML = '';
@@ -60,19 +60,19 @@
                   tbody.appendChild(row);
                   // Up
                   row.querySelector('.up-btn').addEventListener('click', async () => {
-                     await sendPresetAction(`/api/move_preset_up/${i + 1}`);
+                     await sendPresetAction(`/api/v1/move_preset_up/${i + 1}`);
                   });
                   // Down
                   row.querySelector('.down-btn').addEventListener('click', async () => {
-                     await sendPresetAction(`/api/move_preset_down/${i + 1}`);
+                     await sendPresetAction(`/api/v1/move_preset_down/${i + 1}`);
                   });
                   // Delete
                   row.querySelector('.delete-btn').addEventListener('click', async () => {
-                     await sendPresetAction(`/api/delete_preset/${i + 1}`);
+                     await sendPresetAction(`/api/v1/delete_preset/${i + 1}`);
                   });
                   // Insert
                   row.querySelector('.insert-btn').addEventListener('click', async () => {
-                     await sendPresetAction(`/api/insert_preset_at/${i + 1}`);
+                     await sendPresetAction(`/api/v1/insert_preset_at/${i + 1}`);
                   });
                   // Preset name click: open edit page with number and name
                   row.querySelector('.preset-name').addEventListener('click', () => {
@@ -81,7 +81,7 @@
                   // Active checkbox
                   row.querySelector('.active-checkbox').addEventListener('change', async (e) => {
                      const checked = e.target.checked ? 1 : 0;
-                     await sendPresetAction(`/api/swap_preset_activation/${i + 1}/${checked}`);
+                     await sendPresetAction(`/api/v1/swap_preset_activation/${i + 1}/${checked}`);
                   });
                });
             } catch (err) {
@@ -92,7 +92,7 @@
          async function sendPresetAction(url) {
             try {
                let method = 'PUT';
-               if (url.startsWith('/api/delete_preset/')) method = 'DELETE';
+               if (url.startsWith('/api/v1/delete_preset/')) method = 'DELETE';
                const response = await fetch(url, { method });
                if (!response.ok) throw new Error('Request failed');
                // Always expect the updated preset list as response
@@ -117,20 +117,20 @@
                   tbody.appendChild(row);
                   // Re-attach listeners for new rows
                   row.querySelector('.up-btn').addEventListener('click', async () => {
-                     await sendPresetAction(`/api/move_preset_up/${i + 1}`);
+                     await sendPresetAction(`/api/v1/move_preset_up/${i + 1}`);
                   });
                   row.querySelector('.down-btn').addEventListener('click', async () => {
-                     await sendPresetAction(`/api/move_preset_down/${i + 1}`);
+                     await sendPresetAction(`/api/v1/move_preset_down/${i + 1}`);
                   });
                   row.querySelector('.delete-btn').addEventListener('click', async () => {
-                     await sendPresetAction(`/api/delete_preset/${i + 1}`);
+                     await sendPresetAction(`/api/v1/delete_preset/${i + 1}`);
                   });
                   row.querySelector('.insert-btn').addEventListener('click', async () => {
-                     await sendPresetAction(`/api/insert_preset_at/${i + 1}`);
+                     await sendPresetAction(`/api/v1/insert_preset_at/${i + 1}`);
                   });
                   row.querySelector('.active-checkbox').addEventListener('change', async (e) => {
                      const checked = e.target.checked ? 1 : 0;
-                     await sendPresetAction(`/api/swap_preset_activation/${i + 1}/${checked}`);
+                     await sendPresetAction(`/api/v1/swap_preset_activation/${i + 1}/${checked}`);
                   });
                });
             } catch (err) {
@@ -144,3 +144,4 @@
 </body>
 
 </html>
+

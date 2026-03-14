@@ -49,7 +49,7 @@
             const newValue = toggle.checked;
             status.textContent = newValue ? '(On)' : '(Off)';
             try {
-               const resp = await fetch('/api/configuration_presets_circular_navigation', {
+               const resp = await fetch('/api/v1/configuration_presets_circular_navigation', {
                   method: 'PUT',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ state: newValue })
@@ -73,7 +73,7 @@
          // Initialize toggle and lastToggleValue from backend config
          (async () => {
             try {
-               const resp = await fetch('/api/configuration', { method: 'GET' });
+               const resp = await fetch('/api/v1/configuration', { method: 'GET' });
                if (resp.ok) {
                   const data = await resp.json();
                   if (typeof data['circular navigation'] === 'boolean') {
@@ -88,7 +88,7 @@
          // Load config
          loadBtn.addEventListener('click', async () => {
             try {
-               const resp = await fetch('/api/configuration', { method: 'GET' });
+               const resp = await fetch('/api/v1/configuration', { method: 'GET' });
                if (!resp.ok) throw new Error('Failed to load config');
                const data = await resp.json();
                if (typeof data['circular navigation'] === 'boolean') {
@@ -108,7 +108,7 @@
          saveBtn.addEventListener('click', async () => {
             try {
                const body = JSON.stringify({ 'circular navigation': toggle.checked });
-               const resp = await fetch('/api/configuration', {
+               const resp = await fetch('/api/v1/configuration', {
                   method: 'PUT',
                   headers: { 'Content-Type': 'application/json' },
                   body
@@ -131,3 +131,4 @@
 </body>
 
 </html>
+

@@ -203,7 +203,7 @@ void WebserverSlave::register_endpoints_esp32()
 #ifndef UNIT_TEST
     // GET /api/presets
     httpd_uri_t presets_uri = {
-        .uri = "/api/presets",
+        .uri = "/api/v1/presets",
         .method = HTTP_GET,
         .handler = presets_handler_static,
         .user_ctx = apiPresets_};
@@ -211,7 +211,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // GET /api/active_preset_numbers
     httpd_uri_t active_preset_numbers_uri = {
-        .uri = "/api/active_preset_numbers",
+        .uri = "/api/v1/active_preset_numbers",
         .method = HTTP_GET,
         .handler = active_preset_numbers_handler_static,
         .user_ctx = apiPresets_};
@@ -219,7 +219,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // POST /api/select_preset/*
     httpd_uri_t select_preset_uri = {
-        .uri = "/api/select_preset/*",
+        .uri = "/api/v1/select_preset/*",
         .method = HTTP_POST,
         .handler = select_preset_handler_static,
         .user_ctx = apiPresets_};
@@ -227,7 +227,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // POST /api/blackout
     httpd_uri_t blackout_uri = {
-        .uri = "/api/blackout",
+        .uri = "/api/v1/blackout",
         .method = HTTP_POST,
         .handler = blackout_handler_static,
         .user_ctx = apiPresets_};
@@ -235,7 +235,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // PUT /api/save_preset/*
     httpd_uri_t save_preset_uri = {
-        .uri = "/api/save_preset/*",
+        .uri = "/api/v1/save_preset/*",
         .method = HTTP_PUT,
         .handler = save_preset_handler_static,
         .user_ctx = apiPresets_};
@@ -243,7 +243,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // PUT /api/presets/*/move_up
     httpd_uri_t move_preset_up_uri = {
-        .uri = "/api/presets/*/move_up",
+        .uri = "/api/v1/presets/*/move_up",
         .method = HTTP_PUT,
         .handler = move_preset_up_handler_static,
         .user_ctx = apiPresets_};
@@ -251,7 +251,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // PUT /api/presets/*/move_down
     httpd_uri_t move_preset_down_uri = {
-        .uri = "/api/presets/*/move_down",
+        .uri = "/api/v1/presets/*/move_down",
         .method = HTTP_PUT,
         .handler = move_preset_down_handler_static,
         .user_ctx = apiPresets_};
@@ -259,7 +259,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // DELETE /api/presets/*
     httpd_uri_t delete_preset_uri = {
-        .uri = "/api/presets/*",
+        .uri = "/api/v1/presets/*",
         .method = HTTP_DELETE,
         .handler = delete_preset_handler_static,
         .user_ctx = apiPresets_};
@@ -267,7 +267,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // POST /api/presets/*/insert_at
     httpd_uri_t insert_preset_at_uri = {
-        .uri = "/api/presets/*/insert_at",
+        .uri = "/api/v1/presets/*/insert_at",
         .method = HTTP_POST,
         .handler = insert_preset_at_handler_static,
         .user_ctx = apiPresets_};
@@ -275,7 +275,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // PUT /api/presets/*/swap_activation
     httpd_uri_t swap_preset_activation_uri = {
-        .uri = "/api/presets/*/swap_activation",
+        .uri = "/api/v1/presets/*/swap_activation",
         .method = HTTP_PUT,
         .handler = swap_preset_activation_handler_static,
         .user_ctx = apiPresets_};
@@ -283,7 +283,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // GET /api/preset_values/*
     httpd_uri_t get_preset_values_uri = {
-        .uri = "/api/preset_values/*",
+        .uri = "/api/v1/preset_values/*",
         .method = HTTP_GET,
         .handler = get_preset_values_handler_static,
         .user_ctx = apiPresetValues_};
@@ -291,7 +291,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // PUT /api/preset_value/*/*
     httpd_uri_t set_preset_value_uri = {
-        .uri = "/api/preset_value/*/*",
+        .uri = "/api/v1/preset_value/*/*",
         .method = HTTP_PUT,
         .handler = set_preset_value_handler_static,
         .user_ctx = apiPresetValues_};
@@ -299,7 +299,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // GET /api/configuration
     httpd_uri_t config_uri = {
-        .uri = "/api/configuration",
+        .uri = "/api/v1/configuration",
         .method = HTTP_GET,
         .handler = config_handler_static,
         .user_ctx = apiConfig_};
@@ -307,7 +307,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // PUT /api/configuration
     httpd_uri_t put_config_uri = {
-        .uri = "/api/configuration",
+        .uri = "/api/v1/configuration",
         .method = HTTP_PUT,
         .handler = put_config_handler_static,
         .user_ctx = apiConfig_};
@@ -315,7 +315,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // PUT /api/configuration_presets_circular_navigation
     httpd_uri_t circular_navigation_uri = {
-        .uri = "/api/configuration_presets_circular_navigation",
+        .uri = "/api/v1/configuration_presets_circular_navigation",
         .method = HTTP_PUT,
         .handler = circular_navigation_handler_static,
         .user_ctx = apiConfig_};
@@ -323,7 +323,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // GET /api/status
     httpd_uri_t status_uri = {
-        .uri = "/api/status",
+        .uri = "/api/v1/status",
         .method = HTTP_GET,
         .handler = status_handler_static,
         .user_ctx = apiStatus_};
@@ -331,7 +331,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // GET /api/status/stream
     httpd_uri_t status_stream_uri = {
-        .uri = "/api/status/stream",
+        .uri = "/api/v1/status/stream",
         .method = HTTP_GET,
         .handler = status_stream_handler_static,
         .user_ctx = apiStatus_};
@@ -339,7 +339,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // GET /api/nodes_info
     httpd_uri_t nodes_info_uri = {
-        .uri = "/api/nodes_info",
+        .uri = "/api/v1/nodes_info",
         .method = HTTP_GET,
         .handler = nodes_info_handler_static,
         .user_ctx = apiNodes_};
@@ -347,7 +347,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // POST /api/nodes_info
     httpd_uri_t save_nodes_info_uri = {
-        .uri = "/api/nodes_info",
+        .uri = "/api/v1/nodes_info",
         .method = HTTP_POST,
         .handler = save_nodes_info_handler_static,
         .user_ctx = apiNodes_};
@@ -355,7 +355,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // POST /api/reboot
     httpd_uri_t reboot_uri = {
-        .uri = "/api/reboot",
+        .uri = "/api/v1/reboot",
         .method = HTTP_POST,
         .handler = reboot_handler_static,
         .user_ctx = apiSystem_};
@@ -363,7 +363,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // POST /api/factory_reset
     httpd_uri_t factory_reset_uri = {
-        .uri = "/api/factory_reset",
+        .uri = "/api/v1/factory_reset",
         .method = HTTP_POST,
         .handler = factory_reset_handler_static,
         .user_ctx = apiSystem_};
@@ -371,7 +371,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // POST /api/firmware_chunk/*
     httpd_uri_t firmware_chunk_uri = {
-        .uri = "/api/firmware_chunk/*",
+        .uri = "/api/v1/firmware_chunk/*",
         .method = HTTP_POST,
         .handler = firmware_chunk_handler_static,
         .user_ctx = apiFirmware_};
@@ -379,7 +379,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // POST /api/firmware_finish/*
     httpd_uri_t firmware_finish_uri = {
-        .uri = "/api/firmware_finish/*",
+        .uri = "/api/v1/firmware_finish/*",
         .method = HTTP_POST,
         .handler = firmware_finish_handler_static,
         .user_ctx = apiFirmware_};
@@ -387,7 +387,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // POST /api/esp_now_key
     httpd_uri_t esp_now_key_uri = {
-        .uri = "/api/esp_now_key",
+        .uri = "/api/v1/esp_now_key",
         .method = HTTP_POST,
         .handler = esp_now_key_handler_static,
         .user_ctx = apiSecurity_};
@@ -395,7 +395,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // POST /api/wifi_password
     httpd_uri_t wifi_password_uri = {
-        .uri = "/api/wifi_password",
+        .uri = "/api/v1/wifi_password",
         .method = HTTP_POST,
         .handler = wifi_password_handler_static,
         .user_ctx = apiSecurity_};
@@ -403,7 +403,7 @@ void WebserverSlave::register_endpoints_esp32()
 
     // GET /api/logging
     httpd_uri_t logging_uri = {
-        .uri = "/api/logging",
+        .uri = "/api/v1/logging",
         .method = HTTP_GET,
         .handler = logging_handler_static,
         .user_ctx = apiLogging_};
@@ -423,3 +423,4 @@ void WebserverSlave::register_endpoints_test()
     // For now, API objects can be used directly for testing
 #endif
 }
+

@@ -72,13 +72,13 @@ def event_stream():
         print("[SSE] Client disconnected, stopping event stream.")
 
 
-@app.route("/api/status/stream")
+@app.route("/api/v1/status/stream")
 def api_status_stream():
     return Response(event_stream(), mimetype="text/event-stream")
 
 
 # --- Node Status Endpoint ---
-@app.route("/api/status", methods=["GET"])
+@app.route("/api/v1/status", methods=["GET"])
 def api_status():
     # Example: 3 nodes with different values
     nodes = [
@@ -131,11 +131,11 @@ CONFIG_LOCK = threading.Lock()
 
 
 # --- New Configuration API Endpoints ---
-@app.route("/api/configuration_presets_circular_navigation", methods=["PUT"])
+@app.route("/api/v1/configuration_presets_circular_navigation", methods=["PUT"])
 def api_config_presets_circular_navigation():
     data = request.get_json(force=True)
     print(
-        f"POST /api/configuration_presets_circular_navigation: received state={data.get('state')}"
+        f"POST /api/v1/configuration_presets_circular_navigation: received state={data.get('state')}"
     )
     if not isinstance(data, dict) or "state" not in data:
         return jsonify({"ack": "nok"}), 400
@@ -144,7 +144,7 @@ def api_config_presets_circular_navigation():
     return jsonify({"ack": "ok"})
 
 
-@app.route("/api/configuration", methods=["GET", "PUT"])
+@app.route("/api/v1/configuration", methods=["GET", "PUT"])
 def api_configuration():
     if request.method == "GET":
         with CONFIG_LOCK:
@@ -160,7 +160,7 @@ def api_configuration():
         return jsonify({"ack": "ok"})
 
 
-@app.route("/api/wifi_password", methods=["POST"])
+@app.route("/api/v1/wifi_password", methods=["POST"])
 def api_wifi_password():
     data = request.get_json(force=True)
     # Expecting { "password": "..." }
@@ -177,7 +177,7 @@ def api_wifi_password():
 
 # ...existing code...
 # Save preset endpoint (must be after app is defined)
-@app.route("/api/save_preset/<int:preset_number>", methods=["PUT"])
+@app.route("/api/v1/save_preset/<int:preset_number>", methods=["PUT"])
 def save_preset(preset_number):
     data = request.get_json(force=True)
     # Basic validation
@@ -191,9 +191,9 @@ def save_preset(preset_number):
     return jsonify({"ack": "ok"})
 
 
-@app.route("/api/preset_values/<int:x>", methods=["GET"])
+@app.route("/api/v1/preset_values/<int:x>", methods=["GET"])
 def preset_values(x):
-    print(f"GET /api/preset_values/{x}")
+    print(f"GET /api/v1/preset_values/{x}")
     # TODO: Replace with real preset data lookup
     # For now, return a dummy array with some nonzero values for demonstration
     values = [0] * 512
@@ -236,9 +236,9 @@ PRESET_NAMES = {
 PRESET_ACTIVATIONS = [True] + [False] * (len(PRESET_NAMES) - 1)
 
 
-@app.route("/api/presets", methods=["GET"])
+@app.route("/api/v1/presets", methods=["GET"])
 def api_presets():
-    print("GET /api/presets")
+    print("GET /api/v1/presets")
     names = list(PRESET_NAMES.values())
     activations = PRESET_ACTIVATIONS
     presets = [
@@ -248,33 +248,33 @@ def api_presets():
 
 
 # --- DMX Preset Actions (stubs, update logic as needed) ---
-@app.route("/api/move_preset_up/<int:x>", methods=["PUT"])
+@app.route("/api/v1/move_preset_up/<int:x>", methods=["PUT"])
 def move_preset_up(x):
     print(f"Move preset up: {x}")
     # TODO: Implement logic to move preset up
     return api_presets()
 
 
-@app.route("/api/move_preset_down/<int:x>", methods=["PUT"])
+@app.route("/api/v1/move_preset_down/<int:x>", methods=["PUT"])
 def move_preset_down(x):
     print(f"Move preset down: {x}")
     # TODO: Implement logic to move preset down
     return api_presets()
 
 
-@app.route("/api/delete_preset/<int:x>", methods=["DELETE"])
+@app.route("/api/v1/delete_preset/<int:x>", methods=["DELETE"])
 def delete_preset(x):
     print(f"Delete preset: {x}")
     return api_presets()
 
 
-@app.route("/api/insert_preset_at/<int:x>", methods=["PUT"])
+@app.route("/api/v1/insert_preset_at/<int:x>", methods=["PUT"])
 def insert_preset_at(x):
     print(f"Insert preset at: {x}")
     return api_presets()
 
 
-@app.route("/api/swap_preset_activation/<int:x>/<int:state>", methods=["PUT"])
+@app.route("/api/v1/swap_preset_activation/<int:x>/<int:state>", methods=["PUT"])
 def preset_swap_active(x, state):
     print(f"Swap preset activation {x} to {state}")
     # TODO: Update PRESET_ACTIVATIONS[x-1] = bool(state)
@@ -282,7 +282,7 @@ def preset_swap_active(x, state):
 
 
 # Endpoint to set a DMX value for a preset
-@app.route("/api/preset_value/<int:preset>/<int:index>/<int:value>", methods=["PUT"])
+@app.route("/api/v1/preset_value/<int:preset>/<int:index>/<int:value>", methods=["PUT"])
 def set_preset_value(preset, index, value):
     # TODO: Implement logic to update the DMX value for the given preset and index
     print(f"Set DMX value: preset={preset}, index={index}, value={value}")
@@ -293,22 +293,22 @@ def set_preset_value(preset, index, value):
 PRESET_ACTIVATIONS = [True] + [False] * (len(PRESET_NAMES) - 1)
 
 
-@app.route("/api/select_preset/<int:x>", methods=["POST"])
+@app.route("/api/v1/select_preset/<int:x>", methods=["POST"])
 def select_preset(x):
-    print(f"/api/select_preset/{x} called")
+    print(f"/api/v1/select_preset/{x} called")
     return "", 200
 
 
 # --- Blackout Endpoint ---
-@app.route("/api/blackout", methods=["POST"])
+@app.route("/api/v1/blackout", methods=["POST"])
 def api_blackout():
-    print("/api/blackout called")
+    print("/api/v1/blackout called")
     # Here you would trigger the blackout action (e.g., set all DMX values to 0)
     return "", 200
 
 
 # --- Firmware upload endpoints ---
-@app.route('/api/firmware_chunk/<int:node_idx>', methods=['POST'])
+@app.route('/api/v1/firmware_chunk/<int:node_idx>', methods=['POST'])
 def firmware_chunk(node_idx):
     data = request.get_json()
     chunk_num = data.get('chunk')
@@ -329,7 +329,7 @@ def firmware_chunk(node_idx):
     return {'ack': 'ok'}
 
 
-@app.route('/api/firmware_finish/<int:node_idx>', methods=['POST'])
+@app.route('/api/v1/firmware_finish/<int:node_idx>', methods=['POST'])
 def firmware_finish(node_idx):
     print(f"[FW] Finalizing firmware upload for node {node_idx}")
     if node_idx not in firmware_uploads:
@@ -365,7 +365,7 @@ def static_files(path):
     return send_from_directory(".", path)
 
 
-@app.route("/api/nodes_info", methods=["GET", "POST"])
+@app.route("/api/v1/nodes_info", methods=["GET", "POST"])
 def api_nodes_info():
     if request.method == "GET":
         # Mocked node info: name and mac_address for each node
@@ -378,7 +378,7 @@ def api_nodes_info():
         return jsonify(nodes)
     elif request.method == "POST":
         data = request.get_json(force=True)
-        print("POST /api/nodes_info: received data=", data)
+        print("POST /api/v1/nodes_info: received data=", data)
         if not isinstance(data, list):
             return (
                 jsonify({"ack": "nok", "error": "Expected a list of MAC addresses"}),
@@ -394,18 +394,18 @@ def api_nodes_info():
 
 
 # --- Reboot Endpoint ---
-@app.route("/api/reboot", methods=["POST"])
+@app.route("/api/v1/reboot", methods=["POST"])
 def api_reboot():
-    print("POST /api/reboot called")
+    print("POST /api/v1/reboot called")
     # Here you would trigger a system reboot or send a command to hardware
     return ("", 204)  # No Content
 
 
 # --- ESP-NOW Key Endpoint ---
-@app.route("/api/esp_now_key", methods=["POST"])
+@app.route("/api/v1/esp_now_key", methods=["POST"])
 def api_esp_now_key():
     data = request.get_json(force=True)
-    print("POST /api/esp_now_key: received scrambled key=", data)
+    print("POST /api/v1/esp_now_key: received scrambled key=", data)
     # TODO: Descramble and distribute the key to ESP-NOW network
     if (
         not isinstance(data, list)
@@ -419,7 +419,7 @@ def api_esp_now_key():
     return jsonify({"ack": "ok"})
 
 
-@app.route("/api/logging")
+@app.route("/api/v1/logging")
 def api_logging():
     def log_stream():
         try:
@@ -433,7 +433,7 @@ def api_logging():
     return Response(log_stream(), mimetype="text/event-stream")
 
 
-@app.route("/api/factory_reset", methods=["POST"])
+@app.route("/api/v1/factory_reset", methods=["POST"])
 def api_factory_reset():
     # Here you would add logic to perform a factory reset (e.g., clear config, reset NVS, etc.)
     # For demo, just return ok
@@ -447,7 +447,7 @@ def api_factory_reset():
 
 
 # --- Active Preset Numbers Endpoint ---
-@app.route("/api/active_preset_numbers", methods=["GET"])
+@app.route("/api/v1/active_preset_numbers", methods=["GET"])
 def api_active_preset_numbers():
     # Example: return all active preset numbers (simulate with 1, 2, 5, 7, 10, 12, 15, 18, 20)
     active_presets = [1, 2, 5, 7, 10, 12, 13, 15, 18, 20]
@@ -456,3 +456,4 @@ def api_active_preset_numbers():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
+

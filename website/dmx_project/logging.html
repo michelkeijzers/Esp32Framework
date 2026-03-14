@@ -30,7 +30,7 @@
          logbox.scrollTop = logbox.scrollHeight;
       }
       function startLogStream() {
-         eventSource = new EventSource('/api/logging');
+         eventSource = new EventSource('/api/v1/logging');
          eventSource.onmessage = function (e) {
             appendLog(e.data);
          };
@@ -47,3 +47,4 @@
 </body>
 
 </html>
+

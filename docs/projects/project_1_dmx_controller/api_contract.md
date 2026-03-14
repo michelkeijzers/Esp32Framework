@@ -44,7 +44,7 @@ This document describes the API contract between the frontend (web UI) and the b
 
 ## Get Active Preset Numbers
 
-**Endpoint:** `GET /api/active_preset_numbers`  
+**Endpoint:** `GET /api/v1/active_preset_numbers`  
 
 **Description:** Returns an array of all active preset numbers to display only active presets on the Control page. The backend (Flask or ESP32) provides the current active preset numbers.
 
@@ -62,7 +62,7 @@ Array of integers representing active preset numbers:
 Example request:
 
 ```
-GET /api/active_preset_numbers
+GET /api/v1/active_preset_numbers
 ```
 
 Example response (JSON):
@@ -73,7 +73,7 @@ Example response (JSON):
 
 ## Select Preset
 
-**Endpoint:** `POST /api/select_preset/<preset_number>`
+**Endpoint:** `POST /api/v1/select_preset/<preset_number>`
 
 **Description:** Selects a DMX preset by number (1-20). The backend will look up the preset name and return it.
 
@@ -91,7 +91,7 @@ Example response (JSON):
 Example request:
 
 ```
-POST /api/select_preset/1
+POST /api/v1/select_preset/1
 ```
 
 Example response:
@@ -102,7 +102,7 @@ Example response:
 
 ## Blackout
 
-**Endpoint:** `POST /api/blackout`
+**Endpoint:** `POST /api/v1/blackout`
 
 **Description:** Activates blackout mode (all DMX light off). It is a special preset with a fixed name "Blackout".
 
@@ -119,7 +119,7 @@ No request body required.
 Example request:
 
 ```
-POST /api/blackout
+POST /api/v1/blackout
 ```
 
 Example response (JSON):
@@ -132,7 +132,7 @@ Example response (JSON):
 
 # Get Presets
 
-**Endpoint:** `GET /api/presets`  
+**Endpoint:** `GET /api/v1/presets`  
 
 **Description:** Returns an array of all DMX presets with their names and active states to display the full Presets list. The backend (Flask or ESP32) provides the current names and activation status.
 
@@ -148,7 +148,7 @@ Array of preset objects, each containing:
 Example request:
 
 ```
-GET /api/presets
+GET /api/v1/presets
 ```
 
 Example response (JSON):
@@ -163,7 +163,7 @@ Example response (JSON):
 
 ## Save Preset
 
-**Endpoint:** `PUT /api/save_preset/<preset_number>`  
+**Endpoint:** `PUT /api/v1/save_preset/<preset_number>`  
 
 **Description:** Saves the current preset (name and DMX values) for the given preset number. Expects the updated preset data in the request body (JSON). Returns ack/nack.
 
@@ -181,7 +181,7 @@ Example response (JSON):
 Example request:
 
 ```
-PUT /api/save_preset/2
+PUT /api/v1/save_preset/2
 
 {
   "name": "Cool Blue",
@@ -197,7 +197,7 @@ Example response (JSON):
 
 ## Move Preset Up
 
-**Endpoint:** `PUT /api/presets/<preset_index>/move_up`  
+**Endpoint:** `PUT /api/v1/presets/<preset_index>/move_up`  
 
 **Description:** Moves the preset at the given index up by one position. Returns the updated preset list.
 **Returns:** `200 OK` with updated preset list; `400 Bad Request` on invalid index.
@@ -211,7 +211,7 @@ Array of preset objects (same as Get Presets) with presets reordered after the m
 Example request:
 
 ```
-PUT /api/presets/2/move_up
+PUT /api/v1/presets/2/move_up
 ```
 
 Example response (JSON):
@@ -226,7 +226,7 @@ Example response (JSON):
 
 ## Move Preset Down
 
-**Endpoint:** `PUT /api/presets/<preset_index>/move_down`  
+**Endpoint:** `PUT /api/v1/presets/<preset_index>/move_down`  
 
 **Description:** Moves the preset at the given index down by one position. Returns the updated preset list.
 
@@ -243,7 +243,7 @@ Array of preset objects (same as Get Presets) with presets reordered after the m
 Example request:
 
 ```
-PUT /api/presets/1/move_down
+PUT /api/v1/presets/1/move_down
 ```
 
 Example response (JSON):
@@ -258,7 +258,7 @@ Example response (JSON):
 
 ## Delete Preset
 
-**Endpoint:** `DELETE /api/presets/<preset_index>`  
+**Endpoint:** `DELETE /api/v1/presets/<preset_index>`  
 
 **Description:** Deletes the preset at the given index. Returns the updated preset list.
 
@@ -274,7 +274,7 @@ Array of preset objects (same as Get Presets) with the specified preset removed.
 Example request:
 
 ```
-DELETE /api/presets/2
+DELETE /api/v1/presets/2
 ```
 
 Example response (JSON):
@@ -288,7 +288,7 @@ Example response (JSON):
 
 ## Insert Preset At
 
-**Endpoint:** `POST /api/presets/<preset_index>/insert_at`  
+**Endpoint:** `POST /api/v1/presets/<preset_index>/insert_at`  
 
 **Description:** Inserts a new preset at the given index. Returns the updated preset list.
 
@@ -306,7 +306,7 @@ Array of preset objects (same as Get Presets) with the new preset inserted at th
 Example request:
 
 ```json
-POST /api/presets/1/insert_at
+POST /api/v1/presets/1/insert_at
 
 {
   "name": "New Preset",
@@ -327,7 +327,7 @@ Example response (JSON):
 
 ## Swap Preset Activation
 
-**Endpoint:** `PUT /api/presets/<preset_index>/swap_activation`
+**Endpoint:** `PUT /api/v1/presets/<preset_index>/swap_activation`
 
 **Description:** Toggles the activation state of the preset at the given index. Returns the updated preset list.
 
@@ -342,7 +342,7 @@ Array of preset objects (same as Get Presets) with the activation state of the s
 Example request:
 
 ```
-PUT /api/presets/2/swap_activation
+PUT /api/v1/presets/2/swap_activation
 ```
 
 Example response (JSON):
@@ -359,7 +359,7 @@ Example response (JSON):
 
 ## Preset Values
 
-**Endpoint:** `GET /api/preset_values/<preset_number>`
+**Endpoint:** `GET /api/v1/preset_values/<preset_number>`
 
 **Description:** Returns an array of 512 DMX values (0–255) for the specified preset number. Used to display or edit all DMX channel values for a given preset in the frontend.
 
@@ -375,7 +375,7 @@ Array of 512 integers (0-255), where each element represents a DMX channel value
 
 **Example request:**
 ```
-GET /api/preset_values/2
+GET /api/v1/preset_values/2
 ```
 
 **Example response:**
@@ -387,7 +387,7 @@ GET /api/preset_values/2
 
 ## Preset Value
 
-**Endpoint:** `PUT /api/preset_value/<preset>/<index>/<value>`
+**Endpoint:** `PUT /api/v1/preset_value/<preset>/<index>/<value>`
 
 **Description:** Sets the DMX value for a specific preset and channel.
 
@@ -407,7 +407,7 @@ GET /api/preset_values/2
 Example request:
 
 ```
-PUT /api/preset_value/2/45/128
+PUT /api/v1/preset_value/2/45/128
 ```
 
 Example response (JSON):
@@ -424,7 +424,7 @@ Example response (JSON):
 
 ## Load Button
 
-**Endpoint:** `GET /api/configuration`
+**Endpoint:** `GET /api/v1/configuration`
 
 **Description:** Returns all configuration settings as a JSON object. Used to load configuration in the UI.
 
@@ -437,7 +437,7 @@ JSON object containing all configuration settings:
 Example request:
 
 ```
-GET /api/configuration
+GET /api/v1/configuration
 ```
 
 Example response (JSON):
@@ -450,7 +450,7 @@ Example response (JSON):
 
 ## Save Button
 
-**Endpoint:** `PUT /api/configuration`
+**Endpoint:** `PUT /api/v1/configuration`
 
 **Description:** Saves all configuration settings. Expects a JSON object with all config fields. Returns ack ("ok"/"nok").
 
@@ -466,7 +466,7 @@ JSON object containing configuration fields to save:
 Example request (URL + JSON):
 
 ```json
-PUT /api/configuration
+PUT /api/v1/configuration
 
 {
   "circular navigation": false
@@ -481,7 +481,7 @@ Example response (JSON):
 
 ## Presets/Circular Navigation Checkbox
 
-**Endpoint:** `PUT /api/configuration_presets_circular_navigation`
+**Endpoint:** `PUT /api/v1/configuration_presets_circular_navigation`
 
 **Description:** Sets the circular navigation boolean for presets. Expects `{ "state": true|false }` in the request body. Returns ack/nack.
 
@@ -497,7 +497,7 @@ JSON object containing the circular navigation state:
 Example request (URL + JSON):
 
 ```json
-PUT /api/configuration_presets_circular_navigation
+PUT /api/v1/configuration_presets_circular_navigation
 
 { "state": true }
 ```
@@ -513,7 +513,7 @@ Example response (JSON):
 
 ## Get Node Status
 
-**Endpoint:** `GET /api/status`  
+**Endpoint:** `GET /api/v1/status`  
 
 **Description:** Returns an array of all ESP32 nodes with their current status and metadata. Used to display the status dashboard in the web UI.
 
@@ -535,7 +535,7 @@ Array of node objects, each containing:
 
 ## Node Status Stream (SSE)
 
-**Endpoint:** `GET /api/status/stream`  
+**Endpoint:** `GET /api/v1/status/stream`  
 
 **Description:** Streams real-time node status updates using Server-Sent Events (SSE). Each event contains the latest array of node status objects. Used for live updates on the Status page.
 
@@ -549,7 +549,7 @@ Server-sent events (one per update) containing an array of node objects (same st
 Example request:
 
 ```
-GET /api/status/stream
+GET /api/v1/status/stream
 ```
 
 Example event:
@@ -609,7 +609,7 @@ Each node object contains:
 
 ## Opening page
 
-**Endpoint:** `GET /api/nodes_info`  
+**Endpoint:** `GET /api/v1/nodes_info`  
 
 **Description:** Returns an array of all nodes with their names and current MAC addresses. Used to display and edit node MACs in the Initialization page.
 
@@ -623,7 +623,7 @@ Array of node objects, each containing:
 Example request:
 
 ```
-GET /api/nodes_info
+GET /api/v1/nodes_info
 ```
 
 Example response (JSON):
@@ -639,14 +639,14 @@ Example response (JSON):
 
 ## Save Button
 
-**Endpoint:** `POST /api/nodes_info`  
+**Endpoint:** `POST /api/v1/nodes_info`  
 
 **Description:** Updates the MAC addresses for all nodes. Expects a JSON array of MAC addresses (in the same order as returned by GET). Returns ack/nack. Only valid MAC addresses are accepted.
 
 **Returns:** `200 OK` with `{ "ack": "ok" }` on success; `400 Bad Request` with `{ "ack": "nok" }` on error.
 
 **Request Specification:**
-Array of MAC address strings (one per node, in the same order as GET /api/nodes_info):
+Array of MAC address strings (one per node, in the same order as GET /api/v1/nodes_info):
 - Each element (string, required) – MAC address in format XX:XX:XX:XX:XX:XX
 
 **Response Specification:**
@@ -655,7 +655,7 @@ Array of MAC address strings (one per node, in the same order as GET /api/nodes_
 Example request:
 
 ```json
-POST /api/nodes_info
+POST /api/v1/nodes_info
 
 ["24:6F:28:AA:BB:CC", "24:6F:28:BB:CC:DD", "24:6F:28:CC:DD:EE", "24:6F:28:DD:EE:FF"]
 ```
@@ -668,7 +668,7 @@ Example response (JSON):
 
 ## Reboot Button
 
-**Endpoint:** `POST /api/reboot`  
+**Endpoint:** `POST /api/v1/reboot`  
 
 **Description:** Triggers a system reboot action. No request body or response is required. Used by the Reboot button on the Initialization page.
 
@@ -683,7 +683,7 @@ No response body. HTTP status 204 No Content indicates success.
 Example request:
 
 ```
-POST /api/reboot
+POST /api/v1/reboot
 ```
 
 Example response:
@@ -694,7 +694,7 @@ Example response:
 
 ## Factory Reset
 
-**Endpoint:** `POST /api/factory_reset`
+**Endpoint:** `POST /api/v1/factory_reset`
 
 **Description:** Performs a factory reset on the webserver (clears configuration, resets to defaults, may reboot).
 
@@ -711,7 +711,7 @@ No request body required.
 Example request:
 
 ```
-POST /api/factory_reset
+POST /api/v1/factory_reset
 ```
 
 Example response (JSON):
@@ -722,9 +722,9 @@ Example response (JSON):
 
 ## Firmware Update 
 
-### POST /api/firmware_chunk/{node_idx}
+### POST /api/v1/firmware_chunk/{node_idx}
 
-**Endpoint:** `POST /api/firmware_chunk/{node_idx}`  
+**Endpoint:** `POST /api/v1/firmware_chunk/{node_idx}`  
 
 **Description:** Upload a chunk of firmware for a given node (4KB per chunk). The frontend splits the firmware .bin file into 4KB chunks and sends them sequentially. After all chunks are sent, the frontend calls the finalize endpoint to assemble and flash the firmware.
 
@@ -740,16 +740,16 @@ Example response (JSON):
 
 **Upload Process:**
 1. User selects .bin file in the Nodes page UI. JavaScript splits the file into 4KB chunks.
-2. For each chunk, POST to `/api/firmware_chunk/{node_idx}` with chunk index and base64 data. No checksum is used; TCP ensures integrity.
+2. For each chunk, POST to `/api/v1/firmware_chunk/{node_idx}` with chunk index and base64 data. No checksum is used; TCP ensures integrity.
 3. The UI handles retries for failed chunks and shows a live progress bar.
-4. After all chunks, POST to `/api/firmware_finish/{node_idx}`.
+4. After all chunks, POST to `/api/v1/firmware_finish/{node_idx}`.
 5. On success, the UI shows "Firmware updated!" for that node.
 
 **Note:** During firmware upload, the frontend buffers live status updates (SSE) to prevent UI re-renders from interrupting the progress bar and button state. The latest status is rendered after upload completes.
 
 Example request:
 ```json
-POST /api/firmware_chunk/1
+POST /api/v1/firmware_chunk/1
 
 {
   "chunk": 0,
@@ -763,9 +763,9 @@ Example response (JSON):
 { "ack": "ok" }
 ```
 
-### POST /api/firmware_finish/{node_idx}
+### POST /api/v1/firmware_finish/{node_idx}
 
-**Endpoint:** `POST /api/firmware_finish/{node_idx}`  
+**Endpoint:** `POST /api/v1/firmware_finish/{node_idx}`  
 
 **Description:** Finalize firmware upload for a node, assemble and flash firmware.
 
@@ -780,7 +780,7 @@ Example response (JSON):
 Example request:
 
 ```
-POST /api/firmware_finish/1
+POST /api/v1/firmware_finish/1
 ```
 
 Example response (JSON):
@@ -793,7 +793,7 @@ Example response (JSON):
 
 ## Send ESP-NOW Security Key
 
-**Endpoint:** `POST /api/esp_now_key`  
+**Endpoint:** `POST /api/v1/esp_now_key`  
 
 **Description:** Sends the ESP-NOW security key from the web UI to the backend. The key is a 16-byte (uint8_t) array, scrambled using a fixed permutation for security and reversibility. The backend must descramble the key using the same order.
 
@@ -811,7 +811,7 @@ Example response (JSON):
 Example request (URL + JSON):
 
 ```json
-POST /api/esp_now_key
+POST /api/v1/esp_now_key
 
 ["a1", "b2", "c3", "d4", "e5", "f6", "07", "18", "29", "3a", "4b", "5c", "6d", "7e", "8f", "90"]
 ```
@@ -824,7 +824,7 @@ POST /api/esp_now_key
 
 ## Send Wi-Fi Password
 
-**Endpoint:** `POST /api/wifi_password`  
+**Endpoint:** `POST /api/v1/wifi_password`  
 
 **Description:** Sends the Wi-Fi password from the web UI to the backend. The password is a string (WPA2: 8-63 characters). The backend must validate and securely store or forward the password.
 
@@ -840,7 +840,7 @@ POST /api/esp_now_key
 Example request (URL + JSON):
 
 ```json
-POST /api/wifi_password
+POST /api/v1/wifi_password
 
 { "password": "mysecretwifi" }
 ```
@@ -856,7 +856,7 @@ POST /api/wifi_password
 
 ## Logging Stream (SSE)
 
-**Endpoint:** `GET /api/logging`  
+**Endpoint:** `GET /api/v1/logging`  
 
 **Description:** Streams real-time log lines using Server-Sent Events (SSE). 
 
@@ -871,14 +871,14 @@ Server-sent events containing individual log lines:
 - `data` (string) – Log line containing timestamp and message (e.g., "2026-03-12 15:42:10 [INFO] System initialized")
 
 **Frontend behavior:**
-- The Logging page opens a connection to `/api/logging` using EventSource.
+- The Logging page opens a connection to `/api/v1/logging` using EventSource.
 - Each received line is appended to a large textarea for live display.
 - The connection is closed when the page is unloaded.
 
 Example request:
 
 ```
-GET /api/logging
+GET /api/v1/logging
 ```
 
 Example event:

@@ -114,7 +114,7 @@
             const originalText = sendBtn.textContent;
             const originalBg = sendBtn.style.background;
             sendBtn.disabled = true;
-            fetch('/api/esp_now_key', {
+            fetch('/api/v1/esp_now_key', {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
                body: JSON.stringify(scrambledKey)
@@ -155,7 +155,7 @@
                         const originalText = sendBtn.textContent;
                         const originalBg = sendBtn.style.background;
                         sendBtn.disabled = true;
-                        fetch('/api/wifi_password', {
+                        fetch('/api/v1/wifi_password', {
                            method: 'POST',
                            headers: { 'Content-Type': 'application/json' },
                            body: JSON.stringify({ password })
@@ -187,3 +187,4 @@
 </body>
 
 </html>
+
