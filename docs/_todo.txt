@@ -1,0 +1,31 @@
+1. Host Static Files on the ESP32
+- Choose a storage method: SPIFFS or LittleFS (recommended for ESP32). DD: LittleFS is chosen.
+- Adjust the littlefs partition for the ESP32 project so it's big enough (keep headroom as the website may grow double in size or more if possible).
+- Configure your ESP32 project’s partition table to include a SPIFFS/LittleFS partition. Use 1 MB for LittleFS.
+- Mount the filesystem in your ESP32 firmware at startup. Do this in the webserverslave class, gracefully.
+- Prepare a folder (e.g., website/dmx_project/dist/) with the files you want to serve.
+2. Bundle/Minify the Website
+- Use a bundler (Webpack, Vite, Parcel, etc.) to build your website for production. Use Vite
+- Install vite and add vite.config.js to control output paths and minification
+- Minify HTML, CSS, JS. (using vite?)
+- Output to a single folder ( dist/).
+- Inline or compress assets if possible.
+- Copy the contents of dist/ to your SPIFFS/LittleFS image before flashing.
+- Put step 2 in a build step, clean the dist folder before building this step
+
+3. Integrate Static File Serving in ESP32 Webserver
+- In your ESP32 firmware, register URI handlers for static files (index.html).
+- In each handler, open the requested file from SPIFFS/LittleFS and stream it to the client, setting the correct MIME type.
+Create a helper function to set the correct Content-Type for .html, .css, .js, .png, etc.?
+- Register your API endpoints (e.g., “/api/v1/…”) before the static file handler, so API calls are routed to your C++ handlers and not the filesystem. Already done.
+ - Will you serve a custom 404 page or just return a default error? No need for this.
+4. Document
+- Add this workflow to dev_faq.md
+
+
+
+
+Build website: npm run build (generates optimized dist/)
+Test locally: npm run preview (http://localhost:5173)
+Create LittleFS image: python website/dmx_project/create_littlefs_image.py
+Flash to ESP32: idf.py -p PORT flash

@@ -25,6 +25,82 @@ Check c_cpp_properties.json :
 
 Still did not work, so I disabled the squiggle warnings.
 
+# LittleFS & Web UI Deployment
+
+## Overview
+The ESP32 webserver serves a web UI stored in LittleFS (1 MB partition). The build process automatically bundles and minifies the website using Vite, then packages it into the LittleFS image during the ESP32 build.
+
+## Partition Layout
+The ESP32-C3 4 MB flash is divided as:
+- **NVS**: 100 KB (config storage)
+- **App (Factory)**: 1 MB (main firmware)
+- **OTA**: 1 MB (2nd firmware for OTA updates)
+- **LittleFS**: 1 MB (web UI and static assets)
+
+## Building & Deploying the Website
+
+### Step 1: Setup Vite (One-time)
+In the `website/dmx_project/` folder:
+```bash
+cd website/dmx_project
+npm install
+```
+
+### Step 2: Build the Website (Before Each Firmware Flash)
+```bash
+npm run build
+```
+This creates an optimized `dist/` folder with minified HTML, CSS, and JS.
+
+### Step 3: Create LittleFS Image
+```bash
+python create_littlefs_image.py
+```
+This generates `littlefs_image.bin` from the `dist/` folder.
+
+### Step 4: Flash to ESP32
+Flash the ESP32 with both firmware and LittleFS:
+```bash
+idf.py -p PORT flash
+```
+
+If you only want to flash the website (no firmware update):
+```bash
+esptool.py -p PORT write_flash 0x230000 website/dmx_project/littlefs_image.bin
+```
+(0x230000 is the LittleFS partition offset from partitions.csv)
+
+### Step 5: Local Testing (Optional)
+Before flashing, test the built website locally:
+```bash
+cd website/dmx_project
+npm run preview
+```
+This serves the `dist/` folder on http://localhost:5173. Verify all pages load and API calls work correctly.
+
+## Technical Details
+
+### Static File Handler
+- Registered in `WebserverSlave.cpp` as a catch-all URI handler (`/*`)
+- Automatically serves `index.html` for root path and non-API routes (SPA support)
+- Sets correct MIME types using `StaticFileHandler::get_mime_type()`
+- Returns 404 if file not found
+
+### LittleFS Mounting
+- Mounted at startup in `WebserverSlave::mount_littlefs()`
+- Partition label: `littlefs`, base path: `/littlefs`
+- Auto-formats partition if mount fails (graceful degradation)
+
+### API / Static Priority
+- All API endpoints (`/api/v1/*`) are registered **before** the static file handler
+- Ensures API calls route to C++ handlers, never to the filesystem
+
+## Troubleshooting
+
+- **Website not loading**: Check if LittleFS is mounted (see serial logs)
+- **Old files still showing**: Ensure `npm run build` completes before flashing
+- **LittleFS out of space**: Check website size with `du -sh website/dmx_project/dist/`
+
 # Website
 
 ## Android connection

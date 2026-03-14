@@ -9,6 +9,13 @@
 #include "ApiFirmware.hpp"
 #include "ApiSecurity.hpp"
 #include "ApiLogging.hpp"
+#include "StaticFileHandler.hpp"
+
+#ifndef UNIT_TEST
+#include <cstring>
+#include <fstream>
+#include <sstream>
+#endif
 
 WebserverSlave::WebserverSlave(IEspHttpServer& espHttpServer)
     : espHttpServer_(espHttpServer)
@@ -41,6 +48,9 @@ WebserverSlave::~WebserverSlave()
 void WebserverSlave::start()
 {
 #ifndef UNIT_TEST
+    // Mount LittleFS filesystem
+    mount_littlefs();
+    
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
     if (httpd_start(&server, &config) == ESP_OK)
     {
@@ -185,6 +195,50 @@ static esp_err_t logging_handler_static(httpd_req_t *req) {
     auto* obj = static_cast<ApiLogging*>(req->user_ctx);
     return obj->logging_handler(req);
 }
+
+#ifndef UNIT_TEST
+// Static file handler for serving files from LittleFS
+static esp_err_t static_file_handler(httpd_req_t *req) {
+    // Build the file path
+    char filepath[1024];  // Increased buffer size to handle long URIs safely
+    snprintf(filepath, sizeof(filepath), "/littlefs%s", req->uri);
+    
+    // Serve index.html for root path
+    if (strcmp(req->uri, "/") == 0) {
+        snprintf(filepath, sizeof(filepath), "/littlefs/index.html");
+    }
+    
+    // Try to open the file
+    FILE* f = fopen(filepath, "r");
+    if (!f) {
+        // File not found, try index.html (for SPA routing)
+        if (strcmp(filepath, "/littlefs/index.html") != 0) {
+            snprintf(filepath, sizeof(filepath), "/littlefs/index.html");
+            f = fopen(filepath, "r");
+        }
+        
+        if (!f) {
+            httpd_resp_send_404(req);
+            return ESP_OK;
+        }
+    }
+    
+    // Set the correct content type
+    const char* mime_type = StaticFileHandler::get_mime_type(filepath);
+    httpd_resp_set_type(req, mime_type);
+    
+    // Send file contents
+    char buffer[1024];
+    size_t bytes_read;
+    while ((bytes_read = fread(buffer, 1, sizeof(buffer), f)) > 0) {
+        httpd_resp_send_chunk(req, buffer, bytes_read);
+    }
+    httpd_resp_send_chunk(req, NULL, 0);  // Send final empty chunk to signal end
+    
+    fclose(f);
+    return ESP_OK;
+}
+#endif  // UNIT_TEST
 #endif  // UNIT_TEST
 
 void WebserverSlave::register_endpoints()
@@ -408,6 +462,15 @@ void WebserverSlave::register_endpoints_esp32()
         .handler = logging_handler_static,
         .user_ctx = apiLogging_};
     httpd_register_uri_handler(server, &logging_uri);
+
+    // Register static file handler for serving web UI from LittleFS
+    // This must be registered AFTER all API endpoints so API calls take precedence
+    httpd_uri_t static_file_uri = {
+        .uri = "/*",
+        .method = HTTP_GET,
+        .handler = static_file_handler,
+        .user_ctx = NULL};
+    httpd_register_uri_handler(server, &static_file_uri);
 #endif  // UNIT_TEST
 }
 
@@ -423,4 +486,42 @@ void WebserverSlave::register_endpoints_test()
     // For now, API objects can be used directly for testing
 #endif
 }
+
+#ifndef UNIT_TEST
+void WebserverSlave::mount_littlefs()
+{
+#ifdef CONFIG_LITTLEFS_FOR_IDF_VFS
+    // LittleFS configuration
+    esp_littlefs_config_t conf = {
+        .base_path = "/littlefs",
+        .partition_label = "littlefs",
+        .format_if_mount_failed = false,
+        .dont_mount = false,
+    };
+
+    // Mount LittleFS
+    esp_err_t ret = esp_littlefs_mount(&conf);
+    if (ret != ESP_OK) {
+        if (ret == ESP_FAIL) {
+            // Could not mount, format and try again
+            esp_littlefs_format("littlefs");
+            ret = esp_littlefs_mount(&conf);
+        }
+
+        if (ret != ESP_OK) {
+            // Mounting failed despite format attempt; log error but continue
+            // The webserver will still work, just without static files
+            printf("Error mounting LittleFS: %s\n", esp_err_to_name(ret));
+        } else {
+            printf("LittleFS mounted successfully\n");
+        }
+    } else {
+        printf("LittleFS mounted successfully\n");
+    }
+#else
+    // LittleFS support not enabled in ESP-IDF, skipping mount
+    printf("LittleFS support not enabled. To enable, configure ESP-IDF with CONFIG_LITTLEFS_FOR_IDF_VFS\n");
+#endif
+}
+#endif  // UNIT_TEST
 
