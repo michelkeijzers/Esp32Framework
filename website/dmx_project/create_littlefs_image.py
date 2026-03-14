@@ -13,7 +13,7 @@ import shutil
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DIST_DIR = os.path.join(SCRIPT_DIR, "dist")
 OUTPUT_IMAGE = os.path.join(SCRIPT_DIR, "littlefs_image.bin")
-PARTITION_SIZE = 0x100000  # 1 MB in bytes
+PARTITION_SIZE = 0x80000  # 512 KB in bytes (updated from 1 MB)
 
 def check_mklittlefs():
     """Check if mklittlefs is available in ESP-IDF"""

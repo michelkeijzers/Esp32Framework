@@ -35,7 +35,7 @@ The ESP32-C3 4 MB flash is divided as:
 - **NVS**: 100 KB (config storage)
 - **App (Factory)**: 1 MB (main firmware)
 - **OTA**: 1 MB (2nd firmware for OTA updates)
-- **LittleFS**: 1 MB (web UI and static assets)
+- **LittleFS**: 512 KB (web UI and static assets)
 
 ## Building & Deploying the Website
 
@@ -138,4 +138,36 @@ You can build the ESP32 project and run the API tester with a single shortcut ke
 Alternatively, you can use `Ctrl+Shift+B` (or open the Command Palette and select `Run Build Task...`) and choose **ESP32: Build All + Run API Tester** from the task list.
 
 The keybinding is defined in `.vscode/keybindings.json` and the tasks are in `.vscode/tasks.json`.
+
+
+
+### Used Tools etc
+
+**Languages:** 
+
+- C++ for ESP32 firmware
+- Python for server and build scripts
+- HTML/CSS/JS for web UI
+
+**Tools:**
+
+- Vite for web UI bundling and minification
+- CMake for ESP32 build system
+- ESP-IDF for ESP32 development
+- Postman for API testing
+- Visual Studio Code with ESP-IDF extension for development
+- Git for version control
+- Flask for local web server during development
+- Github Copilot for code code and documentation assistance
+
+**Methods:** 
+
+- Plant UML for diagrams
+- OOD principles for software design
+- Test-driven development for API testing
+- OOP for modular and maintainable code structure
+- Design patterns
+- Dependency injection for decoupling components
+- Unit testing for API endpoints
+- RESTful API design for web server endpoints
 

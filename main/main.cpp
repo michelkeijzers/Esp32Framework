@@ -9,14 +9,21 @@
 #define BUILD_WEBSERVER_SLAVE 1
 
 #if defined(BUILD_MASTER)
+
 #include "master/master.hpp"
+
 #elif defined(BUILD_WEBSERVER_SLAVE)
+
+#include "common/esp_file_systems/EspLittleFs.hpp"
+#include "common/esp_http_server/EspHttpServer.hpp"
 #include "slaves/webserver_slave/project_dmx_controller/WebserverSlave.hpp"
+#include "common/esp_nvs/EspNvs.hpp"
+
 #else 
+
 // Other slaves
 #endif // BUILD
 
-#include "esp/EspHttpServer.hpp"
 
 
 // #define BUILD_MASTER 0
@@ -28,8 +35,10 @@ extern "C" void app_main(void)
     master.init();
     printf("Built Master component\n");
 #elif defined(BUILD_WEBSERVER_SLAVE)
-    EspHttpServer espHttpServer;    
-    WebserverSlave webserverSlave(espHttpServer);
+    EspLittleFs espLittleFs;
+    EspHttpServer espHttpServer;
+    EspNvs espNvs;
+    WebserverSlave webserverSlave(espLittleFs, espHttpServer, espNvs);
     webserverSlave.start();
     printf("Built Webserver Slave component\n");
 #else

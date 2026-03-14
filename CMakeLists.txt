@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.5)
 set(PROJECT_NAME "my-esp-idf-project")
 set(PROJECT_VERSION "1.0")
 
+# Make local joltwallet LittleFS component discoverable to ESP-IDF.
+list(APPEND EXTRA_COMPONENT_DIRS "${CMAKE_SOURCE_DIR}/esp_littlefs")
+
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(${PROJECT_NAME}) 
 

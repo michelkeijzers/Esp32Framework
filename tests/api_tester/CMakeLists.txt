@@ -3,11 +3,11 @@ project(api_tester)
 
 set(CMAKE_CXX_STANDARD 17)
 
-
-
 add_executable(api_tester
     test_main.cpp
     MockEspHttpServer.cpp
+    MockEspNowHandler.cpp
+    MockEspNvs.cpp
     ApiPresetsTests.cpp
     ApiStatusTests.cpp
     ApiConfigTests.cpp
@@ -27,7 +27,12 @@ add_executable(api_tester
     ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiFirmware.cpp
     ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiSecurity.cpp
     ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiLogging.cpp
+    ../../main/common/esp_http_server/EspHttpServer.cpp
+    ../../main/common/esp_now/EspNowHandler.cpp
+    # ../../main/common/esp_nvs/EspNvs.cpp
 )
+
+set_property(TARGET api_tester PROPERTY CXX_STANDARD 20)
 
 # Define UNIT_TEST for test build
 target_compile_definitions(api_tester PRIVATE UNIT_TEST)
@@ -38,6 +43,12 @@ target_include_directories(api_tester PRIVATE
     ../../main/esp
     ../../main/slaves/webserver_slave/project_dmx_controller
     ../../main/slaves/webserver_slave/project_dmx_controller/Api
+    ../../main/common
+    ../../main/common/nvs
+    ../../main/common/logging
+    ../../main/common/esp_http_server
+    ../../main/common/esp_now
+    ../../main/common/esp_nvs
 )
 
 # Add additional include directories if needed

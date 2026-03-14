@@ -1,14 +1,13 @@
 #pragma once
 #include "IEspHttpServer.hpp"
-#include <unordered_map>
 #include <string>
 #include <functional>
 
-// Mock implementation for API testing
-class MockEspHttpServer : public IEspHttpServer {
+// Real implementation for ESP32 HTTP server
+class EspHttpServer : public IEspHttpServer {
 public:
-    void registerHandler(const std::string& method, const std::string& path, std::function<std::string(const std::string& body)> handler);
-    std::string simulateRequest(const std::string& method, const std::string& path, const std::string& body = "");
+    EspHttpServer();
+    ~EspHttpServer() override;
 
     esp_err_t httpd_start(httpd_handle_t *handle, const httpd_config_t *config) override;
     esp_err_t httpd_stop(httpd_handle_t handle) override;
@@ -21,8 +20,4 @@ public:
 
     esp_err_t httpd_register_uri_handler(httpd_handle_t handle,
                                      const httpd_uri_t *uri_handler) override;
-private:
-    std::unordered_map<std::string, std::function<std::string(const std::string&)>> handlers_;
-
-    std::string response_;
 };

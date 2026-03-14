@@ -1,14 +1,9 @@
-
-#include "../../../esp/IEspHttpServer.hpp"
+#include "../../../common/esp_http_server/esp_http_server_if.hpp"
 #include "Api/StaticFileHandler.hpp"
 
-#ifndef UNIT_TEST
-#include "../../../esp/esp_http_server_if.hpp"
-#include "esp_spiffs.h"
-#ifdef CONFIG_LITTLEFS_FOR_IDF_VFS
-#include "esp_littlefs.h"
-#endif
-#endif
+class IEspLittleFs;
+class IEspHttpServer;
+class IEspNvs;
 
 class ApiConfig;
 class ApiPresets;
@@ -23,12 +18,15 @@ class ApiLogging;
 class WebserverSlave
 {
 public:
-    explicit WebserverSlave(IEspHttpServer& espHttpServer);
+    explicit WebserverSlave(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager);
     ~WebserverSlave();
 
     void startWebserver();
     void start();
     void stop();
+
+    // Thunk for static file handler
+    static esp_err_t static_file_handler_thunk(httpd_req_t *req);
 
 private:
 #ifndef UNIT_TEST
@@ -36,7 +34,9 @@ private:
 #else
     void* server = nullptr;  // Dummy for unit tests
 #endif
+    IEspLittleFs& espLittleFs_;
     IEspHttpServer& espHttpServer_;
+    IEspNvs& nvsManager_;
 
     ApiConfig* apiConfig_;
     ApiPresets* apiPresets_;
@@ -53,4 +53,7 @@ private:
     void register_endpoints();
     void register_endpoints_esp32();
     void register_endpoints_test();
+
+    // Non-static member for static file handler
+    esp_err_t static_file_handler(httpd_req_t *req);
 };
