@@ -15,25 +15,66 @@
          <h1 class="title-colored no-margin">DMX Controller</h1>
       </div>
       <div class="subtitle-row">
-         <button onclick="window.location.href='../index.html'" class="home-btn">Home</button>
-         <h2 style="margin: 0;">Configuration</h2>
+         <button type="button" onclick="window.location.href='../index.html'" class="home-btn">Home</button>
+         <h2 class="config-title">Configuration</h2>
       </div>
-      <div style="display: flex; gap: 1.2rem; margin-bottom: 1.2rem; margin-top: 1.2rem">
-         <button
-            style="background: #a00; color: #fff; border: 1px solid #a00; font-weight: bold; padding: 0.7rem 2.2rem; border-radius: 0.5rem; font-size: 1.1rem; cursor: pointer;"
-            id="load-btn">Load</button>
-         <button
-            style="background: #a00; color: #fff; border: 1px solid #a00; font-weight: bold; padding: 0.7rem 2.2rem; border-radius: 0.5rem; font-size: 1.1rem; cursor: pointer;"
-            id="save-btn">Save</button>
+      <div class="config-btn-row">
+         <button type="button" id="load-btn">Load</button>
+         <button type="button" id="save-btn">Save</button>
       </div>
-      <section style="background: #111; color: #eee; border-radius: 1rem; padding: 2rem; margin: 2rem 0; max-width: 500px;">
-         <h3 style="margin-top: 0;">Presets</h3>
-         <div style="display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1rem;">
-            <label for="circular-nav-toggle" style="font-size: 1.2rem;">Circular Navigation</label>
-            <input type="checkbox" id="circular-nav-toggle" style="transform: scale(1.5);">
-            <span id="circular-nav-status" style="font-size: 1.1rem;">Off</span>
+      <section class="config-section">
+         <h3 class="config-section-title">Presets</h3>
+         <div class="config-toggle-row">
+            <label for="circular-nav-toggle" class="config-toggle-label">Circular Navigation</label>
+            <input type="checkbox" id="circular-nav-toggle" class="config-toggle-checkbox">
+            <span id="circular-nav-status" class="config-toggle-status">Off</span>
          </div>
       </section>
+      <style>
+         .config-title { margin: 0; }
+         .config-btn-row {
+            display: flex;
+            gap: 1.2rem;
+            margin-bottom: 1.2rem;
+            margin-top: 1.2rem;
+         }
+         #load-btn, #save-btn {
+            background: #a00;
+            color: #fff;
+            border: 1px solid #a00;
+            font-weight: bold;
+            padding: 0.7rem 2.2rem;
+            border-radius: 0.5rem;
+            font-size: 1.1rem;
+            cursor: pointer;
+         }
+         .config-section {
+            background: #111;
+            color: #eee;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem 0;
+            max-width: 500px;
+         }
+         .config-section-title {
+            margin-top: 0;
+         }
+         .config-toggle-row {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            margin-bottom: 1rem;
+         }
+         .config-toggle-label {
+            font-size: 1.2rem;
+         }
+         .config-toggle-checkbox {
+            transform: scale(1.5);
+         }
+         .config-toggle-status {
+            font-size: 1.1rem;
+         }
+      </style>
       <script>
 
          const toggle = document.getElementById('circular-nav-toggle');
