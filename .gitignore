@@ -8,7 +8,6 @@ spiffs_image.bin
 littlefs_image.bin
 
 # IDE and environment files
-.vscode/
 .idea/
 __pycache__/
 *.pyc
