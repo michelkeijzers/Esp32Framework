@@ -1,7 +1,7 @@
 
 #include "MockEspHttpServer.hpp"
 #include "MockEspLogger.hpp"
-#include "WebserverSlave.hpp"
+#include "DmxControllerWebserverSlave.hpp"
 #include "apis/ApiPresetsTests.hpp"
 #include "apis/ApiStatusTests.hpp"
 #include "apis/ApiConfigTests.hpp"

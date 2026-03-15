@@ -16,7 +16,7 @@
 
 #include "common/esp_file_systems/EspLittleFs.hpp"
 #include "common/esp_http_server/EspHttpServer.hpp"
-#include "slaves/webserver_slave/project_dmx_controller/WebserverSlave.hpp"
+#include "slaves/webserver_slave/dmx_controller/DmxControllerWebserverSlave.hpp"
 #include "common/esp_nvs/EspNvs.hpp"
 #include "common/esp_logger/EspLogger.hpp"
 
@@ -40,7 +40,7 @@ extern "C" void app_main(void)
     EspHttpServer espHttpServer;
     EspNvs espNvs;
     EspLogger espLogger;
-    WebserverSlave webserverSlave(espLittleFs, espHttpServer, espNvs, espLogger);
+    DmxControllerWebserverSlave webserverSlave(espLittleFs, espHttpServer, espNvs, espLogger);
     webserverSlave.start();
     printf("Built Webserver Slave component\n");
 #else

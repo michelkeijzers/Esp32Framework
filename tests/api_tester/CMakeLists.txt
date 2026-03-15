@@ -18,19 +18,22 @@ add_executable(api_tester
     apis/ApiPresetValuesTests.cpp
     apis/ApiSecurityTests.cpp
     apis/ApiSystemTests.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/WebserverSlave.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/apis/ApiPresets.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/apis/ApiConfig.cpp
-    ../../main/common/apis/ApiStatus.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/apis/ApiPresetValues.cpp
-    ../../main/common/apis/ApiNodes.cpp
-    ../../main/common/apis/ApiSystem.cpp
-    ../../main/common/apis/ApiFirmware.cpp
-    ../../main/common/apis/ApiSecurity.cpp
-    ../../main/common/apis/ApiLogging.cpp
+    ../../main/slaves/webserver_slave/dmx_controller/DmxControllerWebserverSlave.cpp
+    ../../main/slaves/webserver_slave/dmx_controller/apis/ApiPresets.cpp
+    ../../main/slaves/webserver_slave/dmx_controller/apis/ApiConfig.cpp
+    ../../main/slaves/webserver_slave/common/apis/ApiStatus.cpp
+    ../../main/slaves/webserver_slave/dmx_controller/apis/ApiPresetValues.cpp
+    ../../main/slaves/webserver_slave/common/apis/ApiNodes.cpp
+    ../../main/slaves/webserver_slave/common/apis/ApiSystem.cpp
+    ../../main/slaves/webserver_slave/common/apis/ApiFirmware.cpp
+    ../../main/slaves/webserver_slave/common/apis/ApiSecurity.cpp
+    ../../main/slaves/webserver_slave/common/apis/ApiLogging.cpp
+    ../../main/slaves/webserver_slave/common/apis/ApiResponse.cpp
+    ../../main/slaves/webserver_slave/common/apis/ApiValidator.cpp
     ../../main/common/esp_http_server/EspHttpServer.cpp
     ../../main/common/esp_now/EspNowHandler.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/presets/PresetManager.cpp
+    ../../main/slaves/webserver_slave/dmx_controller/presets/PresetManager.cpp
+    ../../main/slaves/webserver_slave/common/WebserverSlave.cpp
     # ../../main/common/esp_nvs/EspNvs.cpp
 )
 
@@ -39,14 +42,21 @@ set_property(TARGET api_tester PROPERTY CXX_STANDARD 20)
 # Define UNIT_TEST for test build
 target_compile_definitions(api_tester PRIVATE UNIT_TEST)
 
-# Add include directories for main/esp, project_dmx_controller, and Api subdirectory
+# Allow multiple symbol definitions for ESP IDF duplicate symbols in test build
+if(MSVC)
+    target_link_options(api_tester PRIVATE /FORCE:MULTIPLE)
+endif()
+
+# Add include directories for main/esp, dmx_controller, and Api subdirectory
 target_include_directories(api_tester PRIVATE
     .
     ./api
     ./mock
     ../../main/esp
-    ../../main/slaves/webserver_slave/project_dmx_controller
-    ../../main/slaves/webserver_slave/project_dmx_controller/Api
+    ../../main/slaves/webserver_slave/dmx_controller
+    ../../main/slaves/webserver_slave/common
+    ../../main/slaves/webserver_slave/common/apis
+    ../../main/slaves/webserver_slave/dmx_controller/apis
     ../../main/common
     ../../main/common/nvs
     ../../main/common/esp_logger
@@ -56,7 +66,7 @@ target_include_directories(api_tester PRIVATE
 )
 
 # Add additional include directories if needed
-# target_include_directories(api_tester PRIVATE ../../main/slaves/webserver_slave/project_dmx_controller)
+# target_include_directories(api_tester PRIVATE ../../main/slaves/webserver_slave/dmx_controller)
 
 # Link libraries if your handlers require them
 # target_link_libraries(api_tester ...)
