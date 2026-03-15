@@ -1,5 +1,6 @@
 #pragma once
 
+#include "IWebserverSlave.hpp"
 #include <memory>
 #include "../../../common/esp_http_server/esp_http_server_if.hpp"
 #include "../common/apis/StaticFileHandler.hpp"
@@ -20,7 +21,7 @@ class IEspLogger;
  * Derived classes can override register_endpoints() to add project-specific endpoints
  */
 
-class WebserverSlave
+class WebserverSlave : public IWebserverSlave
 {
 public:
     explicit WebserverSlave(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspLogger& logger,
@@ -29,8 +30,8 @@ public:
 
     virtual ~WebserverSlave();
 
-    virtual void start();
-    void stop();
+    virtual void start() override;
+    virtual void stop() override;
 
     // Thunk for static file handler
     static esp_err_t static_file_handler_thunk(httpd_req_t *req);

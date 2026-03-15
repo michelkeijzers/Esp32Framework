@@ -30,6 +30,8 @@
 #include "slaves/webserver_slave/dmx_controller/apis/ApiPresets.hpp"
 #include "slaves/webserver_slave/dmx_controller/apis/ApiPresetValues.hpp"
 #include "slaves/webserver_slave/dmx_controller/presets/PresetManager.hpp"
+#include "slaves/webserver_slave/common/IWebserverSlave.hpp"
+#include "slaves/webserver_slave/dmx_controller/MockDmxControllerWebserverSlave.hpp"
 
 #else 
 
@@ -68,7 +70,7 @@ extern "C" void app_main(void)
     ApiPresetValues* apiPresetValues = new ApiPresetValues(espHttpServer, presetManager);
     
     // Create WebserverSlave with all dependencies injected
-    IDmxControllerWebserverSlave* webserverSlave = new DmxControllerWebserverSlave(
+    IWebserverSlave* webserverSlave = new DmxControllerWebserverSlave(
         espLittleFs, espHttpServer, espNvs, espLogger,
         static_cast<ApiStatus&>(apiStatus),
         static_cast<ApiNodes&>(apiNodes),
