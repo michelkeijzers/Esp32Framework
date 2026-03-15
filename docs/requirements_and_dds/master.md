@@ -3,7 +3,7 @@
 # Message Routing
 
 **REQ-MAS-100:** The master shall maintain a routing table mapping destination MAC addresses to slave roles. This mapping and the MAC addresses will be stored in NVS and is configurable.<br/>
-**Rationale:** Allows the master to route messages based on destination MAC address only, keeping it fully generic.<br/>
+**Rationale:** Allows the master to route messages based on destination MAC address only, keeping it fully common.<br/>
 **Alternative considered:** Dynamic routing table or routing based on message content — rejected, adds complexity and potential for misconfiguration.
 
 **REQ-MAS-105:** The master shall get the MAC addresses via ESP-NOW from the webserver slave at boot and store them in NVS for routing.<br/>
@@ -61,7 +61,7 @@
 - In case of a timeout or missing responses, an error is logged.
 
 **Rationale:** Ensures all slaves are updated with the new encryption key without requiring manual updates or firmware changes, improving security and usability.<br/>
-**Alternative considered:** Manual update of encryption key on each slave — rejected, would be inconvenient and error-prone, especially for larger deployments. Key configuration via web interface — rejected, adds complexity and requires webserver slave to be involved in key management, which is not ideal for a generic master that should not have project specific logic.
+**Alternative considered:** Manual update of encryption key on each slave — rejected, would be inconvenient and error-prone, especially for larger deployments. Key configuration via web interface — rejected, adds complexity and requires webserver slave to be involved in key management, which is not ideal for a common master that should not have project specific logic.
 
 # Software Organization
 
@@ -86,7 +86,7 @@
 **Direction:** Slave to Master<br/>
 **Parameters:**<br/>
 
-- Generic parameters: (these will be omitted in further messages)
+- common parameters: (these will be omitted in further messages)
   - Version Number (uint8_t)
   - Sequence Number (uint8_t)
   - Destination Role (Remote, Slave), (uint8_t/enum)
@@ -120,7 +120,7 @@
 **Message ID: HEARTBEAT**<br/>
 **Description:** Sent periodically by slave to master to indicate it is still online.
 **Direction:** Slave to Master<br/>
-**Specific Parameters:** None (only generic parameters)
+**Specific Parameters:** None (only common parameters)
 
 **Message ID: ERROR**<br/>
 **Description:** Sent by slave to master when an error occurs that the master should be aware of (e.g. failed sensor reading, failed actuation, etc.).<br/>

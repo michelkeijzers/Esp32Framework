@@ -4,7 +4,7 @@
 
 | Document        | ID RANGE | Main Category | Category                                  |
 | --------------- | -------- | ------------- | ----------------------------------------- |
-| generic.md      | REQ-GEN  | Generic       | Generic project, role, communication, ... |
+| common.md       | REQ-GEN  | Common        | Common project, role, communication, ...  |
 | master.md       | REQ-MAS  | Master        |                                           |
 | remote.md       | REQ-REM  | Remove        |                                           |
 | osc_slave       | REQ-OSC  | Slave         | OSC slave                                 |

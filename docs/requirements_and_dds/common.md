@@ -1,4 +1,4 @@
-# GENERIC REQUIREMENTS AND DESIGN DECISIONS
+# COMMON REQUIREMENTS AND DESIGN DECISIONS
 
 # Roles
 
@@ -14,10 +14,10 @@
 **Rationale:** Roles are static per project — no need for dynamic switching. Compile time configuration simplifies implementation and reduces attack surface.<br/>
 **Alternative considered:** Runtime role switching — rejected, adds complexity and potential for misconfiguration.
 
-## Master and Remote are Generic
+## Master and Remote are Common
 
-**REQ-GEN-120:** Master and remote role code shall be fully generic — no project specific code, never reflashed between projects.<br/>
-**Rationale:** Master is a blind router, remote is a simple heartbeat sender — both roles are generic across projects and do not require project specific logic.<br/>
+**REQ-GEN-120:** Master and remote role code shall be fully common (equal) between projects — no project specific code, never reflashed between projects.<br/>
+**Rationale:** Master is a blind router, remote is a simple heartbeat sender — both roles are common across projects and do not require project specific logic.<br/>
 **Alternative considered:** Per-project master and remote code — rejected, would fragment codebase and lose reusability.
 
 # ESP-NOW Protocol
@@ -70,7 +70,7 @@
 
 **REQ-SEC-310:** The static Key for ESP-NOW encryption shall be configurable via NVS and not hardcoded in firmware.<br/>
 **Rationale:** Allows users to set their own encryption key without needing to modify and reflash firmware, improving security and usability.<br/>
-**Alternative considered:** Hardcoded key in firmware — rejected, would require firmware changes to update key and reduce security if firmware is shared. Key configuration via web interface — rejected, adds complexity and requires webserver slave to be involved in key management, which is not ideal for a generic master that should not have project specific logic.
+**Alternative considered:** Hardcoded key in firmware — rejected, would require firmware changes to update key and reduce security if firmware is shared. Key configuration via web interface — rejected, adds complexity and requires webserver slave to be involved in key management, which is not ideal for a common master that should not have project specific logic.
 
 # Boot
 

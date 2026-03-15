@@ -67,8 +67,8 @@
 - [ ] Graceful Wi-Fi loss handling (ESP-NOW continues, web UI offline)
 
 #### 8. General Requirements Status
-- ✅ All requirements from generic.md reviewed
-- ✅ All requirements from generic_slave.md reviewed
+- ✅ All requirements from common.md reviewed
+- ✅ All requirements from common_slave.md reviewed
 - ✅ All requirements from webserver_slave.md reviewed
 - ✅ No contradictions found
 - ✅ All unclear items clarified

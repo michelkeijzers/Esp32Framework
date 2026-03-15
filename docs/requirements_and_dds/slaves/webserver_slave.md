@@ -6,7 +6,7 @@
 
 **REQ-WEB-100:** The webserver slave shall be the only role rewritten per project.<br/>
 **Rationale:** Webserver slave handles project specific logic and UI — requires customization per project.<br/>
-**Alternative considered:** Generic webserver slave — rejected, would limit project specific functionality.
+**Alternative considered:** Common webserver slave — rejected, would limit project specific functionality.
 
 ## Brains
 
@@ -60,7 +60,7 @@
 
 **REQ-SEC-610:** Webserver shall provide a means to change the static security key and able to message it to the master to spread.<br/>
 **Rationale:** Allows users to set their own encryption key without needing to modify and reflash firmware, improving security and usability.<br/>
-**Alternative considered:** Hardcoded key in firmware — rejected, would require firmware changes to update key and reduce security if firmware is shared. Key configuration via web interface — rejected, adds complexity and requires webserver slave to be involved in key management, which is not ideal for a generic master that should not have project specific logic.
+**Alternative considered:** Hardcoded key in firmware — rejected, would require firmware changes to update key and reduce security if firmware is shared. Key configuration via web interface — rejected, adds complexity and requires webserver slave to be involved in key management, which is not ideal for a common master that should not have project specific logic.
 
 ## Wi-Fi Security
 

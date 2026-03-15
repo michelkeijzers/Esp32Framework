@@ -4,7 +4,7 @@
 
 ## Multiple Pages
 
-**REQ-HTMX-100:** The webserver is divided into multiple pages, with a mix of generic and application-specific content:
+**REQ-HTMX-100:** The webserver is divided into multiple pages, with a mix of common and application-specific content:
 	- Application-specific pages
 	- Configuration: project-specific configuration options
 	- Status: status of all nodes (master and slaves)
@@ -13,7 +13,7 @@
 	- Logging: system logs
 	- Nodes: unified node management (status, MAC, firmware, etc.)
 	- Manual: static HTML manual, ready for custom content<br/>
-**Rationale:** Clear structure for users and developers, with reusable generic pages and customizable application-specific pages.<br/>
+**Rationale:** Clear structure for users and developers, with reusable common pages and customizable application-specific pages.<br/>
 **Alternative considered:** Single-page design (too cluttered), or only application-specific pages (harder to find common features).
 
 ## Page Header

@@ -5,7 +5,7 @@
 
 # Role Summary
 
-| Role             | Wi-Fi        | Watchdog             | Heartbeat | Webserver | OTA | Generic     |
+| Role             | Wi-Fi        | Watchdog             | Heartbeat | Webserver | OTA | Common      |
 | ---------------- | ------------ | -------------------- | --------- | --------- | --- | ----------- |
 | `ROLE_MASTER`    | ESP-NOW only | Own cluster + remote | —         | —         | —   | Always      |
 | `ROLE_REMOTE`    | ESP-NOW only | Own cluster          | To master | —         | —   | Always      |

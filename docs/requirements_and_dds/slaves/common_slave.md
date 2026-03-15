@@ -1,10 +1,10 @@
-# GENERIC SLAVE REQUIREMENTS
+# COMMON SLAVE REQUIREMENTS
 
 # Role
 
-## Generic Slave Role
+## Common Slave Role
 
-**REQ-SLV-100:** Slave role code shall be fully generic — no project specific code, project specific data loaded via NVS at first boot.<br/>
+**REQ-SLV-100:** Slave role code shall be fully common between projects — no project specific code, project specific data loaded via NVS at first boot.<br/>
 **Rationale:** Slave roles are consistent across projects, only data varies per project.<br/>
 **Alternative considered:** Per-project slave code — rejected, would increase maintenance burden and reduce code reuse.
 
@@ -31,7 +31,7 @@
 ## Owning Domain Data in NVS
 
 **REQ-SLV-200:** Each slave shall own its domain data as single source of truth — stored in NVS.<br/>
-**Rationale:** Centralizes project specific data in NVS, allowing for configuration without reflashing. Keeps slave code generic and reusable across projects.<br/>
+**Rationale:** Centralizes project specific data in NVS, allowing for configuration without reflashing. Keeps slave code common and reusable across projects.<br/>
 **Alternative considered:** Hardcoded data in firmware — rejected, would require reflashing for configuration changes and reduce flexibility.
 
 ## NVS Structure Identical across Projects
