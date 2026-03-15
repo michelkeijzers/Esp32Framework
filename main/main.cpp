@@ -19,6 +19,7 @@
 #include "common/esp_nvs/EspNvs.hpp"
 #include "common/esp_logger/EspLogger.hpp"
 #include "slaves/webserver_slave/dmx_controller/DmxControllerWebserverSlave.hpp"
+#include "slaves/webserver_slave/dmx_controller/IDmxControllerWebserverSlave.hpp"
 #include "slaves/webserver_slave/common/apis/ApiStatus.hpp"
 #include "slaves/webserver_slave/common/apis/ApiNodes.hpp"
 #include "slaves/webserver_slave/common/apis/ApiSystem.hpp"
@@ -67,15 +68,16 @@ extern "C" void app_main(void)
     ApiPresetValues* apiPresetValues = new ApiPresetValues(espHttpServer, presetManager);
     
     // Create WebserverSlave with all dependencies injected
-    DmxControllerWebserverSlave webserverSlave(espLittleFs, espHttpServer, espNvs, espLogger,
-                                               static_cast<ApiStatus&>(apiStatus),
-                                               static_cast<ApiNodes&>(apiNodes),
-                                               static_cast<ApiSystem&>(apiSystem),
-                                               static_cast<ApiFirmware&>(apiFirmware),
-                                               static_cast<ApiSecurity&>(apiSecurity),
-                                               static_cast<ApiLogging&>(apiLogging),
-                                               apiConfig, apiPresets, apiPresetValues, static_cast<IPresetManager&>(presetManager));
-    webserverSlave.start();
+    IDmxControllerWebserverSlave* webserverSlave = new DmxControllerWebserverSlave(
+        espLittleFs, espHttpServer, espNvs, espLogger,
+        static_cast<ApiStatus&>(apiStatus),
+        static_cast<ApiNodes&>(apiNodes),
+        static_cast<ApiSystem&>(apiSystem),
+        static_cast<ApiFirmware&>(apiFirmware),
+        static_cast<ApiSecurity&>(apiSecurity),
+        static_cast<ApiLogging&>(apiLogging),
+        apiConfig, apiPresets, apiPresetValues, static_cast<IPresetManager&>(presetManager));
+    webserverSlave->start();
     printf("Built Webserver Slave component\n");
 #else
 // Other slaves

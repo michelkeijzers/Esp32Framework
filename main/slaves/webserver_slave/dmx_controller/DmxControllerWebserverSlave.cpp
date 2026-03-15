@@ -45,6 +45,12 @@ void DmxControllerWebserverSlave::start()
     WebserverSlave::start();
 }
 
+void DmxControllerWebserverSlave::stop()
+{
+    // Call base class stop() which handles httpd_stop
+    WebserverSlave::stop();
+}
+
 void DmxControllerWebserverSlave::register_endpoints()
 {
     // Register both generic endpoints (from base class) and DMX-specific endpoints

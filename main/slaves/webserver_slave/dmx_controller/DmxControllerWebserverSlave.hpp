@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../common/WebserverSlave.hpp"
+#include "IDmxControllerWebserverSlave.hpp"
 
 #include "apis/ApiConfig.hpp"
 #include "apis/ApiPresets.hpp"
@@ -9,7 +10,7 @@
 
 class IEspNvs;
 class IPresetManager;
-class DmxControllerWebserverSlave : public WebserverSlave
+class DmxControllerWebserverSlave : public WebserverSlave, public IDmxControllerWebserverSlave
 {
 public:
     explicit DmxControllerWebserverSlave(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager, IEspLogger& logger,
@@ -20,6 +21,7 @@ public:
     ~DmxControllerWebserverSlave();
 
     void start() override;
+    void stop() override;
 
 protected:
     /**
