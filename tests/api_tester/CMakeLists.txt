@@ -29,7 +29,7 @@ add_executable(api_tester
     ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiLogging.cpp
     ../../main/common/esp_http_server/EspHttpServer.cpp
     ../../main/common/esp_now/EspNowHandler.cpp
-    ../../main/common/presets/PresetManager.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/presets/PresetManager.cpp
     # ../../main/common/esp_nvs/EspNvs.cpp
 )
 

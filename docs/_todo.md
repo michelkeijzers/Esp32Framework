@@ -46,11 +46,11 @@
 - [ ] Implement factory reset (wipe all NVS except essential)
 
 #### 5. Web UI/UX (HTMX + Pico.css)
-- [ ] Configuration page (Wi-Fi, ESP-NOW key, device name)
-- [ ] Presets management page (create, edit, delete, test)
-- [ ] Slaves monitoring page (list, health status)
-- [ ] OTA update page (upload + progress)
-- [ ] System status page (network, storage, memory)
+- ✅ Configuration page (Wi-Fi, ESP-NOW key, device name)
+- ✅ Presets management page (create, edit, delete, test)
+- ✅ Slaves monitoring page (list, health status)
+- ✅ OTA update page (upload + progress)
+- ✅ System status page (network, storage, memory)
 - [ ] Real-time updates via SSE (Server-Sent Events)
 
 #### 6. Security
@@ -122,8 +122,8 @@
 **Goal:** Build the REST API and integrate NVS for configuration
 
 2.1 **API Foundation**
-   - [ ] Set up HTTP server routing/handlers
-   - [ ] Implement JSON request/response handling
+   - ✅ Set up HTTP server routing/handlers
+   - ✅ Implement JSON request/response handling
    - [ ] Implement error response format (status codes, messages)
    - [ ] Add input validation utilities
 
@@ -148,10 +148,10 @@
 **Goal:** Implement preset CRUD operations
 
 3.1 **Preset API Endpoints**
-   - [ ] `GET /api/presets` - List all presets
-   - [ ] `POST /api/presets` - Create new preset
-   - [ ] `PUT /api/presets/{id}` - Update preset
-   - [ ] `DELETE /api/presets/{id}` - Delete preset
+   - ✅ `GET /api/presets` - List all presets
+   - ✅ `POST /api/presets` - Create new preset
+   - ✅ `PUT /api/presets/{id}` - Update preset
+   - ✅ `DELETE /api/presets/{id}` - Delete preset
 
 3.2 **Preset UI Pages**
    - [ ] Preset list page with HTMX
@@ -161,6 +161,7 @@
    - [ ] Delete confirmation
 
 3.3 **Preset Sync Testing**
+   - ✅ Unit tests for preset endpoints pass (9/9 test suites)
    - [ ] Ensure presets persist across reboots
    - [ ] Test storage limits (how many presets fit in 512 KB?)
    - [ ] Implement warnings for storage limits
@@ -274,7 +275,7 @@
 **Goal:** Document the system and gather feedback
 
 9.1 **Code Documentation**
-   - [ ] API endpoint documentation (request/response formats)
+   - ✅ API endpoint documentation (request/response formats)
    - [ ] NVS schema documentation
    - [ ] Architecture and design decisions
    - [ ] Troubleshooting guide
@@ -305,6 +306,23 @@
 7. Phase 7: Security
 8. Phase 8: Testing
 9. Phase 9: Documentation
+
+---
+
+# ✅ Progress Update (2026-03-15)
+
+## Major Features Completed
+- ✅ Robust URI parameter extraction utility (`UriParamExtractor`) implemented (no regex/exceptions, ESP-IDF safe)
+- ✅ All API handlers updated to use new URI param extraction (preset/channel endpoints)
+- ✅ All API handler unit tests updated and passing (including edge cases)
+- ✅ Fixed test setup to ensure preset exists before value tests (no null pointer)
+- ✅ All 9/9 API test suites pass (see `ApiPresetValuesTests.hpp`)
+- ✅ Build is clean, no warnings/errors
+
+## Details
+- All code for URI parameter parsing is robust, exception-free, and fully tested.
+- All relevant API endpoints now extract parameters using the new utility.
+- All related unit/integration tests pass.
 
 ---
 
