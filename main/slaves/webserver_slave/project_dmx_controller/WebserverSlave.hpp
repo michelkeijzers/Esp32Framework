@@ -1,6 +1,6 @@
 #include <memory>
 #include "../../../common/esp_http_server/esp_http_server_if.hpp"
-#include "Api/StaticFileHandler.hpp"
+#include "api/StaticFileHandler.hpp"
 #include "./presets/IPresetManager.hpp"
 
 class IEspLittleFs;

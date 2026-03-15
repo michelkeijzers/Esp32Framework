@@ -18,15 +18,15 @@ add_executable(api_tester
     ApiSecurityTests.cpp
     ApiSystemTests.cpp
     ../../main/slaves/webserver_slave/project_dmx_controller/WebserverSlave.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiPresets.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiConfig.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiStatus.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiPresetValues.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiNodes.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiSystem.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiFirmware.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiSecurity.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/Api/ApiLogging.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/api/ApiPresets.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/api/ApiConfig.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/api/ApiStatus.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/api/ApiPresetValues.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/api/ApiNodes.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/api/ApiSystem.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/api/ApiFirmware.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/api/ApiSecurity.cpp
+    ../../main/slaves/webserver_slave/project_dmx_controller/api/ApiLogging.cpp
     ../../main/common/esp_http_server/EspHttpServer.cpp
     ../../main/common/esp_now/EspNowHandler.cpp
     ../../main/slaves/webserver_slave/project_dmx_controller/presets/PresetManager.cpp
