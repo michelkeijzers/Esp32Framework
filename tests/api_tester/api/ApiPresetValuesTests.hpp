@@ -1,6 +1,6 @@
 #pragma once
-#include "MockEspHttpServer.hpp"
-#include "MockPresetManager.hpp"
+#include "../mock/MockEspHttpServer.hpp"
+#include "../mock/MockPresetManager.hpp"
 #include "ApiPresetValues.hpp"
 #include <iostream>
 #include <cassert>

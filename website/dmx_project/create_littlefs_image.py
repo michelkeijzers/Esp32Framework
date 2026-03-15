@@ -15,6 +15,7 @@ DIST_DIR = os.path.join(SCRIPT_DIR, "dist")
 OUTPUT_IMAGE = os.path.join(SCRIPT_DIR, "littlefs_image.bin")
 PARTITION_SIZE = 0x80000  # 512 KB in bytes (updated from 1 MB)
 
+
 def check_mklittlefs():
     """Check if mklittlefs is available in ESP-IDF"""
     idf_path = os.environ.get("IDF_PATH")
@@ -34,6 +35,7 @@ def check_mklittlefs():
             return path
     
     return None
+
 
 def create_littlefs_image():
     """Create LittleFS image from dist/ folder"""
@@ -81,6 +83,7 @@ def create_littlefs_image():
     except subprocess.CalledProcessError as e:
         print(f"Error creating LittleFS image: {e}")
         return False
+
 
 if __name__ == "__main__":
     if not create_littlefs_image():

@@ -5,19 +5,19 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(api_tester
     test_main.cpp
-    MockEspHttpServer.cpp
-    MockEspNowHandler.cpp
-    MockEspNvs.cpp
-    MockEspLogger.cpp
-    ApiPresetsTests.cpp
-    ApiStatusTests.cpp
-    ApiConfigTests.cpp
-    ApiFirmwareTests.cpp
-    ApiLoggingTests.cpp
-    ApiNodesTests.cpp
-    ApiPresetValuesTests.cpp
-    ApiSecurityTests.cpp
-    ApiSystemTests.cpp
+    mock/MockEspHttpServer.cpp
+    mock/MockEspNowHandler.cpp
+    mock/MockEspNvs.cpp
+    mock/MockEspLogger.cpp
+    api/ApiPresetsTests.cpp
+    api/ApiStatusTests.cpp
+    api/ApiConfigTests.cpp
+    api/ApiFirmwareTests.cpp
+    api/ApiLoggingTests.cpp
+    api/ApiNodesTests.cpp
+    api/ApiPresetValuesTests.cpp
+    api/ApiSecurityTests.cpp
+    api/ApiSystemTests.cpp
     ../../main/slaves/webserver_slave/project_dmx_controller/WebserverSlave.cpp
     ../../main/slaves/webserver_slave/project_dmx_controller/api/ApiPresets.cpp
     ../../main/slaves/webserver_slave/project_dmx_controller/api/ApiConfig.cpp
@@ -42,6 +42,8 @@ target_compile_definitions(api_tester PRIVATE UNIT_TEST)
 # Add include directories for main/esp, project_dmx_controller, and Api subdirectory
 target_include_directories(api_tester PRIVATE
     .
+    ./api
+    ./mock
     ../../main/esp
     ../../main/slaves/webserver_slave/project_dmx_controller
     ../../main/slaves/webserver_slave/project_dmx_controller/Api
