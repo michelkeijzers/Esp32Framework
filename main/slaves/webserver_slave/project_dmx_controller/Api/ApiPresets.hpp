@@ -2,12 +2,13 @@
 #pragma once
 #include "../../../../common/esp_http_server/esp_http_server_if.hpp"
 #include "../../../../common/esp/esp_error_if.hpp"
+#include "../../../../common/presets/IPresetManager.hpp"
 
 class IEspHttpServer;
 
 class ApiPresets {
 public:
-    ApiPresets(IEspHttpServer& espHttpServer);
+    ApiPresets(IEspHttpServer& espHttpServer, IPresetManager& presetManager);
     ~ApiPresets();
 
     // Presets management
@@ -24,4 +25,5 @@ public:
 
 private:
     IEspHttpServer& espHttpServer_;
+    IPresetManager& presetManager_;
 };

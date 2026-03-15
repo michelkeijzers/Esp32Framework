@@ -7,6 +7,7 @@ idf_component_register(
         "common/esp_now/EspNowHandler.cpp"
         "common/esp_nvs/EspNvs.cpp"
         "common/esp_file_systems/EspLittleFs.cpp"
+        "common/presets/PresetManager.cpp"
         "slaves/webserver_slave/project_dmx_controller/Api/ApiConfig.cpp"
         "slaves/webserver_slave/project_dmx_controller/Api/ApiPresets.cpp"
         "slaves/webserver_slave/project_dmx_controller/Api/ApiStatus.cpp"
@@ -27,5 +28,6 @@ idf_component_register(
         "common/esp_http_server"
         "common/esp_now"
         "common/esp_nvs"
+        "common/presets"
     REQUIRES esp_littlefs esp_http_server nvs_flash esp_wifi
 )

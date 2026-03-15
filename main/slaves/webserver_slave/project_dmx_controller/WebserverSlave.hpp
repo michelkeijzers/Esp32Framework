@@ -1,5 +1,7 @@
+#include <memory>
 #include "../../../common/esp_http_server/esp_http_server_if.hpp"
 #include "Api/StaticFileHandler.hpp"
+#include "../../../common/presets/IPresetManager.hpp"
 
 class IEspLittleFs;
 class IEspHttpServer;
@@ -37,6 +39,8 @@ private:
     IEspLittleFs& espLittleFs_;
     IEspHttpServer& espHttpServer_;
     IEspNvs& nvsManager_;
+    
+    std::unique_ptr<IPresetManager> presetManager_;
 
     ApiConfig* apiConfig_;
     ApiPresets* apiPresets_;

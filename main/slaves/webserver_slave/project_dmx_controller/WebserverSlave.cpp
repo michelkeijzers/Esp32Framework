@@ -15,6 +15,7 @@
 #include "../../../common/esp_http_server/IEspHttpServer.hpp"
 #include "../../../common/esp_nvs/IEspNvs.hpp"
 #include "../../../common/esp_file_systems/esp_spiffs_if.h"
+#include "../../../common/presets/PresetManager.hpp"
 
 #include <cstring>
 #include <fstream>
@@ -23,9 +24,12 @@
 WebserverSlave::WebserverSlave(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager)
     : espLittleFs_(espLittleFs), espHttpServer_(espHttpServer), nvsManager_(nvsManager)
 {
+    // Create PresetManager with NVS
+    presetManager_ = std::make_unique<PresetManager>(nvsManager_);
+    
     apiConfig_ = new ApiConfig(espHttpServer_);
-    apiPresets_ = new ApiPresets(espHttpServer_);
-    apiPresetValues_ = new ApiPresetValues(espHttpServer_);
+    apiPresets_ = new ApiPresets(espHttpServer_, *presetManager_);
+    apiPresetValues_ = new ApiPresetValues(espHttpServer_, *presetManager_);
     apiStatus_ = new ApiStatus(espHttpServer_);
     apiNodes_ = new ApiNodes(espHttpServer_);
     apiSystem_ = new ApiSystem(espHttpServer_);
@@ -56,6 +60,15 @@ void WebserverSlave::start()
     {
         esp_log_error("WebserverSlave", "Failed to initialize NVS");
         // Continue anyway - NVS errors shouldn't prevent webserver from starting
+    }
+
+    // Load presets from NVS
+    if (presetManager_) {
+        ret = presetManager_->load_presets();
+        if (ret != ESP_OK) {
+            esp_log_error("WebserverSlave", "Failed to load presets");
+            // Continue anyway - preset loading shouldn't prevent webserver from starting
+        }
     }
 
     // Mount LittleFS filesystem (ESP32 only)
