@@ -1,9 +1,10 @@
 #pragma once
 
 #include "../common/WebserverSlave.hpp"
-#include "apis/IApiConfig.hpp"
-#include "apis/IApiPresets.hpp"
-#include "apis/IApiPresetValues.hpp"
+
+#include "apis/ApiConfig.hpp"
+#include "apis/ApiPresets.hpp"
+#include "apis/ApiPresetValues.hpp"
 
 
 class IEspNvs;
@@ -11,7 +12,11 @@ class IPresetManager;
 class DmxControllerWebserverSlave : public WebserverSlave
 {
 public:
-    explicit DmxControllerWebserverSlave(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager, IEspLogger& logger);
+    explicit DmxControllerWebserverSlave(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager, IEspLogger& logger,
+                                         IApiStatus& apiStatus, IApiNodes& apiNodes, IApiSystem& apiSystem,
+                                         IApiFirmware& apiFirmware, IApiSecurity& apiSecurity, IApiLogging& apiLogging,
+                                         IApiConfig* apiConfig, IApiPresets* apiPresets, IApiPresetValues* apiPresetValues,
+                                         IPresetManager& presetManager);
     ~DmxControllerWebserverSlave();
 
     void start() override;
@@ -24,15 +29,12 @@ protected:
 
 private:
     IEspNvs& nvsManager_;
-    std::unique_ptr<IPresetManager> presetManager_;
+    IPresetManager& presetManager_;
 
-    // DMX-specific API pointers
+    // DMX-specific API pointers (concrete)
     IApiConfig* apiConfig_;
     IApiPresets* apiPresets_;
     IApiPresetValues* apiPresetValues_;
-
-    void init_dmx_apis();
-    void cleanup_dmx_apis();
     void register_dmx_endpoints();
     void register_endpoints_esp32();
     void register_endpoints_test();

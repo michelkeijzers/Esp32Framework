@@ -1,39 +1,27 @@
+
 #include "DmxControllerWebserverSlave.hpp"
-#include "apis/ApiConfig.hpp"
-#include "apis/ApiPresets.hpp"
-#include "apis/ApiPresetValues.hpp"
 #include "../../../common/esp_logger/IEspLogger.hpp"
 #include "../../../common/esp_file_systems/IEspLittleFs.hpp"
 #include "../../../common/esp_http_server/IEspHttpServer.hpp"
 #include "../../../common/esp_nvs/IEspNvs.hpp"
-#include "./presets/PresetManager.hpp"
+#include "presets/IPresetManager.hpp"
+#include "apis/ApiPresets.hpp"
+#include "apis/ApiPresetValues.hpp"
+#include "apis/ApiConfig.hpp"
 
-DmxControllerWebserverSlave::DmxControllerWebserverSlave(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager, IEspLogger& logger)
-    : WebserverSlave(espLittleFs, espHttpServer, logger), nvsManager_(nvsManager)
+
+DmxControllerWebserverSlave::DmxControllerWebserverSlave(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager, IEspLogger& logger,
+                                                                                                                 IApiStatus& apiStatus, IApiNodes& apiNodes, IApiSystem& apiSystem,
+                                                                                                                 IApiFirmware& apiFirmware, IApiSecurity& apiSecurity, IApiLogging& apiLogging,
+                                                                                                                 IApiConfig* apiConfig, IApiPresets* apiPresets, IApiPresetValues* apiPresetValues,
+                                                                                                                 IPresetManager& presetManager)
+        : WebserverSlave(espLittleFs, espHttpServer, logger, apiStatus, apiNodes, apiSystem, apiFirmware, apiSecurity, apiLogging),
+            nvsManager_(nvsManager), presetManager_(presetManager), apiConfig_(apiConfig), apiPresets_(apiPresets), apiPresetValues_(apiPresetValues)
 {
-    // Create PresetManager with NVS
-    presetManager_ = std::make_unique<PresetManager>(nvsManager_);
-    
-    init_dmx_apis();
 }
 
 DmxControllerWebserverSlave::~DmxControllerWebserverSlave()
 {
-    cleanup_dmx_apis();
-}
-
-void DmxControllerWebserverSlave::init_dmx_apis()
-{
-    apiConfig_ = new ApiConfig(espHttpServer_, nvsManager_);
-    apiPresets_ = new ApiPresets(espHttpServer_, *presetManager_);
-    apiPresetValues_ = new ApiPresetValues(espHttpServer_, *presetManager_);
-}
-
-void DmxControllerWebserverSlave::cleanup_dmx_apis()
-{
-    delete apiConfig_;
-    delete apiPresets_;
-    delete apiPresetValues_;
 }
 
 void DmxControllerWebserverSlave::start()
@@ -46,13 +34,11 @@ void DmxControllerWebserverSlave::start()
         // Continue anyway - NVS errors shouldn't prevent webserver from starting
     }
 
-    // Load presets from NVS
-    if (presetManager_) {
-        ret = presetManager_->load_presets();
-        if (ret != ESP_OK) {
-            logger_.log_error("DmxControllerWebserverSlave", "Failed to load presets");
-            // Continue anyway - preset loading shouldn't prevent webserver from starting
-        }
+    // Load presets from NVS (using injected preset manager)
+    ret = presetManager_.load_presets();
+    if (ret != ESP_OK) {
+        logger_.log_error("DmxControllerWebserverSlave", "Failed to load presets");
+        // Continue anyway - preset loading shouldn't prevent webserver from starting
     }
 
     // Call base class start() which handles mount_littlefs and httpd_start

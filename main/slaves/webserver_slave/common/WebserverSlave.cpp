@@ -12,40 +12,20 @@
 
 #include <cstring>
 
-WebserverSlave::WebserverSlave(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspLogger& logger)
+WebserverSlave::WebserverSlave(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspLogger& logger,
+                                IApiStatus& apiStatus, IApiNodes& apiNodes, IApiSystem& apiSystem,
+                                IApiFirmware& apiFirmware, IApiSecurity& apiSecurity, IApiLogging& apiLogging)
     : espLittleFs_(espLittleFs), espHttpServer_(espHttpServer), logger_(logger),
-        apiStatus_(nullptr), apiNodes_(nullptr), apiSystem_(nullptr), 
-        apiFirmware_(nullptr), apiSecurity_(nullptr), apiLogging_(nullptr),
+        apiStatus_(apiStatus), apiNodes_(apiNodes), apiSystem_(apiSystem), 
+        apiFirmware_(apiFirmware), apiSecurity_(apiSecurity), apiLogging_(apiLogging),
         server(nullptr)
 {
     server = nullptr;
-    init_generic_apis();
 }
 
 WebserverSlave::~WebserverSlave()
 {
     stop();
-    cleanup_generic_apis();
-}
-
-void WebserverSlave::init_generic_apis()
-{
-    apiStatus_ = new ApiStatus(espHttpServer_);
-    apiNodes_ = new ApiNodes(espHttpServer_);
-    apiSystem_ = new ApiSystem(espHttpServer_);
-    apiFirmware_ = new ApiFirmware(espHttpServer_);
-    apiSecurity_ = new ApiSecurity(espHttpServer_);
-    apiLogging_ = new ApiLogging(espHttpServer_);
-}
-
-void WebserverSlave::cleanup_generic_apis()
-{
-    delete apiStatus_;
-    delete apiNodes_;
-    delete apiSystem_;
-    delete apiFirmware_;
-    delete apiSecurity_;
-    delete apiLogging_;
 }
 
 void WebserverSlave::start()
@@ -124,57 +104,57 @@ void WebserverSlave::register_endpoints()
 
 // Static handler functions for dispatch - Status
 static esp_err_t status_handler_static(httpd_req_t *req) {
-    auto* obj = static_cast<ApiStatus*>(req->user_ctx);
+    auto* obj = static_cast<IApiStatus*>(req->user_ctx);
     return obj->get_status_handler(req);
 }
 static esp_err_t status_stream_handler_static(httpd_req_t *req) {
-    auto* obj = static_cast<ApiStatus*>(req->user_ctx);
+    auto* obj = static_cast<IApiStatus*>(req->user_ctx);
     return obj->get_status_stream_handler(req);
 }
 
 // Static handler functions for dispatch - Nodes
 static esp_err_t nodes_info_handler_static(httpd_req_t *req) {
-    auto* obj = static_cast<ApiNodes*>(req->user_ctx);
+    auto* obj = static_cast<IApiNodes*>(req->user_ctx);
     return obj->get_nodes_info_handler(req);
 }
 static esp_err_t save_nodes_info_handler_static(httpd_req_t *req) {
-    auto* obj = static_cast<ApiNodes*>(req->user_ctx);
+    auto* obj = static_cast<IApiNodes*>(req->user_ctx);
     return obj->save_nodes_info_handler(req);
 }
 
 // Static handler functions for dispatch - System
 static esp_err_t reboot_handler_static(httpd_req_t *req) {
-    auto* obj = static_cast<ApiSystem*>(req->user_ctx);
+    auto* obj = static_cast<IApiSystem*>(req->user_ctx);
     return obj->reboot_handler(req);
 }
 static esp_err_t factory_reset_handler_static(httpd_req_t *req) {
-    auto* obj = static_cast<ApiSystem*>(req->user_ctx);
+    auto* obj = static_cast<IApiSystem*>(req->user_ctx);
     return obj->factory_reset_handler(req);
 }
 
 // Static handler functions for dispatch - Firmware
 static esp_err_t firmware_chunk_handler_static(httpd_req_t *req) {
-    auto* obj = static_cast<ApiFirmware*>(req->user_ctx);
+    auto* obj = static_cast<IApiFirmware*>(req->user_ctx);
     return obj->firmware_chunk_handler(req);
 }
 static esp_err_t firmware_finish_handler_static(httpd_req_t *req) {
-    auto* obj = static_cast<ApiFirmware*>(req->user_ctx);
+    auto* obj = static_cast<IApiFirmware*>(req->user_ctx);
     return obj->firmware_finish_handler(req);
 }
 
 // Static handler functions for dispatch - Security
 static esp_err_t esp_now_key_handler_static(httpd_req_t *req) {
-    auto* obj = static_cast<ApiSecurity*>(req->user_ctx);
+    auto* obj = static_cast<IApiSecurity*>(req->user_ctx);
     return obj->esp_now_key_handler(req);
 }
 static esp_err_t wifi_password_handler_static(httpd_req_t *req) {
-    auto* obj = static_cast<ApiSecurity*>(req->user_ctx);
+    auto* obj = static_cast<IApiSecurity*>(req->user_ctx);
     return obj->wifi_password_handler(req);
 }
 
 // Static handler functions for dispatch - Logging
 static esp_err_t logging_handler_static(httpd_req_t *req) {
-    auto* obj = static_cast<ApiLogging*>(req->user_ctx);
+    auto* obj = static_cast<IApiLogging*>(req->user_ctx);
     return obj->logging_handler(req);
 }
 
@@ -185,7 +165,7 @@ void WebserverSlave::register_generic_endpoints()
         .uri = "/api/v1/status",
         .method = HTTP_GET,
         .handler = status_handler_static,
-        .user_ctx = apiStatus_};
+        .user_ctx = static_cast<void*>(&apiStatus_)};
     espHttpServer_.httpd_register_uri_handler(server, &status_uri);
 
     // GET /api/status/stream
@@ -193,79 +173,79 @@ void WebserverSlave::register_generic_endpoints()
         .uri = "/api/v1/status/stream",
         .method = HTTP_GET,
         .handler = status_stream_handler_static,
-        .user_ctx = apiStatus_};
+        .user_ctx = static_cast<void*>(&apiStatus_)};
     espHttpServer_.httpd_register_uri_handler(server, &status_stream_uri);
 
     // GET /api/nodes_info
     httpd_uri_t nodes_info_uri = {
-        .uri = "/api/v1/nodes_info",
-        .method = HTTP_GET,
-        .handler = nodes_info_handler_static,
-        .user_ctx = apiNodes_};
+           .uri = "/api/v1/nodes_info",
+           .method = HTTP_GET,
+           .handler = nodes_info_handler_static,
+           .user_ctx = static_cast<void*>(&apiNodes_)};
     espHttpServer_.httpd_register_uri_handler(server, &nodes_info_uri);
 
     // POST /api/nodes_info
     httpd_uri_t save_nodes_info_uri = {
-        .uri = "/api/v1/nodes_info",
-        .method = HTTP_POST,
-        .handler = save_nodes_info_handler_static,
-        .user_ctx = apiNodes_};
+           .uri = "/api/v1/nodes_info",
+           .method = HTTP_POST,
+           .handler = save_nodes_info_handler_static,
+           .user_ctx = static_cast<void*>(&apiNodes_)};
     espHttpServer_.httpd_register_uri_handler(server, &save_nodes_info_uri);
 
     // POST /api/reboot
     httpd_uri_t reboot_uri = {
-        .uri = "/api/v1/reboot",
-        .method = HTTP_POST,
-        .handler = reboot_handler_static,
-        .user_ctx = apiSystem_};
+           .uri = "/api/v1/reboot",
+           .method = HTTP_POST,
+           .handler = reboot_handler_static,
+           .user_ctx = static_cast<void*>(&apiSystem_)};
     espHttpServer_.httpd_register_uri_handler(server, &reboot_uri);
 
     // POST /api/factory_reset
     httpd_uri_t factory_reset_uri = {
-        .uri = "/api/v1/factory_reset",
-        .method = HTTP_POST,
-        .handler = factory_reset_handler_static,
-        .user_ctx = apiSystem_};
+           .uri = "/api/v1/factory_reset",
+           .method = HTTP_POST,
+           .handler = factory_reset_handler_static,
+           .user_ctx = static_cast<void*>(&apiSystem_)};
     espHttpServer_.httpd_register_uri_handler(server, &factory_reset_uri);
 
     // POST /api/firmware_chunk/*
     httpd_uri_t firmware_chunk_uri = {
-        .uri = "/api/v1/firmware_chunk/*",
-        .method = HTTP_POST,
-        .handler = firmware_chunk_handler_static,
-        .user_ctx = apiFirmware_};
+           .uri = "/api/v1/firmware_chunk/*",
+           .method = HTTP_POST,
+           .handler = firmware_chunk_handler_static,
+           .user_ctx = static_cast<void*>(&apiFirmware_)};
     espHttpServer_.httpd_register_uri_handler(server, &firmware_chunk_uri);
 
     // POST /api/firmware_finish/*
     httpd_uri_t firmware_finish_uri = {
-        .uri = "/api/v1/firmware_finish/*",
-        .method = HTTP_POST,
-        .handler = firmware_finish_handler_static,
-        .user_ctx = apiFirmware_};
+           .uri = "/api/v1/firmware_finish/*",
+           .method = HTTP_POST,
+           .handler = firmware_finish_handler_static,
+           .user_ctx = static_cast<void*>(&apiFirmware_)};
     espHttpServer_.httpd_register_uri_handler(server, &firmware_finish_uri);
 
     // POST /api/esp_now_key
     httpd_uri_t esp_now_key_uri = {
-        .uri = "/api/v1/esp_now_key",
-        .method = HTTP_POST,
-        .handler = esp_now_key_handler_static,
-        .user_ctx = apiSecurity_};
+           .uri = "/api/v1/esp_now_key",
+           .method = HTTP_POST,
+           .handler = esp_now_key_handler_static,
+           .user_ctx = static_cast<void*>(&apiSecurity_)};
     espHttpServer_.httpd_register_uri_handler(server, &esp_now_key_uri);
 
     // POST /api/wifi_password
     httpd_uri_t wifi_password_uri = {
-        .uri = "/api/v1/wifi_password",
-        .method = HTTP_POST,
-        .handler = wifi_password_handler_static,
-        .user_ctx = apiSecurity_};
+           .uri = "/api/v1/wifi_password",
+           .method = HTTP_POST,
+           .handler = wifi_password_handler_static,
+           .user_ctx = static_cast<void*>(&apiSecurity_)};
     espHttpServer_.httpd_register_uri_handler(server, &wifi_password_uri);
 
     // GET /api/logging
     httpd_uri_t logging_uri = {
-        .uri = "/api/v1/logging",
-        .method = HTTP_GET,
-        .handler = logging_handler_static,
-        .user_ctx = apiLogging_};
+           .uri = "/api/v1/logging",
+           .method = HTTP_GET,
+           .handler = logging_handler_static,
+           .user_ctx = static_cast<void*>(&apiLogging_)};
     espHttpServer_.httpd_register_uri_handler(server, &logging_uri);
 }
 
