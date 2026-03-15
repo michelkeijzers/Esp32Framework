@@ -3,17 +3,16 @@
 #include <memory>
 #include "../../../common/esp_http_server/esp_http_server_if.hpp"
 #include "../common/apis/StaticFileHandler.hpp"
+#include "../common/apis/IApiStatus.hpp"
+#include "../common/apis/IApiNodes.hpp"
+#include "../common/apis/IApiSystem.hpp"
+#include "../common/apis/IApiFirmware.hpp"
+#include "../common/apis/IApiSecurity.hpp"
+#include "../common/apis/IApiLogging.hpp"
 
 class IEspLittleFs;
 class IEspHttpServer;
 class IEspLogger;
-
-class ApiStatus;
-class ApiNodes;
-class ApiSystem;
-class ApiFirmware;
-class ApiSecurity;
-class ApiLogging;
 
 /**
  * Base WebserverSlave class with common functionality for all webserver implementations
@@ -43,12 +42,12 @@ protected:
     IEspHttpServer& espHttpServer_;
     IEspLogger& logger_;
 
-    ApiStatus* apiStatus_;
-    ApiNodes* apiNodes_;
-    ApiSystem* apiSystem_;
-    ApiFirmware* apiFirmware_;
-    ApiSecurity* apiSecurity_;
-    ApiLogging* apiLogging_;
+    IApiStatus* apiStatus_;
+    IApiNodes* apiNodes_;
+    IApiSystem* apiSystem_;
+    IApiFirmware* apiFirmware_;
+    IApiSecurity* apiSecurity_;
+    IApiLogging* apiLogging_;
 
 #ifndef UNIT_TEST
     httpd_handle_t server;

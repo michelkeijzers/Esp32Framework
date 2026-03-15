@@ -1,17 +1,13 @@
 #pragma once
 
 #include "../common/WebserverSlave.hpp"
+#include "apis/IApiConfig.hpp"
+#include "apis/IApiPresets.hpp"
+#include "apis/IApiPresetValues.hpp"
+
 
 class IEspNvs;
 class IPresetManager;
-class ApiConfig;
-class ApiPresets;
-class ApiPresetValues;
-
-/**
- * DMX Controller specific WebserverSlave implementation
- * Extends the base class to add DMX controller features and project-specific APIs
- */
 class DmxControllerWebserverSlave : public WebserverSlave
 {
 public:
@@ -31,9 +27,9 @@ private:
     std::unique_ptr<IPresetManager> presetManager_;
 
     // DMX-specific API pointers
-    ApiConfig* apiConfig_;
-    ApiPresets* apiPresets_;
-    ApiPresetValues* apiPresetValues_;
+    IApiConfig* apiConfig_;
+    IApiPresets* apiPresets_;
+    IApiPresetValues* apiPresetValues_;
 
     void init_dmx_apis();
     void cleanup_dmx_apis();

@@ -23,10 +23,8 @@ idf_component_register(
         "slaves/webserver_slave/dmx_controller/presets/PresetManager.cpp"
     INCLUDE_DIRS
         "."
-        "master"
-        "esp"
+            "master"
         "common"
-        "common/nvs"
         "common/esp_logger"
         "common/esp_http_server"
         "common/esp_now"

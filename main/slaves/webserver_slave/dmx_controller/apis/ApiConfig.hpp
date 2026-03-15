@@ -1,5 +1,6 @@
 
 #pragma once
+#include "IApiConfig.hpp"
 #include "../../../../common/esp_http_server/esp_http_server_if.hpp"
 #include "../../../../common/esp/esp_error_if.hpp"
 #include "../../../../common/esp_nvs/IEspNvs.hpp"
@@ -13,14 +14,14 @@ class IEspNvs;
  * GET /api/v1/config - Returns current configuration (Wi-Fi SSID, device name, etc.)
  * POST /api/v1/config - Updates configuration (Wi-Fi SSID, password, ESP-NOW key, device name)
  */
-class ApiConfig {
+class ApiConfig : public IApiConfig {
 public:
     ApiConfig(IEspHttpServer& espHttpServer, IEspNvs& nvsManager);
     ~ApiConfig();
 
-    esp_err_t get_config_handler(httpd_req_t *req);
-    esp_err_t put_config_handler(httpd_req_t *req);
-    esp_err_t set_circular_navigation_handler(httpd_req_t *req) { return ESP_OK; }
+    esp_err_t get_config_handler(httpd_req_t *req) override;
+    esp_err_t put_config_handler(httpd_req_t *req) override;
+    esp_err_t set_circular_navigation_handler(httpd_req_t *req) override { return ESP_OK; }
 
 private:
     IEspHttpServer& espHttpServer_;
