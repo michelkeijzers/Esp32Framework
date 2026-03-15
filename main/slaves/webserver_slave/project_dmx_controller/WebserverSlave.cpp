@@ -10,7 +10,7 @@
 #include "api/ApiSecurity.hpp"
 #include "api/ApiLogging.hpp"
 #include "api/StaticFileHandler.hpp"
-#include "esp_logger.hpp"
+#include "../../../common/esp_logger/IEspLogger.hpp"
 #include "../../../common/esp_file_systems/IEspLittleFs.hpp"
 #include "../../../common/esp_http_server/IEspHttpServer.hpp"
 #include "../../../common/esp_nvs/IEspNvs.hpp"
@@ -21,8 +21,8 @@
 #include <fstream>
 #include <sstream>
 
-WebserverSlave::WebserverSlave(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager)
-    : espLittleFs_(espLittleFs), espHttpServer_(espHttpServer), nvsManager_(nvsManager)
+WebserverSlave::WebserverSlave(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager, IEspLogger& logger)
+    : espLittleFs_(espLittleFs), espHttpServer_(espHttpServer), nvsManager_(nvsManager), logger_(logger)
 {
     // Create PresetManager with NVS
     presetManager_ = std::make_unique<PresetManager>(nvsManager_);
@@ -58,7 +58,7 @@ void WebserverSlave::start()
     int ret = nvsManager_.nvs_flash_init();
     if (ret != ESP_OK)
     {
-        esp_log_error("WebserverSlave", "Failed to initialize NVS");
+        logger_.log_error("WebserverSlave", "Failed to initialize NVS");
         // Continue anyway - NVS errors shouldn't prevent webserver from starting
     }
 
@@ -66,7 +66,7 @@ void WebserverSlave::start()
     if (presetManager_) {
         ret = presetManager_->load_presets();
         if (ret != ESP_OK) {
-            esp_log_error("WebserverSlave", "Failed to load presets");
+            logger_.log_error("WebserverSlave", "Failed to load presets");
             // Continue anyway - preset loading shouldn't prevent webserver from starting
         }
     }
@@ -82,7 +82,7 @@ void WebserverSlave::start()
     }
     else
     {
-        esp_log_error("WebserverSlave", "Failed to start HTTP server");
+        logger_.log_error("WebserverSlave", "Failed to start HTTP server");
     }
 }
 

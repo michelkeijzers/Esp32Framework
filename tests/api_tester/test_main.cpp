@@ -1,5 +1,6 @@
 
 #include "MockEspHttpServer.hpp"
+#include "MockEspLogger.hpp"
 #include "WebserverSlave.hpp"
 #include "ApiPresetsTests.hpp"
 #include "ApiStatusTests.hpp"

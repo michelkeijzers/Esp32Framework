@@ -8,6 +8,7 @@ add_executable(api_tester
     MockEspHttpServer.cpp
     MockEspNowHandler.cpp
     MockEspNvs.cpp
+    MockEspLogger.cpp
     ApiPresetsTests.cpp
     ApiStatusTests.cpp
     ApiConfigTests.cpp
@@ -46,7 +47,7 @@ target_include_directories(api_tester PRIVATE
     ../../main/slaves/webserver_slave/project_dmx_controller/Api
     ../../main/common
     ../../main/common/nvs
-    ../../main/common/logging
+    ../../main/common/esp_logger
     ../../main/common/esp_http_server
     ../../main/common/esp_now
     ../../main/common/esp_nvs

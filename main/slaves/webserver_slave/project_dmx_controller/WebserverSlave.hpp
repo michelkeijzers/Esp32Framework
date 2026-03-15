@@ -6,6 +6,7 @@
 class IEspLittleFs;
 class IEspHttpServer;
 class IEspNvs;
+class IEspLogger;
 
 class ApiConfig;
 class ApiPresets;
@@ -20,7 +21,7 @@ class ApiLogging;
 class WebserverSlave
 {
 public:
-    explicit WebserverSlave(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager);
+    explicit WebserverSlave(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager, IEspLogger& logger);
     ~WebserverSlave();
 
     void startWebserver();
@@ -39,6 +40,7 @@ private:
     IEspLittleFs& espLittleFs_;
     IEspHttpServer& espHttpServer_;
     IEspNvs& nvsManager_;
+    IEspLogger& logger_;
     
     std::unique_ptr<IPresetManager> presetManager_;
 

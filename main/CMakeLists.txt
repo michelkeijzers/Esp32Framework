@@ -2,7 +2,7 @@ idf_component_register(
     SRCS
         "main.cpp"
         "master/master.cpp"
-        "common/logging/esp_logger.cpp"
+        "common/esp_logger/EspLogger.cpp"
         "common/esp_http_server/EspHttpServer.cpp"
         "common/esp_now/EspNowHandler.cpp"
         "common/esp_nvs/EspNvs.cpp"
@@ -24,7 +24,7 @@ idf_component_register(
         "esp"
         "common"
         "common/nvs"
-        "common/logging"
+        "common/esp_logger"
         "common/esp_http_server"
         "common/esp_now"
         "common/esp_nvs"
