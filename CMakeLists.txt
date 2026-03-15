@@ -33,7 +33,7 @@ add_custom_target(create_littlefs_image ALL
 )
 
 # Make the main build depend on create_littlefs_image (which depends on build_website)
-add_dependencies(${PROJECT_NAME}.elf create_littlefs_image)
+# //TODO Later: add_dependencies(${PROJECT_NAME}.elf create_littlefs_image)
 
 # Custom target to build and run API tester
 add_custom_target(run_api_tester ALL

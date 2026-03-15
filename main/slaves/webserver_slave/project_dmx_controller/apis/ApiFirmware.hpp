@@ -3,7 +3,6 @@
 #include "../../../../common/esp/esp_error_if.hpp"
 
 class IEspHttpServer;
-
 class ApiFirmware {
 public:
     ApiFirmware(IEspHttpServer& espHttpServer);

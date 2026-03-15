@@ -1,7 +1,6 @@
 # DMX Controller API Contract
 
-This document describes the API contract which are specific to this project.
-The general API contracts can be found in [generic_api_contract.md](../requirements_and_dds/generic_api_contract.md).
+This document describes the API contract between the frontend (web UI) and the backend (Flask server or ESP32 webserver) for the DMX controller project.
 
 # Table of Contents
 
