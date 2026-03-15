@@ -86,7 +86,7 @@ esp_err_t ApiConfig::put_config_handler(httpd_req_t *req) {
 
     char response[MAX_RESPONSE_SIZE];
     char ssid[MAX_SSID_LEN + 1] = {0};
-    char password[MAX_PASSWORD_LEN + 1] = {0};
+    //char password[MAX_PASSWORD_LEN + 1] = {0};
     char espnow_key[MAX_ESPNOW_KEY_LEN + 1] = {0};
     char device_name[MAX_DEVICE_NAME_LEN + 1] = {0};
     bool has_ssid = false, has_device_name = false;
