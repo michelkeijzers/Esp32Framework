@@ -1,6 +1,6 @@
 #pragma once
 #include "../mock/MockEspHttpServer.hpp"
-#include "../../../main/slaves/webserver_slave/project_dmx_controller/apis/ApiSecurity.hpp"
+#include "../../../main/common/apis/ApiSecurity.hpp"
 #include <iostream>
 #include <cassert>
 

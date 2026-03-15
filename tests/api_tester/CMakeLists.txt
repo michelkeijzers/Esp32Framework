@@ -21,13 +21,13 @@ add_executable(api_tester
     ../../main/slaves/webserver_slave/project_dmx_controller/WebserverSlave.cpp
     ../../main/slaves/webserver_slave/project_dmx_controller/apis/ApiPresets.cpp
     ../../main/slaves/webserver_slave/project_dmx_controller/apis/ApiConfig.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/apis/ApiStatus.cpp
+    ../../main/common/apis/ApiStatus.cpp
     ../../main/slaves/webserver_slave/project_dmx_controller/apis/ApiPresetValues.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/apis/ApiNodes.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/apis/ApiSystem.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/apis/ApiFirmware.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/apis/ApiSecurity.cpp
-    ../../main/slaves/webserver_slave/project_dmx_controller/apis/ApiLogging.cpp
+    ../../main/common/apis/ApiNodes.cpp
+    ../../main/common/apis/ApiSystem.cpp
+    ../../main/common/apis/ApiFirmware.cpp
+    ../../main/common/apis/ApiSecurity.cpp
+    ../../main/common/apis/ApiLogging.cpp
     ../../main/common/esp_http_server/EspHttpServer.cpp
     ../../main/common/esp_now/EspNowHandler.cpp
     ../../main/slaves/webserver_slave/project_dmx_controller/presets/PresetManager.cpp
