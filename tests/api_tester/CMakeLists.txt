@@ -5,10 +5,10 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(api_tester
     test_main.cpp
-    mocks/infrastructure/MockEspHttpServer.cpp
-    mocks/infrastructure/MockEspNowHandler.cpp
-    mocks/infrastructure/MockEspNvs.cpp
-    mocks/infrastructure/MockEspLogger.cpp
+    ../mocks/esp32/MockEspHttpServer.cpp
+    ../mocks/esp32/MockEspNowHandler.cpp
+    ../mocks/esp32/MockEspNvs.cpp
+    ../mocks/esp32/MockEspLogger.cpp
     apis/ApiPresetsTests.cpp
     apis/ApiStatusTests.cpp
     apis/ApiConfigTests.cpp
