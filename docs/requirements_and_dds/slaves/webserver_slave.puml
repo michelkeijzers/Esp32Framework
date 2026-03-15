@@ -1,0 +1,316 @@
+@startuml 
+
+title Webserver Slave Design / RTOS Tasks
+
+package WebserverSlave_Package
+{
+    class Main {}
+
+    class DmxControllerTask <<RTOS>> {}
+
+    class Website <<LittleFS>>
+
+    class DmxControllerHttpTask <<RTOS>> {}
+    class PresetsTask <<RTOS>> {}
+
+    Main *--> DmxControllerTask
+    Main *--> DmxControllerHttpTask
+    Main *--> PresetsTask
+
+    Website <--> DmxControllerHttpTask : REST API
+}
+
+package Common 
+{
+    package RtosTasks
+    {
+        class RtosTask <<RTOS>> {}
+
+        class SlaveTask <<RTOS>> {}
+        class HttpTask <<RTOS>> {}
+        note bottom of HttpTask
+            Only for
+            webserver slaves 
+            and remotes
+        end note        
+        class WifiTask <<RTOS>> {}
+        class EspNowTask <<RTOS>> {}
+        class OtaTask <<RTOS>> {}
+        class StatusTask <<RTOS>> {}
+        class NvsTask <<RTOS>> {}
+
+        SlaveTask -u-|> RtosTask
+        HttpTask -u-|> RtosTask
+        WifiTask -u-|> RtosTask
+        EspNowTask -u-|> RtosTask
+        OtaTask -u-|> RtosTask
+        StatusTask -u-|> RtosTask
+        NvsTask -u-|> RtosTask
+        
+    }
+    package ESP
+    {
+        class IEspWifi <<ESP32>> {}
+        class IEspNow <<ESP32>> {}
+        class IEspNvs <<ESP32>> {}
+    }
+
+    StatusTask ---> IEspNow
+    WifiTask ---> IEspWifi
+    EspNowTask ---> IEspNow
+    NvsTask ---> IEspNvs
+}
+
+DmxControllerTask --|> SlaveTask
+DmxControllerHttpTask --|> HttpTask
+PresetsTask --|> RtosTask
+
+DmxControllerTask --> DmxControllerHttpTask
+DmxControllerTask --> PresetsTask
+DmxControllerTask --> StatusTask
+DmxControllerTask --> EspNowTask
+DmxControllerTask --> WifiTask
+DmxControllerTask --> OtaTask
+DmxControllerTask --> NvsTask
+
+@enduml
+
+@startuml 
+
+title Webserver Slave Design / API Endpoints, example of security API endpoint 
+
+package WebserverSlave_Package
+{
+    class Main {}
+
+    class DmxControllerTask <<RTOS>> {}
+
+    class Website <<LittleFS>>
+
+    class DmxControllerHttpTask <<RTOS>> {}
+    class PresetsTask <<RTOS>> {}
+
+    Main *--> DmxControllerTask
+    Main *--> DmxControllerHttpTask
+    Main *--> PresetsTask
+
+    Website --> DmxControllerHttpTask : 1. POST Esp Now Key
+}
+
+package Common 
+{
+    package Apis 
+    {
+        class ApiFirmware <<API>> {}
+        class ApiLogging <<API>> {}
+        class ApiNodes <<API>> {}
+        class ApiResposne <<API>> {}
+        class ApiSecurity <<API>> {}
+        class ApiStatus <<API>> {}
+        class ApiSystem <<API>> {}
+        class ApiValidator <<API>> {}
+        class StaticFileHandler <<API>> {}
+    }
+
+    package RtosTasks
+    {
+        class RtosTask <<RTOS>> {}
+
+        class SlaveTask <<RTOS>> {}
+        class HttpTask <<RTOS>> {}
+        note bottom of HttpTask
+            Only for
+            webserver slaves 
+            and remotes
+        end note        
+        class WifiTask <<RTOS>> {}
+        class EspNowTask <<RTOS>> {}
+        class OtaTask <<RTOS>> {}
+        class StatusTask <<RTOS>> {}
+        class NvsTask <<RTOS>> {}
+
+        SlaveTask -u-|> RtosTask
+        HttpTask -u-|> RtosTask
+        WifiTask -u-|> RtosTask
+        EspNowTask -u-|> RtosTask
+        OtaTask -u-|> RtosTask
+        StatusTask -u-|> RtosTask
+        NvsTask -u-|> RtosTask
+    }
+
+    HttpTask --> ApiSecurity : 3. Esp Now Key is for security
+    ApiSecurity --> SlaveTask : 4. Handle Esp Now key
+    SlaveTask --> EspNowTask : 5. Send to other nodes (for all nodes)
+    EspNowTask ..> SlaveTask: 5b Ack
+    SlaveTask --> NvsTask : 6. Store in NVS 
+    NvsTask ..> SlaveTask : 6b. Ack
+    SlaveTask --> HttpTask : 7. Respond to HTTP request
+
+
+}
+
+DmxControllerTask --|> SlaveTask
+HttpTask --|> HttpTask : 2. (Common API)
+PresetsTask --|> RtosTask
+
+@enduml
+
+@startuml 
+
+title Webserver Slave Design / API Endpoints, example of security API endpoint (as seq diagram)
+
+participant Website
+participant DmxControllerHttpTask
+participant HttpTask
+participant ApiSecurity
+participant SlaveTask
+participant EspNowTask
+participant NvsTask
+
+Website -> DmxControllerHttpTask : POST Esp Now Key
+DmxControllerHttpTask -> HttpTask : (Common API handler)
+HttpTask -> ApiSecurity : Esp Now Key \n is for security
+ApiSecurity -> SlaveTask : Handle Esp Now key
+SlaveTask -> EspNowTask : Send to other nodes \n (for all nodes)
+EspNowTask --> IEspNow : Send Esp Now message
+IEspNow --> EspNowTask : Ack
+EspNowTask --> SlaveTask: Ack
+SlaveTask -> NvsTask : Store in NVS
+NvsTask --> IEspNvs: Store in NVS
+IEspNvs --> NvsTask: Ack
+NvsTask --> SlaveTask : Ack
+SlaveTask -> HttpTask : Respond to HTTP request
+HttpTask --> DmxControllerHttpTask : Respond to \n HTTP request
+DmxControllerHttpTask --> Website : Respond to \n HTTP request
+
+@enduml 
+
+@startuml 
+
+title Webserver Slave Design / ESP32 Interfaces
+
+package Common_Package
+{
+    package RtosTasks_Package
+    {
+        class RtosTask <<RTOS>> {}
+
+        class SlaveTask <<RTOS>> {}
+        class HttpTask <<RTOS>> {}
+        note bottom of HttpTask
+            Only for
+            webserver slaves 
+            and remotes
+        end note        
+        class WifiTask <<RTOS>> {}
+        class EspNowTask <<RTOS>> {}
+        class OtaTask <<RTOS>> {}
+        class StatusTask <<RTOS>> {}
+        class NvsTask <<RTOS>> {}
+
+        SlaveTask -u-|> RtosTask
+        HttpTask -u-|> RtosTask
+        WifiTask -u-|> RtosTask
+        EspNowTask -u-|> RtosTask
+        OtaTask -u-|> RtosTask
+        StatusTask -u-|> RtosTask
+        NvsTask -u-|> RtosTask
+        
+    }
+
+    package ESP32_Package
+    {
+        package EspFileSystems_Package     
+        {
+            class IEspLittleFs <<ESP32>> {}
+            class EspLittleFs <<ESP32>> {}
+            class MockEspLittleFs <<ESP32>> {}
+            class esp_littlfs_if_h <<C>> {}
+            class esp_spiffs_if_h <<C>> {}
+
+            EspLittleFs -u-|> IEspLittleFs
+            MockEspLittleFs -u-|> IEspLittleFs
+            note bottom of MockEspLittleFs
+                Only for testing
+            end note
+            EspLittleFs --> esp_littlfs_if_h
+            EspLittleFs --> esp_spiffs_if_h
+        }
+
+        package IEspWifi_Package
+        {
+
+        }
+        
+        package IEspNow_Package
+        {
+            class IEspNow <<ESP32>> {}
+            class EspNow <<ESP32>> {}   
+            class MockEspNow <<ESP32>> {}
+
+            EspNow -u-|> IEspNow
+            MockEspNow -u-|> IEspNow
+            note bottom of MockEspNow
+                Only for testing
+            end note
+
+            EspNow --> esp_now_if_h
+        }
+
+        package IEspNvs_Package 
+        {
+            class IEspNvs <<ESP32>> {}
+            class EspNvs <<ESP32>> {}
+            class MockEspNvs <<ESP32>> {}
+
+            EspNvs -u-|> IEspNvs
+            MockEspNvs -u-|> IEspNvs
+            note bottom of MockEspNvs
+                Only for testing
+            end note
+
+            EspNvs --> nvs_if_h
+        }
+
+        package IEspHttpServer_Package
+        {
+            class IEspHttpServer <<ESP32>> {}
+            class EspHttpServer <<ESP32>> {}    
+            class MockEspHttpServer <<ESP32>> {}
+
+            EspHttpServer -u-|> IEspHttpServer
+            MockEspHttpServer -u-|> IEspHttpServer
+            note bottom of MockEspHttpServer
+                Only for testing
+            end note
+
+            EspHttpServer --> esp_http_server_if_h
+        }
+
+        package IEspLogger_Package
+        {
+            class IEspLogger <<ESP32>> {}
+            class EspLogger <<ESP32>> {}
+            class MockEspLogger <<ESP32>> {}
+
+            EspLogger -u-|> IEspLogger
+            MockEspLogger -u-|> IEspLogger
+            note bottom of MockEspLogger
+                Only for testing
+            end note
+
+            EspLogger --> esp_logger_if_h
+        }
+
+
+    }
+
+    ESP32_Package -[hidden]u-----> RtosTasks_Package 
+
+    StatusTask --> IEspNow
+    'WifiTask --> IEspWifi
+    EspNowTask --> IEspNow
+    NvsTask --> IEspNvs
+}
+
+@enduml
