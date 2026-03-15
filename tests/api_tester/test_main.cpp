@@ -1,6 +1,6 @@
 
-#include "MockEspHttpServer.hpp"
-#include "MockEspLogger.hpp"
+#include "mocks/infrastructure/MockEspHttpServer.hpp"
+#include "mocks/infrastructure/MockEspLogger.hpp"
 #include "DmxControllerWebserverSlave.hpp"
 #include "apis/ApiPresetsTests.hpp"
 #include "apis/ApiStatusTests.hpp"

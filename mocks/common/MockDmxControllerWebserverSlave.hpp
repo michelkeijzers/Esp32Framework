@@ -1,5 +1,5 @@
 #pragma once
-#include "../main/slaves/webserver_slave/dmx_controller/IDmxControllerWebserverSlave.hpp"
+#include "../../main/slaves/webserver_slave/dmx_controller/IDmxControllerWebserverSlave.hpp"
 
 class MockDmxControllerWebserverSlave : public IDmxControllerWebserverSlave {
 public:

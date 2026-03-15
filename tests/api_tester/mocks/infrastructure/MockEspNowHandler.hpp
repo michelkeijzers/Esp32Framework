@@ -1,5 +1,5 @@
 #pragma once
-#include "IEspNowHandler.hpp"
+#include "../../main/common/esp_now/IEspNowHandler.hpp"
 #include <vector>
 #include <cstring>
 

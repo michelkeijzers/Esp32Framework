@@ -31,7 +31,7 @@
 #include "slaves/webserver_slave/dmx_controller/apis/ApiPresetValues.hpp"
 #include "slaves/webserver_slave/dmx_controller/presets/PresetManager.hpp"
 #include "slaves/webserver_slave/common/IWebserverSlave.hpp"
-#include "slaves/webserver_slave/dmx_controller/MockDmxControllerWebserverSlave.hpp"
+#include "../../mocks/common/MockDmxControllerWebserverSlave.hpp"
 
 #else 
 
