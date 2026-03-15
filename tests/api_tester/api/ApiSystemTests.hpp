@@ -6,53 +6,64 @@
 
 class ApiSystemTests {
 public:
+    ApiSystemTests() : totalTests(0), passedTests(0) {}
+
     bool run() {
         std::cout << "\n=== Running ApiSystem Tests ===" << std::endl;
-        
+
         MockEspHttpServer mockServer;
         ApiSystem apiSystem(mockServer);
-        
-        if (!testReboot(mockServer, apiSystem)) return false;
-        if (!testFactoryReset(mockServer, apiSystem)) return false;
-        
-        std::cout << "All ApiSystem tests passed!" << std::endl;
-        return true;
+
+        totalTests = 0;
+        passedTests = 0;
+
+        if (testReboot(mockServer, apiSystem)) passedTests++;
+        totalTests++;
+        if (testFactoryReset(mockServer, apiSystem)) passedTests++;
+        totalTests++;
+
+        return passedTests == totalTests;
     }
 
+    int getTotalTests() const { return totalTests; }
+    int getPassedTests() const { return passedTests; }
+    const char* getTestFileName() const { return "ApiSystemTests"; }
+
 private:
+    int totalTests;
+    int passedTests;
+
     bool testReboot(MockEspHttpServer& mockServer, ApiSystem& apiSystem) {
         std::cout << "Testing reboot..." << std::endl;
-        
-        // Register endpoint handler
+
         mockServer.registerHandler("POST", "/api/v1/reboot", [&apiSystem](const std::string& body) {
             httpd_req_t req{};
             apiSystem.reboot_handler(&req);
             return req.response;
         });
-        
-        // Simulate a request - reboot sends empty response which is OK
+
         std::string response = mockServer.simulateRequest("POST", "/api/v1/reboot", "");
-        
-        std::cout << "PASSED: reboot test passed" << std::endl;
-        return true;
+        // reboot sends empty response which is OK
+        std::cout << (response.empty() ? "PASSED: reboot test passed" : "FAILED: reboot test failed") << std::endl;
+        return response.empty();
     }
 
     bool testFactoryReset(MockEspHttpServer& mockServer, ApiSystem& apiSystem) {
         std::cout << "Testing factory_reset..." << std::endl;
-        
-        // Register endpoint handler
+
         mockServer.registerHandler("POST", "/api/v1/factory_reset", [&apiSystem](const std::string& body) {
             httpd_req_t req{};
             apiSystem.factory_reset_handler(&req);
             return req.response;
         });
-        
-        // Simulate a request
+
         std::string response = mockServer.simulateRequest("POST", "/api/v1/factory_reset", "");
-        assert(!response.empty());
-        assert(response == "{\"ack\":\"ok\"}");
-        
-        std::cout << "PASSED: factory_reset test passed" << std::endl;
-        return true;
+        if (!response.empty() && response == "{\"ack\":\"ok\"}") {
+            std::cout << "PASSED: factory_reset test passed" << std::endl;
+            return true;
+        } else {
+            std::cout << "FAILED: factory_reset test failed" << std::endl;
+            return false;
+        }
     }
 };
