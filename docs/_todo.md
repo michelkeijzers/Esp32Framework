@@ -7,7 +7,7 @@
 
 # MID LONG TERM
 
-## Common WebServer Slave
+## Common WebServer 
 
 - [ ] Status API.
 - [ ] Logging API.
@@ -16,11 +16,11 @@
 - [ ] Firmware API (chunked firmware upload with progress and retries).
 - [ ] Integration tests for all APIs (above).
 - [ ] Frontend pages for all APIs (status, logging, security, firmware).
-- [ ] OTA update via Wi-Fi (for webserver slave itself).
-- [ ] OTA update via ESP-NOW (for slaves without Wi-Fi, long term solution).
+- [ ] OTA update via Wi-Fi (for webserver itself).
+- [ ] OTA update via ESP-NOW (for nodes without Wi-Fi, long term solution).
 - [ ] ESP-NOW connection status monitoring (e.g. signal strength, last successful communication time).
 - [ ] More detailed status reporting (e.g. per-node logs, performance metrics).
-- [ ] Support for multiple webserver slaves (e.g. in larger deployments, with load balancing or redundancy).
+- [ ] Support for multiple webservers (e.g. in larger deployments, with load balancing or redundancy).
 - [ ] More advanced security features (e.g. dynamic keys, authentication, etc.).
 - [ ] More advanced logging features (e.g. log levels, remote logging, etc.).
 - [ ] More advanced error handling (e.g. specific error codes, retry strategies, etc.).
@@ -96,7 +96,7 @@
 - [ ] Add more unit tests for edge cases and error handling.
 - [ ] CICD pipeline for running tests on push.
 - [ ] Code coverage reporting.
-- [ ] Integration tests for webserver slave and website.
+- [ ] Integration tests for webserver and website.
 - [ ] Manual testing of frontend and OTA updates.
 - [ ] Performance testing under load (e.g. high message rates, multiple nodes, etc.).
 - [ ] Security testing (e.g. key management, attack vectors, etc.).
@@ -127,7 +127,7 @@
 - [ ] Add more configuration options (e.g. via KConfig) for flexibility.
 - [ ] Add more abstraction layers for hardware and software components (e.g. hardware abstraction layer, message handling layer, etc.).
 - [ ] Add more unit tests for edge cases and error handling.
-- [ ] Add more integration tests for webserver slave and website.
+- [ ] Add more integration tests for webservers and website.
 - [ ] Add more tests for performance under load (e.g. high message rates, multiple nodes, etc.).
 - [ ] Add more tests for security features (e.g. key changes, encryption, etc.).
 - [ ] Add more tests for error handling (e.g. message loss, node failures, etc.).
@@ -144,14 +144,14 @@
 
 # LONG TERM
 
-## Common Webserver Slave
+## Common Webserver
 
 ### Connection with Master
 
-- [ ] OTA update via ESP-NOW (for slaves without Wi-Fi, long term solution).
+- [ ] OTA update via ESP-NOW (for nodes without Wi-Fi, long term solution).
 - [ ] ESP-NOW connection status monitoring (e.g. signal strength, last successful communication time).
 - [ ] More detailed status reporting (e.g. per-node logs, performance metrics).
-- [ ] Support for multiple webserver slaves (e.g. in larger deployments, with load balancing or redundancy).
+- [ ] Support for multiple webservers (e.g. in larger deployments, with load balancing or redundancy).
 - [ ] More advanced security features (e.g. dynamic keys, authentication, etc.).
 - [ ] More advanced logging features (e.g. log levels, remote logging, etc.).  
 - [ ] More advanced error handling (e.g. specific error codes, retry strategies, etc.).

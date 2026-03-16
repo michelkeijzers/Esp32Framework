@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../main/slaves/webserver_slave/common/apis/IApiNodes.hpp"
+#include "../../../main/common/nodes/webserver/http_task/apis/IApiNodes.hpp"
 #include <vector>
 #include <string>
 

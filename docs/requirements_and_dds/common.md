@@ -4,7 +4,7 @@
 
 ## Role Types
 
-**REQ-GEN-100:** The system shall support four roles: ROLE_MASTER, ROLE_REMOTE, ROLE_WEBSERVER, ROLE_SLAVE.<br/>
+**REQ-GEN-100:** The system shall support four roles: ROLE_MASTER, ROLE_REMOTE, ROLE_WEBSERVER, ROLE_NODE.<br/>
 **Rationale:** Defines the different roles each ESP can assume in the system.<br/>
 **Alternative considered:** Fewer or more roles — rejected, would limit flexibility or add unnecessary complexity.
 
@@ -43,7 +43,7 @@
 ## Version Field
 
 **REQ-GEN-230:** All ESP-NOW messages shall include a version field to support future firmware compatibility.<br/>
-**Rationale:** Allows for future firmware updates on individual slaves without breaking message compatibility with other slaves on different firmware versions.<br/>
+**Rationale:** Allows for future firmware updates on individual nodes without breaking message compatibility with other nodes on different firmware versions.<br/>
 **Alternative considered:** No version field — rejected, would risk compatibility issues as firmware evolves.
 
 ## CRC16 Checksum
@@ -70,21 +70,21 @@
 
 **REQ-SEC-310:** The static Key for ESP-NOW encryption shall be configurable via NVS and not hardcoded in firmware.<br/>
 **Rationale:** Allows users to set their own encryption key without needing to modify and reflash firmware, improving security and usability.<br/>
-**Alternative considered:** Hardcoded key in firmware — rejected, would require firmware changes to update key and reduce security if firmware is shared. Key configuration via web interface — rejected, adds complexity and requires webserver slave to be involved in key management, which is not ideal for a common master that should not have project specific logic.
+**Alternative considered:** Hardcoded key in firmware — rejected, would require firmware changes to update key and reduce security if firmware is shared. Key configuration via web interface — rejected, adds complexity and requires webserver to be involved in key management, which is not ideal for a common master that should not have project specific logic.
 
 # Boot
 
 ## Boot Before Master
 
-**REQ-GEN-400:** Slaves shall handle booting before master is ready — retry ESP-NOW registration until master responds.<br/>
-**Rationale:** Slaves may boot before master is ready to receive messages. Retrying registration ensures slaves can come online independently without timing issues.<br/>
-**Alternative considered:** Slaves fail if master not ready — rejected, would create boot timing dependencies and reduce reliability.
+**REQ-GEN-400:** Nodes shall handle booting before master is ready — retry ESP-NOW registration until master responds.<br/>
+**Rationale:** Nodes may boot before master is ready to receive messages. Retrying registration ensures nodes can come online independently without timing issues.<br/>
+**Alternative considered:** Nodes fail if master not ready — rejected, would create boot timing dependencies and reduce reliability.
 
 ## Report Firmware to Master
 
 **REQ-GEN-410:** Each ESP shall report its firmware version to master via ESP-NOW at boot.<br/>
-**Rationale:** Allows master and webserver to track firmware versions of all slaves, aiding in debugging and ensuring compatibility.<br/>
-**Alternative considered:** No firmware version reporting — rejected, would have no visibility into slave firmware versions, making debugging and compatibility management more difficult.
+**Rationale:** Allows master and webserver to track firmware versions of all nodes, aiding in debugging and ensuring compatibility.<br/>
+**Alternative considered:** No firmware version reporting — rejected, would have no visibility into node firmware versions, making debugging and compatibility management more difficult.
 
 # OTA
 
@@ -96,7 +96,7 @@
 
 ## Triggerable via Website/Webserver
 
-**REQ-FW-150:** OTA shall be triggerable per ESP from the Htmx UI on the webserver slave.<br/>
+**REQ-FW-150:** OTA shall be triggerable per ESP from the Htmx UI on the webserver.<br/>
 **Rationale:** Provides a user-friendly way to initiate OTA updates from the web interface.<br/>
 **Alternative considered:** OTA only via command line or physical button — rejected, less user-friendly and not suitable for remote updates.
 
@@ -112,7 +112,7 @@
 
 ## Single VS Project
 
-**REQ-GEN-800:** The project shall use a single VS Code project, including all slave code.<br/>
+**REQ-GEN-800:** The project shall use a single VS Code project, including all node code.<br/>
 **Rationale:** A single project is easier for development.<br/>
 **Alternative considered:** Multiple projects per role — rejected, would increase complexity and reduce maintainability.
 
@@ -128,9 +128,9 @@
 
 - ESP-Now Task (handles incoming messages and sending messages, verifies CRC)
 - OTA Task (handles over-the-air updates)
-- Slave specific task(s)
+- Node specific task(s)
 
-**Rationale:** Separating concerns into different tasks allows for better organization and responsiveness. ESP-Now task can prioritize handling messages, while OTA and slave specific tasks can run independently without blocking message handling.<br/>
+**Rationale:** Separating concerns into different tasks allows for better organization and responsiveness. ESP-Now task can prioritize handling messages, while OTA and node specific tasks can run independently without blocking message handling.<br/>
 **Alternative considered:** Single task for all functionality — rejected, would be less responsive and harder to organize code. No separate task for receiving/sending messages — rejected, would make it harder to prioritize message handling and could lead to dropped messages under load.
 
 ## Task Spawning after EPS-NOW Initialization

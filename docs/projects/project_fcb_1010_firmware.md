@@ -8,12 +8,12 @@
 | --- | -------------- | ---------------------------------------------- | ------- |
 | #1  | ROLE_MASTER    | None                                           | FPC     |
 | #2  | ROLE_WEBSERVER | Wi-Fi, Htmx UI, input-to-MIDI mapping, OTA     | FPC     |
-| #3  | Input slave    | 2x 74HC165 (12 switches), 2x A1324 via ADS1115 | PCB     |
-| #4  | Display slave  | 2x MAX7219 — custom display + 18 LEDs          | PCB     |
-| #5  | MIDI slave     | MIDI IN + OUT + MERGE                          | PCB     |
-| #6  | OSC slave      | OSC over Wi-Fi UDP to Gig Performer            | FPC     |
+| #3  | Input node    | 2x 74HC165 (12 switches), 2x A1324 via ADS1115 | PCB     |
+| #4  | Display node  | 2x MAX7219 — custom display + 18 LEDs          | PCB     |
+| #5  | MIDI node     | MIDI IN + OUT + MERGE                          | PCB     |
+| #6  | OSC node      | OSC over Wi-Fi UDP to Gig Performer            | FPC     |
 
-**Display slave detail:**
+**Display node detail:**
 
 | Output                                       | Count       | IC                          |
 | -------------------------------------------- | ----------- | --------------------------- |
@@ -26,7 +26,7 @@
 
 MAX7219 RSET resistor: 3.3kΩ for 25mA per output (maximum brightness, safe practical limit).
 
-**Input slave detail:**
+**Input node detail:**
 
 | Input                           | Count | IC                         |
 | ------------------------------- | ----- | -------------------------- |
@@ -38,7 +38,7 @@ MAX7219 RSET resistor: 3.3kΩ for 25mA per output (maximum brightness, safe prac
 ```
 External MIDI device  →  MIDI IN (6N138)  ──┐
                                              ├──→  merge buffer  →  MIDI OUT
-Webserver (generated) →  ESP-NOW → master  ──┘                  →  OSC slave → Gig Performer
+Webserver (generated) →  ESP-NOW → master  ──┘                  →  OSC node → Gig Performer
 ```
 
 **Power budget:**
@@ -47,10 +47,10 @@ Webserver (generated) →  ESP-NOW → master  ──┘                  →  O
 | --------------------------------------------------- | ---------- |
 | Master ESP32-C3 (ESP-NOW)                           | ~80mA      |
 | Webserver ESP32-C3 (Wi-Fi)                          | ~120mA     |
-| Input slave ESP32-C3 (ESP-NOW)                      | ~80mA      |
-| Display slave ESP32-C3 (ESP-NOW)                    | ~80mA      |
-| MIDI slave ESP32-C3 (ESP-NOW)                       | ~80mA      |
-| OSC slave ESP32-C3 (Wi-Fi)                          | ~130mA     |
+| Input node ESP32-C3 (ESP-NOW)                      | ~80mA      |
+| Display node ESP32-C3 (ESP-NOW)                    | ~80mA      |
+| MIDI node ESP32-C3 (ESP-NOW)                       | ~80mA      |
+| OSC node ESP32-C3 (Wi-Fi)                          | ~130mA     |
 | 2x MAX7219 at 25mA/output (37 outputs, multiplexed) | ~115mA     |
 | 2x 74HC165                                          | ~5mA       |
 | 2x A1324 Hall sensors                               | ~18mA      |
@@ -59,13 +59,13 @@ Webserver (generated) →  ESP-NOW → master  ──┘                  →  O
 
 Recommended PSU: 5V 2A — 1290mA headroom.
 
-**Slave code contributed:**
+**Node code contributed:**
 
-- `slaves/midi/` — MIDI IN/OUT/MERGE
-- `slaves/display/max7219/` — custom segment and LED control, RSET 3.3kΩ
-- `slaves/input/hc165/` — shift register button input
-- `slaves/input/a1324/` — Hall effect pedal sensor
-- `slaves/osc/` — OSC over UDP
+- `nodes/midi/` — MIDI IN/OUT/MERGE
+- `nodes/display/max7219/` — custom segment and LED control, RSET 3.3kΩ
+- `nodes/input/hc165/` — shift register button input
+- `nodes/input/a1324/` — Hall effect pedal sensor
+- `nodes/osc/` — OSC over UDP
 
 **DD-008: MAX7219 for FCB1010 display**
 

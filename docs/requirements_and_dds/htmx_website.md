@@ -7,7 +7,7 @@
 **REQ-HTMX-100:** The webserver is divided into multiple pages, with a mix of common and application-specific content:
 	- Application-specific pages
 	- Configuration: project-specific configuration options
-	- Status: status of all nodes (master and slaves)
+	- Status: status of all nodes (master and nodes)
 	- Initialization: initialization process for all nodes
 	- Security: ESP-NOW key management
 	- Logging: system logs
@@ -40,11 +40,11 @@
 
 ## Node properties
 
-**REQ-HTMX-400:** The Nodes page provides unified management for all nodes (master and slaves), including:
+**REQ-HTMX-400:** The Nodes page provides unified management for all nodes (master and nodes), including:
 
 	- Node number and name
-	- Role (Master, Remote, Slave type)
-	- Slave sequence number (for slaves)
+	- Role (Master, Remote, Node type)
+	- Node sequence number (for nodes)
 	- Status (OK/NOK)
 	- Last communication time
 	- Uptime
@@ -52,7 +52,7 @@
 	- Per-node firmware update button (chunked upload, live progress, retries, no checksum)
 	- Configuration version
 	- MAC address (editable, with Save button)
-	- IP address (for webserver slaves/remotes)
+	- IP address (for webserver/remotes)
 **Rationale:** Comprehensive, actionable node management and monitoring in one place.<br/>
 **Alternative considered:** Minimal or split node management/status (less user-friendly, harder to maintain).
 
@@ -66,7 +66,7 @@
 
 # Security Page
 
-**REQ-HTMX-500:** The security page shall show the current ESP-NOW security key and allow users to change it. When the key is changed, it is sent to the master to be spread to all slaves.<br/>
+**REQ-HTMX-500:** The security page shall show the current ESP-NOW security key and allow users to change it. When the key is changed, it is sent to the master to be spread to all nodes.<br/>
 **Rationale:** The security page provides users with visibility into the current security settings of the system and allows them to easily update the ESP-NOW security key without needing to modify firmware. Sending the new key to the master for distribution ensures that all nodes in the system are updated with the new key, maintaining secure communication across the network.<br/>
 **Alternative considered:** No security page or a security page without the ability to change the ESP-NOW key — rejected, would limit users' ability to manage their security settings and require firmware changes to update the key, which is less user-friendly and reduces security if the firmware is shared.
 

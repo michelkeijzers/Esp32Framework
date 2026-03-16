@@ -9,7 +9,7 @@
 | ---------------- | ------------ | -------------------- | --------- | --------- | --- | ----------- |
 | `ROLE_MASTER`    | ESP-NOW only | Own cluster + remote | —         | —         | —   | Always      |
 | `ROLE_REMOTE`    | ESP-NOW only | Own cluster          | To master | —         | —   | Always      |
-| `ROLE_SLAVE`     | ESP-NOW only | —                    | To master | —         | —   | Always      |
+| `ROLE_NODE?`     | ESP-NOW only | —                    | To master | —         | —   | Always      |
 | `ROLE_WEBSERVER` | AP or router | —                    | To master | Yes       | Yes | Per project |
 
 # Antenna Reference
@@ -19,44 +19,44 @@
 | ROLE_MASTER    | U.FL    | FPC flexible   |
 | ROLE_REMOTE    | U.FL    | FPC flexible   |
 | ROLE_WEBSERVER | U.FL    | FPC flexible   |
-| ROLE_SLAVE     | PCB     | Built-in trace |
-| OSC slave      | U.FL    | FPC flexible   |
+| ROLE_NODE?     | PCB     | Built-in trace |
+| OSC node       | U.FL    | FPC flexible   |
 
-Note: Slaves in metal enclosures may require U.FL + FPC — OTA proxy via ESP-NOW is the preferred long term solution for these cases.
+Note: Nodes in metal enclosures may require U.FL + FPC — OTA proxy via ESP-NOW is the preferred long term solution for these cases.
 
 # OTA Reference
 
-| Approach              | Applies to      | Wi-Fi on slave  | Status            |
+| Approach              | Applies to      | Wi-Fi on node   | Status            |
 | --------------------- | --------------- | --------------- | ----------------- |
 | USB cable via idf.py  | All ESPs        | No              | Always available  |
-| Wi-Fi OTA             | Webserver slave | Yes (own Wi-Fi) | Implemented       |
-| Temporary Wi-Fi OTA   | Slaves          | Yes (temporary) | To be implemented |
-| OTA proxy via ESP-NOW | Slaves          | No              | Deferred          |
+| Wi-Fi OTA             | Webservers      | Yes (own Wi-Fi) | Implemented       |
+| Temporary Wi-Fi OTA   | Nodes           | Yes (temporary) | To be implemented |
+| OTA proxy via ESP-NOW | Nodes           | No              | Deferred          |
 
 ## OTA Proxy — ESP-NOW Chunk Protocol
 
 ```
 Webserver downloads firmware binary (~500KB) to LittleFS via Wi-Fi
 Webserver calculates CRC32 of full binary
-Webserver sends MSG_OTA_START to master → routed to target slave
+Webserver sends MSG_OTA_START to master → routed to target node
   payload: total_chunks, total_size, binary_crc32, firmware_version
 
-Slave receives MSG_OTA_START
-Slave sends MSG_OTA_STARTED to master
-Slave opens second flash partition for writing
+Node receives MSG_OTA_START
+Node sends MSG_OTA_STARTED to master
+Node opens second flash partition for writing
 
 For each chunk:
   Webserver sends MSG_OTA_CHUNK
     payload: chunk_index, total_chunks, chunk_size, chunk_crc16, data[200]
-  Slave receives chunk
-  Slave verifies chunk_crc16 — mismatch → sends NACK → webserver resends
-  Slave writes chunk to flash partition
-  Slave sends ACK with chunk_index
+  Node receives chunk
+  Node verifies chunk_crc16 — mismatch → sends NACK → webserver resends
+  Node writes chunk to flash partition
+  Node sends ACK with chunk_index
 
 Webserver receives last ACK
 Webserver sends MSG_OTA_COMPLETE
 
-Slave verifies full binary CRC32
+Node verifies full binary CRC32
   Mismatch → abort → rollback to previous partition → notify master
   Match → reboot into new partition
   Failed boot → automatic rollback via ESP-IDF bootloader
@@ -88,49 +88,49 @@ uint16_t crc = esp_crc16_le(0, data, length); // per message, per chunk
 uint32_t crc = esp_crc32_le(0, data, length); // full OTA binary
 ```
 
-# Slave Hardware
+# Node Hardware
 
-## UART — pick one per slave
+## UART — pick one per node
 
 | Define             | Hardware           | Baud     |
 | ------------------ | ------------------ | -------- |
-| `SLAVE_UART_MIDI`  | 6N138, 220R, DIN-5 | 31250    |
-| `SLAVE_UART_DMX`   | MAX3485, XLR, 120R | 250000   |
-| `SLAVE_UART_CO2`   | MH-Z19             | 9600     |
-| `SLAVE_UART_GPS`   | NEO-6M             | 9600     |
-| `SLAVE_UART_RS232` | MAX3232            | variable |
-| `SLAVE_UART_PZEM`  | PZEM-004T          | 9600     |
+| `NODE_UART_MIDI`  | 6N138, 220R, DIN-5 | 31250    |
+| `NODE_UART_DMX`   | MAX3485, XLR, 120R | 250000   |
+| `NODE_UART_CO2`   | MH-Z19             | 9600     |
+| `NODE_UART_GPS`   | NEO-6M             | 9600     |
+| `NODE_UART_RS232` | MAX3232            | variable |
+| `NODE_UART_PZEM`  | PZEM-004T          | 9600     |
 
 ## I2C — any combination
 
 | Define                   | IC       | Address   |
 | ------------------------ | -------- | --------- |
-| `SLAVE_I2C_DISPLAY_LCD`  | PCF8574  | 0x27/0x3F |
-| `SLAVE_I2C_DISPLAY_TM`   | TM1637   | GPIO      |
-| `SLAVE_I2C_DISPLAY_TM38` | TM1638   | GPIO      |
-| `SLAVE_I2C_DISPLAY_OLED` | SSD1306  | 0x3C      |
-| `SLAVE_I2C_MCP23017`     | MCP23017 | 0x20      |
-| `SLAVE_I2C_ADS1115`      | ADS1115  | 0x48/0x49 |
-| `SLAVE_I2C_PCA9685`      | PCA9685  | 0x40+     |
-| `SLAVE_I2C_SHT31`        | SHT31    | 0x44      |
-| `SLAVE_I2C_BH1750`       | BH1750   | 0x23      |
-| `SLAVE_I2C_VL53L0X`      | VL53L0X  | 0x29      |
-| `SLAVE_I2C_DS3231`       | DS3231   | 0x68      |
-| `SLAVE_I2C_INA219`       | INA219   | 0x40      |
+| `NODE_I2C_DISPLAY_LCD`  | PCF8574  | 0x27/0x3F |
+| `NODE_I2C_DISPLAY_TM`   | TM1637   | GPIO      |
+| `NODE_I2C_DISPLAY_TM38` | TM1638   | GPIO      |
+| `NODE_I2C_DISPLAY_OLED` | SSD1306  | 0x3C      |
+| `NODE_I2C_MCP23017`     | MCP23017 | 0x20      |
+| `NODE_I2C_ADS1115`      | ADS1115  | 0x48/0x49 |
+| `NODE_I2C_PCA9685`      | PCA9685  | 0x40+     |
+| `NODE_I2C_SHT31`        | SHT31    | 0x44      |
+| `NODE_I2C_BH1750`       | BH1750   | 0x23      |
+| `NODE_I2C_VL53L0X`      | VL53L0X  | 0x29      |
+| `NODE_I2C_DS3231`       | DS3231   | 0x68      |
+| `NODE_I2C_INA219`       | INA219   | 0x40      |
 
 ## SPI, RMT, GPIO
 
 | Define                | Hardware                  | Max                     |
 | --------------------- | ------------------------- | ----------------------- |
-| `SLAVE_SPI_595`       | 74HC595 + ULN2803         | 128 outputs (16 ICs)    |
-| `SLAVE_SPI_165`       | 74HC165                   | 64 inputs (8 ICs)       |
-| `SLAVE_SPI_MAX7219`   | MAX7219                   | 128 outputs (2 ICs)     |
-| `SLAVE_RMT_WS2812`    | WS2812B / WS2813 / SK6812 | 2 strips, 600 LEDs each |
-| `SLAVE_GPIO_ENCODERS` | Direct GPIO + interrupt   | 2 encoders              |
-| `SLAVE_GPIO_PIR`      | HC-SR501 / RCWL-0516      | 1 pin                   |
-| `SLAVE_GPIO_IR_RECV`  | TSOP38238                 | 1 pin                   |
-| `SLAVE_GPIO_IR_SEND`  | TSAL6200                  | 1 pin                   |
-| `SLAVE_GPIO_AUDIO`    | MCP6004 + ADS1115         | 4 bands                 |
+| `NODE_SPI_595`       | 74HC595 + ULN2803         | 128 outputs (16 ICs)    |
+| `NODE_SPI_165`       | 74HC165                   | 64 inputs (8 ICs)       |
+| `NODE_SPI_MAX7219`   | MAX7219                   | 128 outputs (2 ICs)     |
+| `NODE_RMT_WS2812`    | WS2812B / WS2813 / SK6812 | 2 strips, 600 LEDs each |
+| `NODE_GPIO_ENCODERS` | Direct GPIO + interrupt   | 2 encoders              |
+| `NODE_GPIO_PIR`      | HC-SR501 / RCWL-0516      | 1 pin                   |
+| `NODE_GPIO_IR_RECV`  | TSOP38238                 | 1 pin                   |
+| `NODE_GPIO_IR_SEND`  | TSAL6200                  | 1 pin                   |
+| `NODE_GPIO_AUDIO`    | MCP6004 + ADS1115         | 4 bands                 |
 
 ## MAX7219 Brightness Reference
 
@@ -167,7 +167,7 @@ webserver/
 webserver.c
 ota.c
 littlefs.c
-slaves/
+nodes/
 dmx/
 display/
 tm1637/
@@ -189,8 +189,8 @@ ws2812/
 
 | Path                               | Latency | Notes                              |
 | ---------------------------------- | ------- | ---------------------------------- |
-| Button → webserver                 | ~8ms    | Input slave → master → webserver   |
-| Webserver → DMX                    | ~5ms    | Webserver → master → DMX slave     |
+| Button → webserver                 | ~8ms    | Input node → master → webserver   |
+| Webserver → DMX                    | ~5ms    | Webserver → master → DMX node     |
 | Button → DMX (full chain)          | ~31ms   | Includes 22ms DMX frame            |
 | MIDI note → OSC UDP                | ~6ms    | Direct routing, bypasses webserver |
 | MIDI note → webserver (monitoring) | ~6ms    | Parallel copy, non-blocking        |

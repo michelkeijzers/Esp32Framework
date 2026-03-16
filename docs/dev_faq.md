@@ -81,13 +81,13 @@ This serves the `dist/` folder on http://localhost:5173. Verify all pages load a
 ## Technical Details
 
 ### Static File Handler
-- Registered in `WebserverSlave.cpp` as a catch-all URI handler (`/*`)
+- Registered in `Webserver.cpp` as a catch-all URI handler (`/*`)
 - Automatically serves `index.html` for root path and non-API routes (SPA support)
 - Sets correct MIME types using `StaticFileHandler::get_mime_type()`
 - Returns 404 if file not found
 
 ### LittleFS Mounting
-- Mounted at startup in `WebserverSlave::mount_littlefs()`
+- Mounted at startup in `Webserver::mount_littlefs()`
 - Partition label: `littlefs`, base path: `/littlefs`
 - Auto-formats partition if mount fails (graceful degradation)
 

@@ -1,22 +1,22 @@
 @startuml 
 
-title Webserver Slave Design / RTOS Tasks
+title Webserver Design / RTOS Tasks
 
-package WebserverSlave_Package
+package Webserver_Package
 {
     class Main {}
     note right of Main
         Creates all objects (DI)
     end note
 
-    class DmxControllerWebserverSlave <<RtosTask>> {}
+    class DmxControllerWebserver <<RtosTask>> {}
 
     class Website <<LittleFS>>
 
     class DmxControllerHttpTask <<RtosTask>> {}
     class PresetsTask <<RtosTask>> {}
 
-    Main *--> DmxControllerWebserverSlave
+    Main *--> DmxControllerWebserver
     
     Website <--> DmxControllerHttpTask : REST API
 }
@@ -27,11 +27,11 @@ package Common
     {
         class RtosTask <<RtosTask>> {}
 
-        class SlaveTask <<RtosTask>> {}
+        class NodeTask <<RtosTask>> {}
         class HttpTask <<RtosTask>> {}
         note bottom of HttpTask
             Only for
-            webserver slaves 
+            webservers
             and remotes
         end note        
         class WifiTask <<RtosTask>> {}
@@ -40,7 +40,7 @@ package Common
         class StatusTask <<RtosTask>> {}
         class NvsTask <<RtosTask>> {}
 
-        SlaveTask -u-|> RtosTask
+        NodeTask -u-|> RtosTask
         HttpTask -u-|> RtosTask
         WifiTask -u-|> RtosTask
         EspNowTask -u-|> RtosTask
@@ -62,36 +62,36 @@ package Common
     NvsTask ---> IEspNvs
 }
 
-DmxControllerWebserverSlave --|> SlaveTask
+DmxControllerWebserver --|> NodeTask
 DmxControllerHttpTask --|> HttpTask
 PresetsTask --|> RtosTask
 
-DmxControllerWebserverSlave *-- DmxControllerHttpTask
-DmxControllerWebserverSlave *-- PresetsTask
-DmxControllerWebserverSlave *-- StatusTask
-DmxControllerWebserverSlave *-- EspNowTask
-DmxControllerWebserverSlave *-- WifiTask
-DmxControllerWebserverSlave *-- OtaTask
-DmxControllerWebserverSlave *-- NvsTask
+DmxControllerWebserver *-- DmxControllerHttpTask
+DmxControllerWebserver *-- PresetsTask
+DmxControllerWebserver *-- StatusTask
+DmxControllerWebserver *-- EspNowTask
+DmxControllerWebserver *-- WifiTask
+DmxControllerWebserver *-- OtaTask
+DmxControllerWebserver *-- NvsTask
 
 @enduml
 
 @startuml 
 
-title Webserver Slave Design / API Endpoints, example of security API endpoint 
+title Webserver Design / API Endpoints, example of security API endpoint 
 
-package WebserverSlave_Package
+package Webserver_Package
 {
     class Main {}
 
-    class DmxControllerWebserverSlave <<RtosTask>> {}
+    class DmxControllerWebserver <<RtosTask>> {}
 
     class Website <<LittleFS>>
 
     class DmxControllerHttpTask <<RtosTask>> {}
     class PresetsTask <<RtosTask>> {}
 
-    Main *--> DmxControllerWebserverSlave
+    Main *--> DmxControllerWebserver
     Main *--> DmxControllerHttpTask
     Main *--> PresetsTask
 
@@ -117,11 +117,11 @@ package Common
     {
         class RtosTask <<RtosTask>> {}
 
-        class SlaveTask <<RtosTask>> {}
+        class NodeTask <<RtosTask>> {}
         class HttpTask <<RtosTask>> {}
         note bottom of HttpTask
             Only for
-            webserver slaves 
+            webservers
             and remotes
         end note        
         class WifiTask <<RtosTask>> {}
@@ -130,7 +130,7 @@ package Common
         class StatusTask <<RtosTask>> {}
         class NvsTask <<RtosTask>> {}
 
-        SlaveTask -u-|> RtosTask
+        NodeTask -u-|> RtosTask
         HttpTask -u-|> RtosTask
         WifiTask -u-|> RtosTask
         EspNowTask -u-|> RtosTask
@@ -140,17 +140,17 @@ package Common
     }
 
     HttpTask --> ApiSecurity : 3. Esp Now Key is for security
-    ApiSecurity --> SlaveTask : 4. Handle Esp Now key
-    SlaveTask --> EspNowTask : 5. Send to other nodes (for all nodes)
-    EspNowTask ..> SlaveTask: 5b Ack
-    SlaveTask --> NvsTask : 6. Store in NVS 
-    NvsTask ..> SlaveTask : 6b. Ack
-    SlaveTask --> HttpTask : 7. Respond to HTTP request
+    ApiSecurity --> NodeTask : 4. Handle Esp Now key
+    NodeTask --> EspNowTask : 5. Send to other nodes (for all nodes)
+    EspNowTask ..> NodeTask: 5b Ack
+    NodeTask --> NvsTask : 6. Store in NVS 
+    NvsTask ..> NodeTask : 6b. Ack
+    NodeTask --> HttpTask : 7. Respond to HTTP request
 
 
 }
 
-DmxControllerWebserverSlave --|> SlaveTask
+DmxControllerWebserver --|> NodeTask
 DmxControllerHttpTask --> HttpTask : 2. (Common API)
 PresetsTask --|> RtosTask
 
@@ -158,30 +158,30 @@ PresetsTask --|> RtosTask
 
 @startuml 
 
-title Webserver Slave Design / API Endpoints, example of security API endpoint (as seq diagram)
+title Webserver Design / API Endpoints, example of security API endpoint (as seq diagram)
 
 participant Website
 participant DmxControllerHttpTask
 participant HttpTask
 participant ApiSecurity
-participant SlaveTask
+participant NodeTask
 participant EspNowTask
 participant NvsTask
 
 Website ->  DmxControllerHttpTask : POST Esp Now Key
 DmxControllerHttpTask -> HttpTask : (Common API handler)
 HttpTask -> ApiSecurity : Esp Now Key \n is for security
-ApiSecurity -> SlaveTask : Handle Esp Now key
-SlaveTask -> EspNowTask : Send to other nodes \n (for all nodes)
+ApiSecurity -> NodeTask : Handle Esp Now key
+NodeTask -> EspNowTask : Send to other nodes \n (for all nodes)
 EspNowTask --> IEspNow : Send Esp Now message
 IEspNow --> EspNowTask : Ack
-EspNowTask --> SlaveTask: Ack
-SlaveTask -> NvsTask : Store in NVS
+EspNowTask --> NodeTask: Ack
+NodeTask -> NvsTask : Store in NVS
 NvsTask --> IEspNvs: Store in NVS
 IEspNvs --> NvsTask: Ack
-NvsTask --> SlaveTask : Ack
-SlaveTask --> SlaveTask : Wait for acks from EspNowTask and NvsTask
-SlaveTask -> HttpTask : Respond to HTTP request
+NvsTask --> NodeTask : Ack
+NodeTask --> NodeTask : Wait for acks from EspNowTask and NvsTask
+NodeTask -> HttpTask : Respond to HTTP request
 HttpTask --> DmxControllerHttpTask : Respond to \n HTTP request
 DmxControllerHttpTask --> Website : Respond to \n HTTP request
 
@@ -189,7 +189,7 @@ DmxControllerHttpTask --> Website : Respond to \n HTTP request
 
 @startuml 
 
-title Webserver Slave Design / DMX Controller, Get preset
+title Webserver Design / DMX Controller, Get preset
 
 participant Website
 participant DmxControllerTask
@@ -214,7 +214,7 @@ DmxControllerHttpTask -> Website : HTTP response
 
 @startuml 
 
-title Webserver Slave Design / ESP32 Interfaces
+title Webserver Design / ESP32 Interfaces
 
 package Common_Package
 {
@@ -222,11 +222,11 @@ package Common_Package
     {
         class RtosTask <<RtosTask>> {}
 
-        class SlaveTask <<RtosTask>> {}
+        class NodeTask <<RtosTask>> {}
         class HttpTask <<RtosTask>> {}
         note bottom of HttpTask
             Only for
-            webserver slaves 
+            webservers 
             and remotes
         end note        
         class WifiTask <<RtosTask>> {}
@@ -235,7 +235,7 @@ package Common_Package
         class StatusTask <<RtosTask>> {}
         class NvsTask <<RtosTask>> {}
 
-        SlaveTask -u-|> RtosTask
+        NodeTask -u-|> RtosTask
         HttpTask -u-|> RtosTask
         WifiTask -u-|> RtosTask
         EspNowTask -u-|> RtosTask
@@ -334,7 +334,7 @@ package Common_Package
 
     ESP32_Package -[hidden]u-----> RtosTasks_Package 
 
-    SlaveTask --> IEspLogger
+    NodeTask --> IEspLogger
     HttpTask --> IEspLogger
     WifiTask --> IEspLogger
     EspNowTask --> IEspLogger

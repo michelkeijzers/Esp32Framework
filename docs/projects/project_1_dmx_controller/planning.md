@@ -11,8 +11,8 @@
 | REQ-GEN-300 | 1    | Later       | Encryption     |
 
 **REQ-GEN-410:** Each ESP shall report its firmware version to master via ESP-NOW at boot.<br/>
-**Rationale:** Allows master and webserver to track firmware versions of all slaves, aiding in debugging and ensuring compatibility.<br/>
-**Alternative considered:** No firmware version reporting — rejected, would have no visibility into slave firmware versions, making debugging and compatibility management more difficult.
+**Rationale:** Allows master and webserver to track firmware versions of all nodes, aiding in debugging and ensuring compatibility.<br/>
+**Alternative considered:** No firmware version reporting — rejected, would have no visibility into node firmware versions, making debugging and compatibility management more difficult.
 
 # OTA
 
@@ -20,11 +20,11 @@
 **Rationale:** Dual partition is required for OTA updates. Adding it later would require USB reflash of all devices, which is inconvenient once installed in enclosures. Flash space cost is minimal and no hardware changes are needed, so it makes sense to include it from the start.<br/>
 **Alternative considered:** Add dual partition later — rejected, defeats the purpose of OTA and would require inconvenient USB reflash of all devices.
 
-**REQ-FW-510:** ESPs shall support OTA via temporary Wi-Fi — slave temporarily enables Wi-Fi STA mode, connects to router, downloads firmware, reboots, returns to ESP-NOW only mode.<br/>
-**Rationale:** Provides a wireless OTA option for slaves that have Wi-Fi capability and are close enough to the router. Allows for OTA without needing physical access for USB reflash.<br/>
-**Alternative considered:** OTA only via webserver slave — rejected, slaves with Wi-Fi capability should be able to update directly without needing to route through the webserver. OTA proxy via ESP-NOW — rejected, adds significant complexity and development effort, and is not strictly necessary for slaves with Wi-Fi capability.
+**REQ-FW-510:** ESPs shall support OTA via temporary Wi-Fi — node temporarily enables Wi-Fi STA mode, connects to router, downloads firmware, reboots, returns to ESP-NOW only mode.<br/>
+**Rationale:** Provides a wireless OTA option for nodes that have Wi-Fi capability and are close enough to the router. Allows for OTA without needing physical access for USB reflash.<br/>
+**Alternative considered:** OTA only via webservers — rejected, nodes with Wi-Fi capability should be able to update directly without needing to route through the webserver. OTA proxy via ESP-NOW — rejected, adds significant complexity and development effort, and is not strictly necessary for nodes with Wi-Fi capability.
 
-**REQ-FW-150:** OTA shall be triggerable per ESP from the Hemx UI on the webserver slave.<br/>
+**REQ-FW-150:** OTA shall be triggerable per ESP from the Hemx UI on the webservers.<br/>
 **Rationale:** Provides a user-friendly way to initiate OTA updates from the web interface.<br/>
 **Alternative considered:** OTA only via command line or physical button — rejected, less user-friendly and not suitable for remote updates.
 
@@ -36,7 +36,7 @@
 
 # Software Organization
 
-**REQ-GEN-800:** The project shall use a single VS Code, including all slave code.
+**REQ-GEN-800:** The project shall use a single VS Code, including all node code.
 **Rationale:** A single project is easier for development.
 **Alternative considered:** Multiple projects per role — rejected, would increase complexity and reduce maintainability.
 
@@ -52,10 +52,10 @@
 
 # Hardware
 
-# STEP 2: GPIO SLAVE
+# STEP 2: GPIO NODE
 
 # STEP 3: WEB SERVER
 
-# STEP 4: DISPLAY SLAVE
+# STEP 4: DISPLAY NODE
 
-# STEP 5: DMX SLAVE
+# STEP 5: DMX NODE

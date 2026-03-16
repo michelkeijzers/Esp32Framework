@@ -31,10 +31,10 @@ main/
             Master.hpp/cpp
             MasterTask 
                 MasterTask.hpp/cpp
-        slaves/
-            webserver_slave/
-                webserver_slave_task/
-                    WebserverSlaveTask.hpp/cpp
+        nodes /
+            webserver/
+                webserver_task/
+                    WebserverTask.hpp/cpp
                 http_task
                     HttpTask.hpp/cpp
                     apis/
@@ -48,9 +48,9 @@ main/
                         nodes.html
                         ...
     projects
-        dmx_controller/ (webserver slave implementation)
-            IDmxControllerWebserverSlave.hpp
-            DmxControllerWebserverSlave.hpp/cpp
+        dmx_controller/ (webserver implementation)
+            IDmxControllerWebserver.hpp
+            DmxControllerWebserver.hpp/cpp
             preset_task
                 Presets.hpp/cpp
                 Preset.hpp/cpp

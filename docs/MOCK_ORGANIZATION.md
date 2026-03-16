@@ -8,9 +8,9 @@ All mocks have been reorganized into a clear, hierarchical structure that separa
 ### Root Level: `mocks/`
 **Purpose:** Shared mocks used across multiple components and test suites
 
-- **`mocks/common/`** - Shared component mocks for common webserver slave functionality
-  - `MockWebserverSlave.hpp` - Mock for IWebserverSlave interface
-  - `MockDmxControllerWebserverSlave.hpp` - Mock for IDmxControllerWebserverSlave interface
+- **`mocks/common/`** - Shared component mocks for common webserver functionality
+  - `MockWebserver.hpp` - Mock for IWebserver interface
+  - `MockDmxControllerWebserver.hpp` - Mock for IDmxControllerWebserver interface
   - **Usage:** Included in `main/main.cpp` for flexible dependency injection across the application
 
 ### API Tester: `tests/api_tester/mocks/`
@@ -66,7 +66,7 @@ All mocks have been reorganized into a clear, hierarchical structure that separa
 ## Old Locations Cleaned Up
 - Removed `tests/mock/` directory (moved to `tests/api_tester/mocks/`)
 - Removed `tests/MockXxx.hpp` files (moved to `mocks/common/`)
-- Removed old mock from `main/slaves/webserver_slave/dmx_controller/`
+- Removed old mock from `main/nodes/webserver/dmx_controller/`
 
 ## Build Status
 ✅ API tester builds successfully with new structure

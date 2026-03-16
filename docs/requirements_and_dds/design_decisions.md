@@ -18,27 +18,27 @@
 
 ---
 
-**DD-011: MIDI merge buffer in MIDI slave**
+**DD-011: MIDI merge buffer in MIDI node**
 
-- Decision: MIDI slave implements a merge buffer combining external MIDI IN (UART RX) with internally generated messages (ESP-NOW from master)
+- Decision: MIDI node implements a merge buffer combining external MIDI IN (UART RX) with internally generated messages (ESP-NOW from master)
 - Reason: FCB1010 must pass through external MIDI device while also generating its own MIDI — single MIDI OUT must carry both streams without corruption.
 - Queue size: 32 messages, configurable via `MIDI_MERGE_QUEUE_SIZE`
 
 ---
 
-**DD-012: Slave code library grows per project**
+**DD-012: Node code library grows per project**
 
-- Decision: Each project contributes reusable slave components to the shared library
+- Decision: Each project contributes reusable node components to the shared library
 - Reason: After two projects the library covers most common stage peripherals. Future projects are assembly of existing components, not new development.
 - Project 1 adds: dmx, tm1637, gpio input
 - Project 2 adds: midi, max7219, hc165, a1324, osc
 
 ---
 
-**DD-013: Prefer additional ESP slave over UART expander IC**
+**DD-013: Prefer additional ESP node over UART expander IC**
 
-- Decision: When a slave requires more than one UART, add a second ESP slave rather than using a UART expander IC such as SC16IS752
-- Reason: Additional ESP slave costs the same (~2 euro), provides a full independent CPU, keeps each slave simple, fits the design philosophy of one role per ESP
+- Decision: When a node requires more than one UART, add a second ESP node rather than using a UART expander IC such as SC16IS752
+- Reason: Additional ESP node costs the same (~2 euro), provides a full independent CPU, keeps each node simple, fits the design philosophy of one role per ESP
 - Alternative considered: SC16IS752 UART expander via I2C — rejected, same cost, added complexity, no architectural benefit
 
 ---
@@ -46,10 +46,10 @@
 **DD-014: OTA strategy — three approaches**
 
 - Decision: Three OTA approaches supported, used based on situation
-- Approach 1 — Webserver slave via Wi-Fi: standard ESP-IDF OTA, already in design, works today
-- Approach 2 — Slaves via temporary Wi-Fi: slave temporarily enables Wi-Fi STA, connects to router, downloads firmware, returns to ESP-NOW only mode. Works for plastic enclosure slaves close to router.
-- Approach 3 — OTA proxy via ESP-NOW: webserver downloads firmware via Wi-Fi, pushes to slave via ESP-NOW chunks (~2500 chunks at 200 bytes each). No Wi-Fi needed on slave. Works regardless of enclosure or antenna. Deferred — significant development effort.
-- Reason: Slaves are inside enclosures, USB access is inconvenient. Wireless OTA needed for maintenance without physical access.
+- Approach 1 — Webserver via Wi-Fi: standard ESP-IDF OTA, already in design, works today
+- Approach 2 — Nodes via temporary Wi-Fi: node temporarily enables Wi-Fi STA, connects to router, downloads firmware, returns to ESP-NOW only mode. Works for plastic enclosure nodes close to router.
+- Approach 3 — OTA proxy via ESP-NOW: webserver downloads firmware via Wi-Fi, pushes to node via ESP-NOW chunks (~2500 chunks at 200 bytes each). No Wi-Fi needed on node. Works regardless of enclosure or antenna. Deferred — significant development effort.
+- Reason: Nodes are inside enclosures, USB access is inconvenient. Wireless OTA needed for maintenance without physical access.
 - Alternative considered: USB only — rejected, impractical once installed in enclosures
 
 ---

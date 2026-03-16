@@ -1,20 +1,20 @@
-# OSC Slave
+# OSC Node
 
-**REQ-OSC-100:** The OSC slave shall receive MIDI messages via ESP-NOW from master.
+**REQ-OSC-100:** The OSC node shall receive MIDI messages via ESP-NOW from master.
 
-**REQ-OSC-110:** The OSC slave shall forward MIDI messages as OSC over Wi-Fi UDP to a configurable target IP and port.
+**REQ-OSC-110:** The OSC node shall forward MIDI messages as OSC over Wi-Fi UDP to a configurable target IP and port.
 
-**REQ-OSC-120:** The OSC slave shall use dedicated Wi-Fi — separate from the webserver slave.
+**REQ-OSC-120:** The OSC node shall use dedicated Wi-Fi — separate from the webserver.
 
-**REQ-OSC-130:** The OSC slave shall use an FPC external antenna for reliable low-latency Wi-Fi during live performance.
+**REQ-OSC-130:** The OSC node shall use an FPC external antenna for reliable low-latency Wi-Fi during live performance.
 
 #### MIDI Message Generation
 
-**REQ-GEN-100:** The webserver slave shall generate MIDI messages based on input slave events and stored mappings.
+**REQ-GEN-100:** The webserver shall generate MIDI messages based on input node events and stored mappings.
 
-**REQ-GEN-110:** Input-to-MIDI mappings shall be stored in webserver slave NVS and configurable via Htmx UI without reflashing.
+**REQ-GEN-110:** Input-to-MIDI mappings shall be stored in webserver NVS and configurable via Htmx UI without reflashing.
 
-**REQ-GEN-120:** The webserver slave shall support configurable MIDI channel, note, velocity, CC value, program change, and transpose per input.
+**REQ-GEN-120:** The webserver shall support configurable MIDI channel, note, velocity, CC value, program change, and transpose per input.
 
 # Software Organization
 

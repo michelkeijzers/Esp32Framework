@@ -29,8 +29,8 @@ def event_stream():
                 {
                     "name": "Master",
                     "role": "Master",
-                    "slave_type": "Webserver",
-                    "slave_sequence": 1,
+                    "node_type": "Webserver",
+                    "node_sequence": 1,
                     "status_watchdog": "OK",
                     "last_communication": master_last_comm,
                     "uptime": "3h 12m",
@@ -40,10 +40,10 @@ def event_stream():
                     "ip_address": "192.168.1.101",
                 },
                 {
-                    "name": "Slave",
-                    "role": "Slave",
-                    "slave_type": "Webserver",
-                    "slave_sequence": 2,
+                    "name": "Node",
+                    "role": "Node",
+                    "node_type": "Webserver",
+                    "node_sequence": 2,
                     "status_watchdog": "ERROR",
                     "last_communication": "2026-03-11 14:25:10",
                     "uptime": "2h 45m",
@@ -54,9 +54,9 @@ def event_stream():
                 },
                 {
                     "name": "Backup",
-                    "role": "Slave",
-                    "slave_type": "MIDI",
-                    "slave_sequence": 3,
+                    "role": "Node",
+                    "node_type": "MIDI",
+                    "node_sequence": 3,
                     "status_watchdog": "OK",
                     "last_communication": "2026-03-11 14:26:30",
                     "uptime": "1h 10m",
@@ -87,8 +87,8 @@ def api_status():
         {
             "name": "Master",
             "role": "Master",
-            "slave_type": "Webserver",
-            "slave_sequence": 1,
+            "node_type": "Webserver",
+            "node_sequence": 1,
             "status_watchdog": "OK",
             "last_communication": "2026-03-11 14:23:01",
             "uptime": "3h 12m",
@@ -98,10 +98,10 @@ def api_status():
             "ip_address": "192.168.1.101",
         },
         {
-            "name": "Slave",
-            "role": "Slave",
-            "slave_type": "Webserver",
-            "slave_sequence": 2,
+            "name": "Node",
+            "role": "Node",
+            "node_type": "Webserver",
+            "node_sequence": 2,
             "status_watchdog": "ERROR",
             "last_communication": "2026-03-11 14:25:10",
             "uptime": "2h 45m",
@@ -112,9 +112,9 @@ def api_status():
         },
         {
             "name": "Backup",
-            "role": "Slave",
-            "slave_type": "MIDI",
-            "slave_sequence": 3,
+            "role": "Node",
+            "node_type": "MIDI",
+            "node_sequence": 3,
             "status_watchdog": "OK",
             "last_communication": "2026-03-11 14:26:30",
             "uptime": "1h 10m",
@@ -374,8 +374,8 @@ def api_nodes_info():
         nodes = [
             {"name": "Master", "mac_address": "24:6F:28:AA:BB:CC"},
             {"name": "Webserver", "mac_address": "24:6F:28:BB:CC:DD"},
-            {"name": "GPIO Slave", "mac_address": "24:6F:28:CC:DD:EE"},
-            {"name": "Display Slave", "mac_address": "24:6F:28:DD:EE:FF"},
+            {"name": "GPIO Node", "mac_address": "24:6F:28:CC:DD:EE"},
+            {"name": "Display Node", "mac_address": "24:6F:28:DD:EE:FF"},
         ]
         return jsonify(nodes)
     elif request.method == "POST":

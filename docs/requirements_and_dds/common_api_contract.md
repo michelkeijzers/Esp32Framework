@@ -32,10 +32,10 @@ This document describes the API contract between the frontend (web UI) and the b
 
 **Response Specification:**
 Array of node objects, each containing:
-- `name` (string, required) – Node identifier (e.g., "Master", "Slave")
-- `role` (string, required) – Role of the node (e.g., "Master", "Slave")
-- `slave_type` (string, required) – Type of slave (e.g., "Webserver", "DMX", "MIDI")
-- `slave_sequence` (integer, required) – Sequence number of the slave (1-based)
+- `name` (string, required) – Node identifier (e.g., "Master", "Node")
+- `role` (string, required) – Role of the node (e.g., "Master", "Node")
+- `node_type` (string, required) – Type of node (e.g., "Webserver", "DMX", "MIDI")
+- `node_sequence` (integer, required) – Sequence number of the node (1-based)
 - `status_watchdog` (string, required) – Watchdog status (e.g., "OK", "ERROR", "TIMEOUT")
 - `last_communication` (string, required) – ISO 8601 timestamp of last communication
 - `uptime` (string, required) – Human-readable uptime (e.g., "3h 12m")
@@ -67,7 +67,7 @@ Example event:
 
 ```
 event: status
-data: [{ "name": "Master", "role": "Master", "slave_type": "Webserver", "slave_sequence": 1, "status_watchdog": "OK", "last_communication": "2026-03-11 14:23:01", "uptime": "3h 12m", "firmware_version": "v1.2.3", "config_version": "cfg-2026-03-10", "mac_address": "24:6F:28:AA:BB:CC", "ip_address": "192.168.1.101" }, { "name": "Slave", "role": "Slave", "slave_type": "DMX", "slave_sequence": 2, "status_watchdog": "ERROR", "last_communication": "2026-03-11 14:25:10", "uptime": "2h 45m", "firmware_version": "v1.2.2", "config_version": "cfg-2026-03-09", "mac_address": "24:6F:28:DD:EE:FF", "ip_address": "192.168.1.102" }]
+data: [{ "name": "Master", "role": "Master", "node_type": "Webserver", "node_sequence": 1, "status_watchdog": "OK", "last_communication": "2026-03-11 14:23:01", "uptime": "3h 12m", "firmware_version": "v1.2.3", "config_version": "cfg-2026-03-10", "mac_address": "24:6F:28:AA:BB:CC", "ip_address": "192.168.1.101" }, { "name": "Node", "role": "Node", "node_type": "DMX", "node_sequence": 2, "status_watchdog": "ERROR", "last_communication": "2026-03-11 14:25:10", "uptime": "2h 45m", "firmware_version": "v1.2.2", "config_version": "cfg-2026-03-09", "mac_address": "24:6F:28:DD:EE:FF", "ip_address": "192.168.1.102" }]
 ```
 
 Example response (JSON):
@@ -77,8 +77,8 @@ Example response (JSON):
   {
     "name": "Master",
     "role": "Master",
-    "slave_type": "Webserver",
-    "slave_sequence": 1,
+    "node_type": "Webserver",
+    "node_sequence": 1,
     "status_watchdog": "OK",
     "last_communication": "2026-03-11 14:23:01",
     "uptime": "3h 12m",
@@ -88,10 +88,10 @@ Example response (JSON):
     "ip_address": "192.168.1.101"
   },
   {
-    "name": "Slave",
-    "role": "Slave",
-    "slave_type": "DMX",
-    "slave_sequence": 2,
+    "name": "Node",
+    "role": "Node",
+    "node_type": "DMX",
+    "node_sequence": 2,
     "status_watchdog": "ERROR",
     "last_communication": "2026-03-11 14:25:10",
     "uptime": "2h 45m",
@@ -105,8 +105,8 @@ Example response (JSON):
 Each node object contains:
   - name: string
   - role: string
-  - slave_type: string (e.g. "Webserver", "DMX", "MIDI")
-  - slave_sequence: integer
+  - node_type: string (e.g. "Webserver", "DMX", "MIDI")
+  - node_sequence: integer
   - status_watchdog: string
   - last_communication: string
   - uptime: string
@@ -143,8 +143,8 @@ Example response (JSON):
 [
   { "name": "Master", "mac_address": "24:6F:28:AA:BB:CC" },
   { "name": "Webserver", "mac_address": "24:6F:28:BB:CC:DD" },
-  { "name": "GPIO Slave", "mac_address": "24:6F:28:CC:DD:EE" },
-  { "name": "Display Slave", "mac_address": "24:6F:28:DD:EE:FF" }
+  { "name": "GPIO Node", "mac_address": "24:6F:28:CC:DD:EE" },
+  { "name": "Display Node", "mac_address": "24:6F:28:DD:EE:FF" }
 ]
 ```
 

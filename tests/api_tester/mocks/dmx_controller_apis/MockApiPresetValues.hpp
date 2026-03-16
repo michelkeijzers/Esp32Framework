@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../main/slaves/webserver_slave/dmx_controller/apis/IApiPresetValues.hpp"
+#include "../../../main/common/nodes/webserver/http_task/apis/IApiPresetValues.hpp"
 #include <vector>
 #include <string>
 

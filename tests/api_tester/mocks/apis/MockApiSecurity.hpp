@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../main/slaves/webserver_slave/common/apis/IApiSecurity.hpp"
+#include "../../../main/common/nodes/webserver/http_task/apis/IApiSecurity.hpp"
 #include <vector>
 #include <string>
 

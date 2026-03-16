@@ -66,7 +66,7 @@ target_include_directories(api_tester PRIVATE
 )
 
 # Add additional include directories if needed
-# target_include_directories(api_tester PRIVATE ../../main/slaves/webserver_slave/dmx_controller)
+# target_include_directories(api_tester PRIVATE ../../main/nodes/webserver_node/dmx_controller)
 
 # Link libraries if your handlers require them
 # target_link_libraries(api_tester ...)

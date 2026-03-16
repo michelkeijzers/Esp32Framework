@@ -195,7 +195,7 @@ typedef struct {
     uint8_t miso_len;           ///< Input data length, in bytes
     uint8_t address_bitlen;     ///< Length of address in bits, set to 0 if command does not need an address
     uint32_t address;           ///< Address to perform operation on
-    const uint8_t *mosi_data;   ///< Output data to salve
+    const uint8_t *mosi_data;   ///< Output data to slave
     uint8_t *miso_data;         ///< [out] Input data from slave, little endian
     uint32_t flags;             ///< Flags for this transaction. Set to 0 for now.
 #define SPI_FLASH_TRANS_FLAG_CMD16          BIT(0)  ///< Send command of 16 bits
