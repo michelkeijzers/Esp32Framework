@@ -6,7 +6,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>DMX Presets</title>
    <link rel="stylesheet" href="pico.min.css">
-   <link rel="stylesheet" href="custom.css">
+   <link rel="stylesheet" href="dmx_controller_custom.css">
 </head>
 
 <body>
@@ -65,7 +65,7 @@
                   tbody.appendChild(row);
                   // Up
                   row.querySelector('.up-btn').addEventListener('click', async () => {
-                     await sendPresetAction(`/api/v1/presets/${i + 1}/move_up`, 'PUT');
+                     await sendPresetAction(`/api/v1/move_preset_up/${i + 1}`);
                   });
                   // Down
                   row.querySelector('.down-btn').addEventListener('click', async () => {
@@ -94,8 +94,10 @@
             }
          }
 
-         async function sendPresetAction(url, method = 'PUT') {
+         async function sendPresetAction(url) {
             try {
+               let method = 'PUT';
+               if (url.startsWith('/api/v1/delete_preset/')) method = 'DELETE';
                const response = await fetch(url, { method });
                if (!response.ok) throw new Error('Request failed');
                // Always expect the updated preset list as response

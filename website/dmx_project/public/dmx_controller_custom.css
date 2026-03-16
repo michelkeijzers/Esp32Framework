@@ -1,14 +1,11 @@
-/* Firmware upload progress bar styling */
-.fw-progress-bar {
-  height: 18px;
-  background: #222;
-  border-radius: 8px;
-  border: 1.5px solid #1fa750;
-  margin-top: 0.7em;
-  margin-bottom: 0.5em;
-  width: 100%;
-  accent-color: #1fa750;
+/* DMX Controller Specific Styles */
+
+body {
+  background: #00f !important;
+  color: #111 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
 }
+
 /* Home screen: black buttons and gap */
 .big-bold-btn {
   background: #111 !important;
@@ -25,14 +22,6 @@
   background: #222 !important;
   color: #fff !important;
 }
-/* Red status for watchdog error */
-.status-error {
-  color: #fff;
-  background: #c00;
-  padding: 0 0.4em;
-  border-radius: 0.3em;
-  font-weight: bold;
-}
 .dmx-channel-input-small {
   height: 3.2rem !important;
   font-size: 2.5rem !important;
@@ -43,10 +32,8 @@
 /* Match +/- button to digit buttons, increase size */
 .dmx-incdec-btn {
   font-size: 3.2rem;
-  height: 12.5rem;
-  min-height: 8.5rem;
-  width: 6.5rem;
   height: 8.5rem;
+  width: 6.5rem;
   background: #222;
   color: #eee;
   border: 1px solid #444;
@@ -69,12 +56,6 @@
   background: #a88fd8;
   color: #eee;
   border: 1px solid #a88fd8;
-}
-.keypad {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  margin-top: 1.2rem;
 }
 .keypad-row {
   display: flex;
@@ -226,9 +207,6 @@
   max-width: 48px;
   padding-left: 0;
   padding-right: 0;
-}
-
-.preset-table td.active-col {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -249,17 +227,12 @@
   display: block;
 }
 
-.preset-table td.active-col {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.preset-table .active-checkbox {
-  width: 22px;
-  height: 22px;
+.subtitle-row h2 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   margin: 0;
-  display: block;
+  width: max-content;
 }
 /* Horizontally align edit buttons and vertically center them */
 .edit-btn-row {
@@ -389,16 +362,12 @@
 .container h2 {
   color: var(--primary-background, #eee);
   display: flex;
-  align-items:center;
+  align-items: center;
   justify-content: center;
   gap: 2rem;
   margin-bottom: 2rem;
 }
-body {
-  background: #00f !important;
-  color: #111 !important;
-  font-family: Arial, Helvetica, sans-serif !important;
-}
+
 .preset-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -419,26 +388,7 @@ body {
   color: #222;
 }
 
-.blackout-btn {
-  width: 100%;
-  min-width: 506px;
-  margin-bottom: 0rem;
-}
-
-.blackout-btn:hover {
-  background: #cc8;
-  color: #222;
-}
-
-.big-bold-btn {
-  font-weight: bold;
-  font-size: 1.25rem;
-  padding: 1rem 0.5rem;
-  width: 100%;
-}
-
-.title-colored,
-.version-colored {
+.title-colored {
   color: var(--primary-background, #eee);
 }
 
@@ -452,11 +402,6 @@ body {
 
 .no-margin {
   margin: 0;
-}
-
-.version-label {
-  font-size: 1.1rem;
-  font-weight: bold;
 }
 
 #preset-label {
