@@ -1,15 +1,15 @@
-#include "DmxControllerWebserver.hpp"
+#include "DmxControllerHttpTask.hpp"
 #include "../../../common/esp/esp_logger/IEspLogger.hpp"
 #include "../../../common/esp/esp_file_systems/IEspLittleFs.hpp"
 #include "../../../common/esp/esp_http_server/IEspHttpServer.hpp"
 #include "../../../common/esp/esp_nvs/IEspNvs.hpp"
-#include "../dmx_controller/presets/IPresetManager.hpp"
-#include "../dmx_controller/apis/ApiPresets.hpp"
-#include "../dmx_controller/apis/ApiPresetValues.hpp"
-#include "../dmx_controller/apis/ApiConfig.hpp"
+#include "../../../common/nodes/webserver/dmx_controller/presets/IPresetManager.hpp"
+#include "../../../common/nodes/webserver/dmx_controller/apis/ApiPresets.hpp"
+#include "../../../common/nodes/webserver/dmx_controller/apis/ApiPresetValues.hpp"
+#include "../../../common/nodes/webserver/dmx_controller/apis/ApiConfig.hpp"
 
 
-DmxControllerWebserver::DmxControllerWebserver(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager, IEspLogger& logger,
+DmxControllerHttpTask::DmxControllerHttpTask(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager, IEspLogger& logger,
                                                                                                                  IApiStatus& apiStatus, IApiNodes& apiNodes, IApiSystem& apiSystem,
                                                                                                                  IApiFirmware& apiFirmware, IApiSecurity& apiSecurity, IApiLogging& apiLogging,
                                                                                                                  IApiConfig* apiConfig, IApiPresets* apiPresets, IApiPresetValues* apiPresetValues,
@@ -19,24 +19,24 @@ DmxControllerWebserver::DmxControllerWebserver(IEspLittleFs& espLittleFs, IEspHt
 {
 }
 
-DmxControllerWebserver::~DmxControllerWebserver()
+DmxControllerHttpTask::~DmxControllerHttpTask()
 {
 }
 
-void DmxControllerWebserver::start()
+void DmxControllerHttpTask::start()
 {
     // Initialize NVS first (using injected manager)
     int ret = nvsManager_.nvs_flash_init();
     if (ret != ESP_OK)
     {
-        logger_.log_error("DmxControllerWebserver", "Failed to initialize NVS");
+        logger_.log_error("DmxControllerHttpTask", "Failed to initialize NVS");
         // Continue anyway - NVS errors shouldn't prevent webserver from starting
     }
 
     // Load presets from NVS (using injected preset manager)
     ret = presetManager_.load_presets();
     if (ret != ESP_OK) {
-        logger_.log_error("DmxControllerWebserver", "Failed to load presets");
+        logger_.log_error("DmxControllerHttpTask", "Failed to load presets");
         // Continue anyway - preset loading shouldn't prevent webserver from starting
     }
 
@@ -44,13 +44,13 @@ void DmxControllerWebserver::start()
     Webserver::start();
 }
 
-void DmxControllerWebserver::stop()
+void DmxControllerHttpTask::stop()
 {
     // Call base class stop() which handles httpd_stop
     Webserver::stop();
 }
 
-void DmxControllerWebserver::register_endpoints()
+void DmxControllerHttpTask::register_endpoints()
 {
     // Register both generic endpoints (from base class) and DMX-specific endpoints
     register_endpoints_esp32();
@@ -122,7 +122,7 @@ static esp_err_t circular_navigation_handler_static(httpd_req_t *req) {
     return obj->set_circular_navigation_handler(req);
 }
 
-void DmxControllerWebserver::register_dmx_endpoints()
+void DmxControllerHttpTask::register_dmx_endpoints()
 {
     // GET /api/presets
     httpd_uri_t presets_uri = {
@@ -245,7 +245,7 @@ void DmxControllerWebserver::register_dmx_endpoints()
     espHttpServer_.httpd_register_uri_handler(server, &circular_navigation_uri);
 }
 
-void DmxControllerWebserver::register_endpoints_esp32()
+void DmxControllerHttpTask::register_endpoints_esp32()
 {
     // Register all DMX-specific endpoints
     register_dmx_endpoints();
@@ -257,7 +257,7 @@ void DmxControllerWebserver::register_endpoints_esp32()
     register_static_file_handler();
 }
 
-void DmxControllerWebserver::register_endpoints_test()
+void DmxControllerHttpTask::register_endpoints_test()
 {
     // For testing, register the same endpoints as in production
     register_endpoints_esp32();

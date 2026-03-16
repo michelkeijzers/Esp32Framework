@@ -37,6 +37,41 @@ def check_mklittlefs():
     return None
 
 
+def copy_common_website_files():
+    """Copy common website files from main/common/nodes/webserver/http_task/website/ to dist/"""
+    # Path to common website files
+    common_website_dir = os.path.join(SCRIPT_DIR, "../../main/common/nodes/webserver/http_task/website")
+    common_website_dir = os.path.abspath(common_website_dir)
+    
+    if not os.path.isdir(common_website_dir):
+        print(f"Warning: Common website directory not found at {common_website_dir}")
+        print("Proceeding with app-specific files only.")
+        return True
+    
+    print(f"Copying common website files from {common_website_dir}")
+    try:
+        for filename in os.listdir(common_website_dir):
+            src = os.path.join(common_website_dir, filename)
+            dst = os.path.join(DIST_DIR, filename)
+            
+            if os.path.isfile(src):
+                # Copy file, overwriting if it exists
+                shutil.copy2(src, dst)
+                print(f"  Copied: {filename}")
+            elif os.path.isdir(src) and filename != '__pycache__':
+                # Skip if directory already exists in dist
+                if os.path.exists(dst):
+                    print(f"  Skipped directory: {filename} (already exists in dist)")
+                else:
+                    shutil.copytree(src, dst)
+                    print(f"  Copied directory: {filename}")
+        
+        return True
+    except Exception as e:
+        print(f"Error copying common website files: {e}")
+        return False
+
+
 def create_littlefs_image():
     """Create LittleFS image from dist/ folder"""
     
@@ -45,6 +80,10 @@ def create_littlefs_image():
         print(f"Error: dist/ folder not found at {DIST_DIR}")
         print("Please run 'npm run build' first.")
         return False
+    
+    # Copy common website files to dist/
+    if not copy_common_website_files():
+        print("Warning: Could not copy common website files")
     
     # Check if mklittlefs is available
     mklittlefs = check_mklittlefs()

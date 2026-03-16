@@ -1,13 +1,13 @@
 #pragma once
 
 /**
- * Interface for DMX Controller Webserver
+ * Interface for DMX Controller HTTP Task
  * Provides abstraction for dependency injection and testing
  */
-class IDmxControllerWebserver
+class IDmxControllerHttpTask
 {
 public:
-    virtual ~IDmxControllerWebserver() = default;
+    virtual ~IDmxControllerHttpTask() = default;
 
     /**
      * Start the webserver and all its services

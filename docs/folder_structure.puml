@@ -1,10 +1,8 @@
 
 @startmindmap
 
-* **main** 
--- docs
--- esp_littlefs 
-** common
+* **ESP32FW** 
+** main/ \n common
 *** esp
 ' **** esp_error
 ' ***** esp_error_if.hpp
@@ -52,9 +50,12 @@
 ****** DmxSenderTask.hpp/cpp
 ****** Universe.hpp/cpp
 
--- projects
---- dmx_controller/ (webserver implementation)
----- main.hpp/cpp
+-- docs
+-- esp_littlefs 
+-- main/main.hpp/cpp
+-- tests
+-- main/projects
+--- dmx_controller
 ---- dmx_controller_task
 ----- DmxControllerTask.hpp/cpp
 ---- preset_task

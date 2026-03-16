@@ -19,7 +19,7 @@ idf_component_register(
         "common/nodes/webserver/http_task/apis/ApiResponse.cpp"
         "common/nodes/webserver/http_task/apis/ApiValidator.cpp"
         "common/nodes/webserver/webserver_task/Webserver.cpp"
-        "common/nodes/webserver/webserver_task/DmxControllerWebserver.cpp"
+        "projects/dmx_controller/http_task/DmxControllerHttpTask.cpp"
         "common/nodes/webserver/dmx_controller/presets/PresetManager.cpp"
     INCLUDE_DIRS
         "."

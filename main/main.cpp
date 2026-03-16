@@ -17,8 +17,8 @@
 #include "common/esp/esp_http_server/EspHttpServer.hpp"
 #include "common/esp/esp_nvs/EspNvs.hpp"
 #include "common/esp/esp_logger/EspLogger.hpp"
-#include "common/nodes/webserver/webserver_task/DmxControllerWebserver.hpp"
-#include "common/nodes/webserver/webserver_task/IDmxControllerWebserver.hpp"
+#include "projects/dmx_controller/http_task/DmxControllerHttpTask.hpp"
+#include "projects/dmx_controller/http_task/IDmxControllerHttpTask.h"
 #include "common/nodes/webserver/http_task/apis/ApiStatus.hpp"
 #include "common/nodes/webserver/http_task/apis/ApiNodes.hpp"
 #include "common/nodes/webserver/http_task/apis/ApiSystem.hpp"
@@ -68,8 +68,8 @@ extern "C" void app_main(void)
     ApiPresets* apiPresets = new ApiPresets(espHttpServer, presetManager);
     ApiPresetValues* apiPresetValues = new ApiPresetValues(espHttpServer, presetManager);
     
-    // Create DmxControllerWebserver with all dependencies injected
-    IDmxControllerWebserver* webserverSlave = new DmxControllerWebserver(
+    // Create DmxControllerHttpTask with all dependencies injected
+    IDmxControllerHttpTask* webserverSlave = new DmxControllerHttpTask(
         espLittleFs, espHttpServer, espNvs, espLogger,
         static_cast<ApiStatus&>(apiStatus),
         static_cast<ApiNodes&>(apiNodes),

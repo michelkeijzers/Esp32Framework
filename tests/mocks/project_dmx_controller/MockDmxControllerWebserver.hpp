@@ -1,7 +1,7 @@
 #pragma once
-#include "../../../main/common/nodes/webserver/webserver_task/IDmxControllerWebserver.hpp"
+#include "../../../projects/dmx_controller/http_task/IDmxControllerHttpTask.h"
 
-class MockDmxControllerWebserver : public IDmxControllerWebserver {
+class MockDmxControllerWebserver : public IDmxControllerHttpTask {
 public:
     MockDmxControllerWebserver() = default;
     ~MockDmxControllerWebserver() override = default;

@@ -1,24 +1,24 @@
 #pragma once
 
-#include "Webserver.hpp"
-#include "IDmxControllerWebserver.hpp"
+#include "../../../common/nodes/webserver/webserver_task/Webserver.hpp"
+#include "IDmxControllerHttpTask.h"
 
-#include "../dmx_controller/apis/ApiConfig.hpp"
-#include "../dmx_controller/apis/ApiPresets.hpp"
-#include "../dmx_controller/apis/ApiPresetValues.hpp"
+#include "../../../common/nodes/webserver/dmx_controller/apis/ApiConfig.hpp"
+#include "../../../common/nodes/webserver/dmx_controller/apis/ApiPresets.hpp"
+#include "../../../common/nodes/webserver/dmx_controller/apis/ApiPresetValues.hpp"
 
 
 class IEspNvs;
 class IPresetManager;
-class DmxControllerWebserver : public Webserver, public IDmxControllerWebserver
+class DmxControllerHttpTask : public Webserver, public IDmxControllerHttpTask
 {
 public:
-    explicit DmxControllerWebserver(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager, IEspLogger& logger,
+    explicit DmxControllerHttpTask(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager, IEspLogger& logger,
                                          IApiStatus& apiStatus, IApiNodes& apiNodes, IApiSystem& apiSystem,
                                          IApiFirmware& apiFirmware, IApiSecurity& apiSecurity, IApiLogging& apiLogging,
                                          IApiConfig* apiConfig, IApiPresets* apiPresets, IApiPresetValues* apiPresetValues,
                                          IPresetManager& presetManager);
-    ~DmxControllerWebserver();
+    ~DmxControllerHttpTask();
 
     void start() override;
     void stop() override;
