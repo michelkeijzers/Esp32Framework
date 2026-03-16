@@ -21,18 +21,19 @@ add_executable(api_tester
     ../../main/common/nodes/webserver/webserver_task/DmxControllerWebserver.cpp
     ../../main/common/nodes/webserver/dmx_controller/apis/ApiPresets.cpp
     ../../main/common/nodes/webserver/dmx_controller/apis/ApiConfig.cpp
-    ../../main/common/nodes/webserver/common/apis/ApiStatus.cpp
+    ../../main/common/nodes/webserver/http_task/apis/ApiStatus.cpp
     ../../main/common/nodes/webserver/dmx_controller/apis/ApiPresetValues.cpp
-    ../../main/common/nodes/webserver/common/apis/ApiNodes.cpp
-    ../../main/common/nodes/webserver/common/apis/ApiSystem.cpp
-    ../../main/common/nodes/webserver/common/apis/ApiFirmware.cpp
-    ../../main/common/nodes/webserver/common/apis/ApiSecurity.cpp
-    ../../main/common/nodes/webserver/common/apis/ApiLogging.cpp
-    ../../main/common/nodes/webserver/common/apis/ApiResponse.cpp
-    ../../main/common/nodes/webserver/common/apis/ApiValidator.cpp
+    ../../main/common/nodes/webserver/http_task/apis/ApiNodes.cpp
+    ../../main/common/nodes/webserver/http_task/apis/ApiSystem.cpp
+    ../../main/common/nodes/webserver/http_task/apis/ApiFirmware.cpp
+    ../../main/common/nodes/webserver/http_task/apis/ApiSecurity.cpp
+    ../../main/common/nodes/webserver/http_task/apis/ApiLogging.cpp
+    ../../main/common/nodes/webserver/http_task/apis/ApiResponse.cpp
+    ../../main/common/nodes/webserver/http_task/apis/ApiValidator.cpp
     ../../main/common/esp/esp_http_server/EspHttpServer.cpp
     ../../main/common/nodes/webserver/dmx_controller/presets/PresetManager.cpp
-    ../../main/common/nodes/webserver/common/Webserver.cpp
+    ../../main/common/nodes/webserver/webserver_task/Webserver.cpp
+    ../../main/common/nodes/webserver/webserver_task/DmxControllerWebserver.cpp
     # ../../main/common/esp_nvs/EspNvs.cpp
 )
 
@@ -53,8 +54,8 @@ target_include_directories(api_tester PRIVATE
     ./mock
     ../../main/esp
     ../../main/common/nodes/webserver/dmx_controller
-    ../../main/common/nodes/webserver/common
-    ../../main/common/nodes/webserver/common/apis
+    ../../main/common/nodes/webserver/webserver_task
+    ../../main/common/nodes/webserver/http_task/apis
     ../../main/common/nodes/webserver/dmx_controller/apis
     ../../main/common
     ../../main/common/nvs

@@ -1,6 +1,6 @@
 
 #include "ApiLogging.hpp"
-#include "IEspHttpServer.hpp"
+#include "../../../../esp/esp_http_server/IEspHttpServer.hpp"
 
 ApiLogging::ApiLogging(IEspHttpServer& espHttpServer) : espHttpServer_(espHttpServer) {}
 ApiLogging::~ApiLogging() = default;

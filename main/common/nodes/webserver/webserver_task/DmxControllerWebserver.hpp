@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../common/Webserver.hpp"
+#include "Webserver.hpp"
 #include "IDmxControllerWebserver.hpp"
 
 #include "../dmx_controller/apis/ApiConfig.hpp"

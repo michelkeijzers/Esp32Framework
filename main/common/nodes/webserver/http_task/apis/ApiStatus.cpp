@@ -1,6 +1,6 @@
 
 #include "ApiStatus.hpp"
-#include "IEspHttpServer.hpp"
+#include "../../../../esp/esp_http_server/IEspHttpServer.hpp"
 
 ApiStatus::ApiStatus(IEspHttpServer& espHttpServer) : espHttpServer_(espHttpServer) {}
 ApiStatus::~ApiStatus() = default;

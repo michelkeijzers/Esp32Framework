@@ -3,13 +3,13 @@
 #include "IWebserver.hpp"
 #include <memory>
 #include "../../../common/esp/esp_http_server/esp_http_server_if.hpp"
-#include "../common/apis/StaticFileHandler.hpp"
-#include "../common/apis/ApiStatus.hpp"
-#include "../common/apis/ApiNodes.hpp"
-#include "../common/apis/ApiSystem.hpp"
-#include "../common/apis/ApiFirmware.hpp"
-#include "../common/apis/ApiSecurity.hpp"
-#include "../common/apis/ApiLogging.hpp"
+#include "../apis/StaticFileHandler.hpp"
+#include "../apis/ApiStatus.hpp"
+#include "../apis/ApiNodes.hpp"
+#include "../apis/ApiSystem.hpp"
+#include "../apis/ApiFirmware.hpp"
+#include "../apis/ApiSecurity.hpp"
+#include "../apis/ApiLogging.hpp"
 
 class IEspLittleFs;
 class IEspHttpServer;

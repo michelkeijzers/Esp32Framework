@@ -1,6 +1,6 @@
 
 #include "ApiNodes.hpp"
-#include "IEspHttpServer.hpp"
+#include "../../../../esp/esp_http_server/IEspHttpServer.hpp"
 
 ApiNodes::ApiNodes(IEspHttpServer& espHttpServer) : espHttpServer_(espHttpServer) {}
 ApiNodes::~ApiNodes() = default;

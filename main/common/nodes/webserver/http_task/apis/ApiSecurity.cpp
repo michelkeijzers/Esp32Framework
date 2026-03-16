@@ -1,6 +1,6 @@
 
 #include "ApiSecurity.hpp"
-#include "IEspHttpServer.hpp"
+#include "../../../../esp/esp_http_server/IEspHttpServer.hpp"
 
 ApiSecurity::ApiSecurity(IEspHttpServer& espHttpServer) : espHttpServer_(espHttpServer) {}
 ApiSecurity::~ApiSecurity() = default;

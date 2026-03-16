@@ -30,8 +30,6 @@
 **** master
 ***** master_task
 ****** MasterTask.hpp/cpp
-***** esp_now_task
-****** EspNowTask.hpp/cpp
 **** webserver
 ***** webserver_task
 ****** WebserverTask.hpp/cpp

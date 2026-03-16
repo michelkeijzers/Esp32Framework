@@ -1,6 +1,6 @@
 
 #include "ApiFirmware.hpp"
-#include "IEspHttpServer.hpp"
+#include "../../../../esp/esp_http_server/IEspHttpServer.hpp"
 
 ApiFirmware::ApiFirmware(IEspHttpServer& espHttpServer) : espHttpServer_(espHttpServer) {}
 ApiFirmware::~ApiFirmware() = default;

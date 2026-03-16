@@ -22,17 +22,17 @@ namespace {
 void Webserver_init_generic_apis_impl(Webserver* pthis)
 {
     // Stub - initialize API pointers to null for testing
-    // Real impl is in common/Webserver.cpp for production
+    // Real impl is in webserver_task/Webserver.cpp for production
 }
 
-void Webserver_cleanup_generic_apis_impl(Webserver* pthis)  
+void Webserver_cleanup_generic_apis_impl(Webserver* pthis)
 {
     // Stub - cleanup API pointers for testing
-    // Real impl is in common/Webserver.cpp for production
+    // Real impl is in webserver_task/Webserver.cpp for production
 }
 
 } // namespace
 
-// Weaksymbol implementations that can be overridden by real common/Webserver.cpp if linked
+// Weaksymbol implementations that can be overridden by real webserver_task/Webserver.cpp if linked
 extern "C" __declspec(selectany) void Webserver_init_generic_apis = &Webserver_init_generic_apis_impl;
 extern "C" __declspec(selectany) void Webserver_cleanup_generic_apis = &Webserver_cleanup_generic_apis_impl;

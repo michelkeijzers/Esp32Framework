@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../main/common/nodes/webserver/common/IWebserver.hpp"
+#include "../../../main/common/nodes/webserver/webserver_task/IWebserver.hpp"
 
 class MockWebserver : public IWebserver {
 public:

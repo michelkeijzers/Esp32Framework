@@ -1,6 +1,6 @@
 
 #include "ApiSystem.hpp"
-#include "IEspHttpServer.hpp"
+#include "../../../../esp/esp_http_server/IEspHttpServer.hpp"
 
 ApiSystem::ApiSystem(IEspHttpServer& espHttpServer) : espHttpServer_(espHttpServer) {}
 ApiSystem::~ApiSystem() = default;
