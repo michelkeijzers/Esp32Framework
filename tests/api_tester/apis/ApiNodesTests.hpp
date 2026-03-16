@@ -1,6 +1,6 @@
 #pragma once
 #include "../mocks/esp32/MockEspHttpServer.hpp"
-#include "../../../main/slaves/webserver_slave/common/apis/ApiNodes.hpp"
+#include "../../../main/common/nodes/webserver/common/apis/ApiNodes.hpp"
 #include <iostream>
 #include <cassert>
 

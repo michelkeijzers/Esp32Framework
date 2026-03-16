@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../main/slaves/webserver_slave/common/IWebserverSlave.hpp"
+#include "../../../main/common/nodes/webserver/common/IWebserverSlave.hpp"
 
 class MockWebserverSlave : public IWebserverSlave {
 public:

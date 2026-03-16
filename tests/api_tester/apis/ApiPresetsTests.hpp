@@ -1,7 +1,7 @@
 #pragma once
 #include "../mocks/esp32/MockEspHttpServer.hpp"
 #include "../mocks/project_dmx_controller/MockPresetManager.hpp"
-#include "../../../main/slaves/webserver_slave/dmx_controller/apis/ApiPresets.hpp"
+#include "../../../main/common/nodes/webserver/dmx_controller/apis/ApiPresets.hpp"
 #include <iostream>
 #include <cassert>
 

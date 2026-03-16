@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../main/slaves/webserver_slave/dmx_controller/presets/IPresetManager.hpp"
+#include "../../../main/common/nodes/webserver/dmx_controller/presets/IPresetManager.hpp"
 #include <vector>
 #include <memory>
 #include <algorithm>

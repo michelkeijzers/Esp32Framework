@@ -18,21 +18,21 @@ add_executable(api_tester
     apis/ApiPresetValuesTests.cpp
     apis/ApiSecurityTests.cpp
     apis/ApiSystemTests.cpp
-    ../../main/slaves/webserver_slave/dmx_controller/DmxControllerWebserverSlave.cpp
-    ../../main/slaves/webserver_slave/dmx_controller/apis/ApiPresets.cpp
-    ../../main/slaves/webserver_slave/dmx_controller/apis/ApiConfig.cpp
-    ../../main/slaves/webserver_slave/common/apis/ApiStatus.cpp
-    ../../main/slaves/webserver_slave/dmx_controller/apis/ApiPresetValues.cpp
-    ../../main/slaves/webserver_slave/common/apis/ApiNodes.cpp
-    ../../main/slaves/webserver_slave/common/apis/ApiSystem.cpp
-    ../../main/slaves/webserver_slave/common/apis/ApiFirmware.cpp
-    ../../main/slaves/webserver_slave/common/apis/ApiSecurity.cpp
-    ../../main/slaves/webserver_slave/common/apis/ApiLogging.cpp
-    ../../main/slaves/webserver_slave/common/apis/ApiResponse.cpp
-    ../../main/slaves/webserver_slave/common/apis/ApiValidator.cpp
+    ../../main/common/nodes/webserver/dmx_controller/DmxControllerWebserverSlave.cpp
+    ../../main/common/nodes/webserver/dmx_controller/apis/ApiPresets.cpp
+    ../../main/common/nodes/webserver/dmx_controller/apis/ApiConfig.cpp
+    ../../main/common/nodes/webserver/common/apis/ApiStatus.cpp
+    ../../main/common/nodes/webserver/dmx_controller/apis/ApiPresetValues.cpp
+    ../../main/common/nodes/webserver/common/apis/ApiNodes.cpp
+    ../../main/common/nodes/webserver/common/apis/ApiSystem.cpp
+    ../../main/common/nodes/webserver/common/apis/ApiFirmware.cpp
+    ../../main/common/nodes/webserver/common/apis/ApiSecurity.cpp
+    ../../main/common/nodes/webserver/common/apis/ApiLogging.cpp
+    ../../main/common/nodes/webserver/common/apis/ApiResponse.cpp
+    ../../main/common/nodes/webserver/common/apis/ApiValidator.cpp
     ../../main/common/esp/esp_http_server/EspHttpServer.cpp
-    ../../main/slaves/webserver_slave/dmx_controller/presets/PresetManager.cpp
-    ../../main/slaves/webserver_slave/common/WebserverSlave.cpp
+    ../../main/common/nodes/webserver/dmx_controller/presets/PresetManager.cpp
+    ../../main/common/nodes/webserver/common/WebserverSlave.cpp
     # ../../main/common/esp_nvs/EspNvs.cpp
 )
 
@@ -52,10 +52,10 @@ target_include_directories(api_tester PRIVATE
     ./api
     ./mock
     ../../main/esp
-    ../../main/slaves/webserver_slave/dmx_controller
-    ../../main/slaves/webserver_slave/common
-    ../../main/slaves/webserver_slave/common/apis
-    ../../main/slaves/webserver_slave/dmx_controller/apis
+    ../../main/common/nodes/webserver/dmx_controller
+    ../../main/common/nodes/webserver/common
+    ../../main/common/nodes/webserver/common/apis
+    ../../main/common/nodes/webserver/dmx_controller/apis
     ../../main/common
     ../../main/common/nvs
     ../../main/common/esp/esp_logger
