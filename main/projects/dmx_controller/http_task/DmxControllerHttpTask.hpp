@@ -3,9 +3,9 @@
 #include "../../../common/nodes/webserver/webserver_task/Webserver.hpp"
 #include "IDmxControllerHttpTask.h"
 
-#include "../../../common/nodes/webserver/dmx_controller/apis/ApiConfig.hpp"
-#include "../../../common/nodes/webserver/dmx_controller/apis/ApiPresets.hpp"
-#include "../../../common/nodes/webserver/dmx_controller/apis/ApiPresetValues.hpp"
+#include "apis/ApiConfig.hpp"
+#include "apis/ApiPresets.hpp"
+#include "apis/ApiPresetValues.hpp"
 
 
 class IEspNvs;

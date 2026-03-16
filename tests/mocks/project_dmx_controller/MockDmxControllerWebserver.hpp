@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../projects/dmx_controller/http_task/IDmxControllerHttpTask.h"
+#include "../../main/projects/dmx_controller/http_task/IDmxControllerHttpTask.h"
 
 class MockDmxControllerWebserver : public IDmxControllerHttpTask {
 public:

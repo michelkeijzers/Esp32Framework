@@ -3,10 +3,10 @@
 #include "../../../common/esp/esp_file_systems/IEspLittleFs.hpp"
 #include "../../../common/esp/esp_http_server/IEspHttpServer.hpp"
 #include "../../../common/esp/esp_nvs/IEspNvs.hpp"
-#include "../../../common/nodes/webserver/dmx_controller/presets/IPresetManager.hpp"
-#include "../../../common/nodes/webserver/dmx_controller/apis/ApiPresets.hpp"
-#include "../../../common/nodes/webserver/dmx_controller/apis/ApiPresetValues.hpp"
-#include "../../../common/nodes/webserver/dmx_controller/apis/ApiConfig.hpp"
+#include "../presets_task/IPresetManager.hpp"
+#include "apis/ApiPresets.hpp"
+#include "apis/ApiPresetValues.hpp"
+#include "apis/ApiConfig.hpp"
 
 
 DmxControllerHttpTask::DmxControllerHttpTask(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager, IEspLogger& logger,

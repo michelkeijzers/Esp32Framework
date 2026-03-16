@@ -7,10 +7,10 @@ idf_component_register(
         "common/esp/esp_now/EspNow.cpp"
         "common/esp/esp_nvs/EspNvs.cpp"
         "common/esp/esp_file_systems/EspLittleFs.cpp"
-        "common/nodes/webserver/dmx_controller/apis/ApiConfig.cpp"
-        "common/nodes/webserver/dmx_controller/apis/ApiPresets.cpp"
+        "projects/dmx_controller/http_task/apis/ApiConfig.cpp"
+        "projects/dmx_controller/http_task/apis/ApiPresets.cpp"
         "common/nodes/webserver/http_task/apis/ApiStatus.cpp"
-        "common/nodes/webserver/dmx_controller/apis/ApiPresetValues.cpp"
+        "projects/dmx_controller/http_task/apis/ApiPresetValues.cpp"
         "common/nodes/webserver/http_task/apis/ApiNodes.cpp"
         "common/nodes/webserver/http_task/apis/ApiSystem.cpp"
         "common/nodes/webserver/http_task/apis/ApiFirmware.cpp"
@@ -20,7 +20,7 @@ idf_component_register(
         "common/nodes/webserver/http_task/apis/ApiValidator.cpp"
         "common/nodes/webserver/webserver_task/Webserver.cpp"
         "projects/dmx_controller/http_task/DmxControllerHttpTask.cpp"
-        "common/nodes/webserver/dmx_controller/presets/PresetManager.cpp"
+        "projects/dmx_controller/presets_task/PresetManager.cpp"
     INCLUDE_DIRS
         "."
         "common"
@@ -29,7 +29,6 @@ idf_component_register(
         "common/esp/esp_http_server"
         "common/esp/esp_now"
         "common/esp/esp_nvs"
-        "common/nodes/webserver/dmx_controller/presets"
         "common/nodes/webserver/http_task/apis"
     REQUIRES esp_littlefs esp_http_server nvs_flash esp_wifi
 )

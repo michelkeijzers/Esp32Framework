@@ -19,10 +19,10 @@ add_executable(api_tester
     apis/ApiSecurityTests.cpp
     apis/ApiSystemTests.cpp
     ../../main/projects/dmx_controller/http_task/DmxControllerHttpTask.cpp
-    ../../main/common/nodes/webserver/dmx_controller/apis/ApiPresets.cpp
-    ../../main/common/nodes/webserver/dmx_controller/apis/ApiConfig.cpp
+    ../../main/projects/dmx_controller/http_task/apis/ApiPresets.cpp
+    ../../main/projects/dmx_controller/http_task/apis/ApiConfig.cpp
     ../../main/common/nodes/webserver/http_task/apis/ApiStatus.cpp
-    ../../main/common/nodes/webserver/dmx_controller/apis/ApiPresetValues.cpp
+    ../../main/projects/dmx_controller/http_task/apis/ApiPresetValues.cpp
     ../../main/common/nodes/webserver/http_task/apis/ApiNodes.cpp
     ../../main/common/nodes/webserver/http_task/apis/ApiSystem.cpp
     ../../main/common/nodes/webserver/http_task/apis/ApiFirmware.cpp
@@ -31,7 +31,7 @@ add_executable(api_tester
     ../../main/common/nodes/webserver/http_task/apis/ApiResponse.cpp
     ../../main/common/nodes/webserver/http_task/apis/ApiValidator.cpp
     ../../main/common/esp/esp_http_server/EspHttpServer.cpp
-    ../../main/common/nodes/webserver/dmx_controller/presets/PresetManager.cpp
+    ../../main/projects/dmx_controller/presets_task/PresetManager.cpp
     ../../main/common/nodes/webserver/webserver_task/Webserver.cpp
     ../../main/projects/dmx_controller/http_task/DmxControllerHttpTask.cpp
     # ../../main/common/esp_nvs/EspNvs.cpp
