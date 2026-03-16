@@ -8,14 +8,10 @@
 #include "apis/ApiPresetValues.hpp"
 #include "apis/ApiConfig.hpp"
 
-
-DmxControllerHttpTask::DmxControllerHttpTask(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager, IEspLogger& logger,
-                                                                                                                 IApiStatus& apiStatus, IApiNodes& apiNodes, IApiSystem& apiSystem,
-                                                                                                                 IApiFirmware& apiFirmware, IApiSecurity& apiSecurity, IApiLogging& apiLogging,
-                                                                                                                 IApiConfig* apiConfig, IApiPresets* apiPresets, IApiPresetValues* apiPresetValues,
-                                                                                                                 IPresetManager& presetManager)
-        : Webserver(espLittleFs, espHttpServer, logger, apiStatus, apiNodes, apiSystem, apiFirmware, apiSecurity, apiLogging),
-            nvsManager_(nvsManager), presetManager_(presetManager), apiConfig_(apiConfig), apiPresets_(apiPresets), apiPresetValues_(apiPresetValues)
+DmxControllerHttpTask::DmxControllerHttpTask(Contexts &contexts, IApiConfig &apiConfig, IApiPresets &apiPresets,
+                                             IApiPresetValues &apiPresetValues, IPresetManager &presetManager)
+    : Webserver(contexts), presetManager_(presetManager), apiConfig_(apiConfig), apiPresets_(apiPresets),
+      apiPresetValues_(apiPresetValues)
 {
 }
 
@@ -25,20 +21,20 @@ DmxControllerHttpTask::~DmxControllerHttpTask()
 
 void DmxControllerHttpTask::start()
 {
-    // Initialize NVS first (using injected manager)
-    int ret = nvsManager_.nvs_flash_init();
-    if (ret != ESP_OK)
-    {
-        logger_.log_error("DmxControllerHttpTask", "Failed to initialize NVS");
-        // Continue anyway - NVS errors shouldn't prevent webserver from starting
-    }
+    // // Initialize NVS first (using injected manager)
+    // int ret =  nvsManager_.nvs_flash_init();
+    // if (ret != ESP_OK)
+    // {
+    //     logger_.log_error("DmxControllerHttpTask", "Failed to initialize NVS");
+    //     // Continue anyway - NVS errors shouldn't prevent webserver from starting
+    // }
 
-    // Load presets from NVS (using injected preset manager)
-    ret = presetManager_.load_presets();
-    if (ret != ESP_OK) {
-        logger_.log_error("DmxControllerHttpTask", "Failed to load presets");
-        // Continue anyway - preset loading shouldn't prevent webserver from starting
-    }
+    // // Load presets from NVS (using injected preset manager)
+    // ret = presetManager_.load_presets();
+    // if (ret != ESP_OK) {
+    //     logger_.log_error("DmxControllerHttpTask", "Failed to load presets");
+    //     // Continue anyway - preset loading shouldn't prevent webserver from starting
+    // }
 
     // Call base class start() which handles mount_littlefs and httpd_start
     Webserver::start();
@@ -126,122 +122,101 @@ void DmxControllerHttpTask::register_dmx_endpoints()
 {
     // GET /api/presets
     httpd_uri_t presets_uri = {
-        .uri = "/api/v1/presets",
-        .method = HTTP_GET,
-        .handler = presets_handler_static,
-        .user_ctx = apiPresets_};
+        .uri = "/api/v1/presets", .method = HTTP_GET, .handler = presets_handler_static, .user_ctx = &apiPresets_};
     espHttpServer_.httpd_register_uri_handler(server, &presets_uri);
 
     // GET /api/active_preset_numbers
-    httpd_uri_t active_preset_numbers_uri = {
-        .uri = "/api/v1/active_preset_numbers",
-        .method = HTTP_GET,
-        .handler = active_preset_numbers_handler_static,
-        .user_ctx = apiPresets_};
+    httpd_uri_t active_preset_numbers_uri = {.uri = "/api/v1/active_preset_numbers",
+                                             .method = HTTP_GET,
+                                             .handler = active_preset_numbers_handler_static,
+                                             .user_ctx = &apiPresets_};
     espHttpServer_.httpd_register_uri_handler(server, &active_preset_numbers_uri);
 
     // POST /api/select_preset/*
-    httpd_uri_t select_preset_uri = {
-        .uri = "/api/v1/select_preset/*",
-        .method = HTTP_POST,
-        .handler = select_preset_handler_static,
-        .user_ctx = apiPresets_};
+    httpd_uri_t select_preset_uri = {.uri = "/api/v1/select_preset/*",
+                                     .method = HTTP_POST,
+                                     .handler = select_preset_handler_static,
+                                     .user_ctx = &apiPresets_};
     espHttpServer_.httpd_register_uri_handler(server, &select_preset_uri);
 
     // POST /api/blackout
     httpd_uri_t blackout_uri = {
-        .uri = "/api/v1/blackout",
-        .method = HTTP_POST,
-        .handler = blackout_handler_static,
-        .user_ctx = apiPresets_};
+        .uri = "/api/v1/blackout", .method = HTTP_POST, .handler = blackout_handler_static, .user_ctx = &apiPresets_};
     espHttpServer_.httpd_register_uri_handler(server, &blackout_uri);
 
     // PUT /api/save_preset/*
-    httpd_uri_t save_preset_uri = {
-        .uri = "/api/v1/save_preset/*",
-        .method = HTTP_PUT,
-        .handler = save_preset_handler_static,
-        .user_ctx = apiPresets_};
+    httpd_uri_t save_preset_uri = {.uri = "/api/v1/save_preset/*",
+                                   .method = HTTP_PUT,
+                                   .handler = save_preset_handler_static,
+                                   .user_ctx = &apiPresets_};
     espHttpServer_.httpd_register_uri_handler(server, &save_preset_uri);
 
     // PUT /api/presets/*/move_up
-    httpd_uri_t move_preset_up_uri = {
-        .uri = "/api/v1/presets/*/move_up",
-        .method = HTTP_PUT,
-        .handler = move_preset_up_handler_static,
-        .user_ctx = apiPresets_};
+    httpd_uri_t move_preset_up_uri = {.uri = "/api/v1/presets/*/move_up",
+                                      .method = HTTP_PUT,
+                                      .handler = move_preset_up_handler_static,
+                                      .user_ctx = &apiPresets_};
     espHttpServer_.httpd_register_uri_handler(server, &move_preset_up_uri);
 
     // PUT /api/presets/*/move_down
-    httpd_uri_t move_preset_down_uri = {
-        .uri = "/api/v1/presets/*/move_down",
-        .method = HTTP_PUT,
-        .handler = move_preset_down_handler_static,
-        .user_ctx = apiPresets_};
+    httpd_uri_t move_preset_down_uri = {.uri = "/api/v1/presets/*/move_down",
+                                        .method = HTTP_PUT,
+                                        .handler = move_preset_down_handler_static,
+                                        .user_ctx = &apiPresets_};
     espHttpServer_.httpd_register_uri_handler(server, &move_preset_down_uri);
 
     // DELETE /api/presets/*
-    httpd_uri_t delete_preset_uri = {
-        .uri = "/api/v1/presets/*",
-        .method = HTTP_DELETE,
-        .handler = delete_preset_handler_static,
-        .user_ctx = apiPresets_};
+    httpd_uri_t delete_preset_uri = {.uri = "/api/v1/presets/*",
+                                     .method = HTTP_DELETE,
+                                     .handler = delete_preset_handler_static,
+                                     .user_ctx = &apiPresets_};
     espHttpServer_.httpd_register_uri_handler(server, &delete_preset_uri);
 
     // POST /api/presets/*/insert_at
-    httpd_uri_t insert_preset_at_uri = {
-        .uri = "/api/v1/presets/*/insert_at",
-        .method = HTTP_POST,
-        .handler = insert_preset_at_handler_static,
-        .user_ctx = apiPresets_};
+    httpd_uri_t insert_preset_at_uri = {.uri = "/api/v1/presets/*/insert_at",
+                                        .method = HTTP_POST,
+                                        .handler = insert_preset_at_handler_static,
+                                        .user_ctx = &apiPresets_};
     espHttpServer_.httpd_register_uri_handler(server, &insert_preset_at_uri);
 
     // PUT /api/presets/*/swap_activation
-    httpd_uri_t swap_preset_activation_uri = {
-        .uri = "/api/v1/presets/*/swap_activation",
-        .method = HTTP_PUT,
-        .handler = swap_preset_activation_handler_static,
-        .user_ctx = apiPresets_};
+    httpd_uri_t swap_preset_activation_uri = {.uri = "/api/v1/presets/*/swap_activation",
+                                              .method = HTTP_PUT,
+                                              .handler = swap_preset_activation_handler_static,
+                                              .user_ctx = &apiPresets_};
     espHttpServer_.httpd_register_uri_handler(server, &swap_preset_activation_uri);
 
     // GET /api/preset_values/*
-    httpd_uri_t get_preset_values_uri = {
-        .uri = "/api/v1/preset_values/*",
-        .method = HTTP_GET,
-        .handler = get_preset_values_handler_static,
-        .user_ctx = apiPresetValues_};
+    httpd_uri_t get_preset_values_uri = {.uri = "/api/v1/preset_values/*",
+                                         .method = HTTP_GET,
+                                         .handler = get_preset_values_handler_static,
+                                         .user_ctx = &apiPresetValues_};
     espHttpServer_.httpd_register_uri_handler(server, &get_preset_values_uri);
 
     // PUT /api/preset_value/*/*
-    httpd_uri_t set_preset_value_uri = {
-        .uri = "/api/v1/preset_value/*/*",
-        .method = HTTP_PUT,
-        .handler = set_preset_value_handler_static,
-        .user_ctx = apiPresetValues_};
+    httpd_uri_t set_preset_value_uri = {.uri = "/api/v1/preset_value/*/*",
+                                        .method = HTTP_PUT,
+                                        .handler = set_preset_value_handler_static,
+                                        .user_ctx = &apiPresetValues_};
     espHttpServer_.httpd_register_uri_handler(server, &set_preset_value_uri);
 
     // GET /api/configuration
     httpd_uri_t config_uri = {
-        .uri = "/api/v1/configuration",
-        .method = HTTP_GET,
-        .handler = config_handler_static,
-        .user_ctx = apiConfig_};
+        .uri = "/api/v1/configuration", .method = HTTP_GET, .handler = config_handler_static, .user_ctx = &apiConfig_};
     espHttpServer_.httpd_register_uri_handler(server, &config_uri);
 
     // PUT /api/configuration
-    httpd_uri_t put_config_uri = {
-        .uri = "/api/v1/configuration",
-        .method = HTTP_PUT,
-        .handler = put_config_handler_static,
-        .user_ctx = apiConfig_};
+    httpd_uri_t put_config_uri = {.uri = "/api/v1/configuration",
+                                  .method = HTTP_PUT,
+                                  .handler = put_config_handler_static,
+                                  .user_ctx = &apiConfig_};
     espHttpServer_.httpd_register_uri_handler(server, &put_config_uri);
 
     // PUT /api/configuration_presets_circular_navigation
-    httpd_uri_t circular_navigation_uri = {
-        .uri = "/api/v1/configuration_presets_circular_navigation",
-        .method = HTTP_PUT,
-        .handler = circular_navigation_handler_static,
-        .user_ctx = apiConfig_};
+    httpd_uri_t circular_navigation_uri = {.uri = "/api/v1/configuration_presets_circular_navigation",
+                                           .method = HTTP_PUT,
+                                           .handler = circular_navigation_handler_static,
+                                           .user_ctx = &apiConfig_};
     espHttpServer_.httpd_register_uri_handler(server, &circular_navigation_uri);
 }
 

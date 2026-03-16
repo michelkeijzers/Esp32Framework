@@ -11,6 +11,8 @@
 #include "../apis/ApiSecurity.hpp"
 #include "../apis/ApiLogging.hpp"
 
+#include "../../../common/context/Contexts.hpp"
+
 class IEspLittleFs;
 class IEspHttpServer;
 class IEspLogger;
@@ -24,17 +26,14 @@ class IEspLogger;
 class Webserver : public IWebserver
 {
 public:
-    explicit Webserver(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspLogger& logger,
-                            IApiStatus& apiStatus, IApiNodes& apiNodes, IApiSystem& apiSystem,
-                            IApiFirmware& apiFirmware, IApiSecurity& apiSecurity, IApiLogging& apiLogging);
+  explicit Webserver(Contexts &contexts);
+  virtual ~Webserver();
 
-    virtual ~Webserver();
+  virtual void start() override;
+  virtual void stop() override;
 
-    virtual void start() override;
-    virtual void stop() override;
-
-    // Thunk for static file handler
-    static esp_err_t static_file_handler_thunk(httpd_req_t *req);
+  // Thunk for static file handler
+  static esp_err_t static_file_handler_thunk(httpd_req_t *req);
 
 protected:
     // Order matters for -Werror=reorder: server must come before API pointers

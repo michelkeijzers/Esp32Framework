@@ -2,26 +2,22 @@
 
 #include "../../../common/nodes/webserver/webserver_task/Webserver.hpp"
 #include "IDmxControllerHttpTask.h"
+#include "../../../common/context/Contexts.hpp"
 
 #include "apis/ApiConfig.hpp"
 #include "apis/ApiPresets.hpp"
 #include "apis/ApiPresetValues.hpp"
 
-
-class IEspNvs;
 class IPresetManager;
 class DmxControllerHttpTask : public Webserver, public IDmxControllerHttpTask
 {
 public:
-    explicit DmxControllerHttpTask(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager, IEspLogger& logger,
-                                         IApiStatus& apiStatus, IApiNodes& apiNodes, IApiSystem& apiSystem,
-                                         IApiFirmware& apiFirmware, IApiSecurity& apiSecurity, IApiLogging& apiLogging,
-                                         IApiConfig* apiConfig, IApiPresets* apiPresets, IApiPresetValues* apiPresetValues,
-                                         IPresetManager& presetManager);
-    ~DmxControllerHttpTask();
+  explicit DmxControllerHttpTask(Contexts &contexts, IApiConfig &apiConfig, IApiPresets &apiPresets,
+                                 IApiPresetValues &apiPresetValues, IPresetManager &presetManager);
+  ~DmxControllerHttpTask();
 
-    void start() override;
-    void stop() override;
+  void start() override;
+  void stop() override;
 
 protected:
     /**
@@ -29,14 +25,13 @@ protected:
      */
     void register_endpoints() override;
 
-private:
-    IEspNvs& nvsManager_;
+  private:
     IPresetManager& presetManager_;
 
-    // DMX-specific API pointers (concrete)
-    IApiConfig* apiConfig_;
-    IApiPresets* apiPresets_;
-    IApiPresetValues* apiPresetValues_;
+    // DMX-specific API references (concrete)
+    IApiConfig &apiConfig_;
+    IApiPresets &apiPresets_;
+    IApiPresetValues &apiPresetValues_;
     void register_dmx_endpoints();
     void register_endpoints_esp32();
     void register_endpoints_test();

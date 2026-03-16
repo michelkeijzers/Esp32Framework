@@ -2,6 +2,8 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
+#include "common/context/Contexts.hpp"
+
 // Select project to build
 #define BUILD_PROJECT_DMX_CONTROLLER 1
 
@@ -50,8 +52,6 @@
 
 #endif // NODE_TO_BUILD
 
-
-
 // #define BUILD_MASTER 0
 
 extern "C" void app_main(void)
@@ -66,7 +66,7 @@ extern "C" void app_main(void)
     EspHttpServer espHttpServer;
     EspNvs espNvs;
     EspLogger espLogger;
-    
+
     // Create generic API instances
     ApiStatus apiStatus(espHttpServer);
     ApiNodes apiNodes(espHttpServer);
@@ -77,21 +77,19 @@ extern "C" void app_main(void)
     
     // Create DMX-specific instances
     PresetManager presetManager(espNvs);
-    ApiConfig* apiConfig = new ApiConfig(espHttpServer, espNvs);
-    ApiPresets* apiPresets = new ApiPresets(espHttpServer, presetManager);
-    ApiPresetValues* apiPresetValues = new ApiPresetValues(espHttpServer, presetManager);
-    
+
+    ApiConfig apiConfig(espHttpServer, espNvs);
+    ApiPresets apiPresets(espHttpServer, presetManager);
+    ApiPresetValues apiPresetValues(espHttpServer, presetManager);
+
     // Create DmxControllerHttpTask with all dependencies injected
-    IDmxControllerHttpTask* webserver = new DmxControllerHttpTask(
-        espLittleFs, espHttpServer, espNvs, espLogger,
-        static_cast<ApiStatus&>(apiStatus),
-        static_cast<ApiNodes&>(apiNodes),
-        static_cast<ApiSystem&>(apiSystem),
-        static_cast<ApiFirmware&>(apiFirmware),
-        static_cast<ApiSecurity&>(apiSecurity),
-        static_cast<ApiLogging&>(apiLogging),
-        apiConfig, apiPresets, apiPresetValues, static_cast<IPresetManager&>(presetManager));
-    webserver->start();
+    EspContexts espContexts{espLittleFs, espHttpServer, espNvs, espLogger};
+    CommonApiContexts commonApiContexts{apiStatus, apiNodes, apiSystem, apiFirmware, apiSecurity, apiLogging};
+    Contexts contexts{espContexts, commonApiContexts};
+
+    DmxControllerHttpTask webserver(
+        DmxControllerHttpTask(contexts, apiConfig, apiPresets, apiPresetValues, presetManager));
+    webserver.start();
     printf("Built Webserver component\n");
 #else
 // Other nodes

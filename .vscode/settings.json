@@ -1,14 +1,13 @@
 {
-  "cSpell.words": [
-    "connectionless",
-    "enduml",
-    "ment",
-    "netif",
-    "OLED",
-    "reflashing"
-  ],
+  "cSpell.words": ["connectionless", "enduml", "ment", "netif", "OLED", "reflashing"],
   "idf.currentSetup": "C:\\Users\\i4studio\\esp\\v5.4.1\\esp-idf",
   "idf.openOcdConfigs": ["board/esp32c3-builtin.cfg"],
   "C_Cpp.errorSquiggles": "disabled",
-  "python-envs.defaultEnvManager": "ms-python.python:system"
+  "python-envs.defaultEnvManager": "ms-python.python:system",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[cpp]": {
+    "editor.defaultFormatter": "ms-vscode.cpptools"
+  },
+  "editor.rulers": [120]
 }

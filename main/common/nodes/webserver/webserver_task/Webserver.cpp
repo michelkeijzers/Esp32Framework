@@ -12,13 +12,12 @@
 
 #include <cstring>
 
-Webserver::Webserver(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspLogger& logger,
-                                IApiStatus& apiStatus, IApiNodes& apiNodes, IApiSystem& apiSystem,
-                                IApiFirmware& apiFirmware, IApiSecurity& apiSecurity, IApiLogging& apiLogging)
-    : espLittleFs_(espLittleFs), espHttpServer_(espHttpServer), logger_(logger),
-        apiStatus_(apiStatus), apiNodes_(apiNodes), apiSystem_(apiSystem), 
-        apiFirmware_(apiFirmware), apiSecurity_(apiSecurity), apiLogging_(apiLogging),
-        server(nullptr)
+Webserver::Webserver(Contexts &contexts)
+    : espLittleFs_(contexts.espContexts.espLittleFs), espHttpServer_(contexts.espContexts.espHttpServer),
+      logger_(contexts.espContexts.espLogger), apiStatus_(contexts.commonApiContexts.apiStatus),
+      apiNodes_(contexts.commonApiContexts.apiNodes), apiSystem_(contexts.commonApiContexts.apiSystem),
+      apiFirmware_(contexts.commonApiContexts.apiFirmware), apiSecurity_(contexts.commonApiContexts.apiSecurity),
+      apiLogging_(contexts.commonApiContexts.apiLogging), server(nullptr)
 {
     server = nullptr;
 }
