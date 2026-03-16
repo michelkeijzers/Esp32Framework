@@ -4,16 +4,9 @@
 
 #include "common/context/Contexts.hpp"
 
-// Select project to build
-#define BUILD_PROJECT_DMX_CONTROLLER 1
-
-// Select Node to build
-
-//#define BUILD_MASTER_NODE 1
-#define BUILD_WEBSERVER_NODE 2
-// #define BUILD_GPIO_NODE 3
-// #define BUILD_DMX_NODE 4
-
+// DEFINES FOR THE PROJECT AND NODE TO BUILD
+#define BUILD_PROJECT_DMX_CONTROLLER
+#define BUILD_WEBSERVER_NODE
 
 #if defined(BUILD_MASTER_NODE)
 
@@ -33,7 +26,7 @@
 #include "common/nodes/webserver/http_task/apis/ApiLogging.hpp"
 #include "common/nodes/webserver/http_task/IApiServer.hpp"
 
-#ifdef BUILD_PROJECT_DMX_CONTROLLER
+#if defined(BUILD_PROJECT_DMX_CONTROLLER)
 
 #include "projects/dmx_controller/http_task/DmxControllerHttpTask.hpp"
 #include "projects/dmx_controller/http_task/IDmxControllerHttpTask.h"
@@ -42,7 +35,7 @@
 #include "projects/dmx_controller/http_task/apis/ApiPresetValues.hpp"
 #include "projects/dmx_controller/presets_task/PresetManager.hpp"
 
-#elif // Other projects 
+#elif defined(BUILD_PROJECT_OTHER)
 
 #endif // BUILD_PROJECT
 

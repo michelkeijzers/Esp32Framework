@@ -9,6 +9,7 @@ list(APPEND EXTRA_COMPONENT_DIRS "${CMAKE_SOURCE_DIR}/esp_littlefs")
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(${PROJECT_NAME}) 
 
+
 file(GLOB_RECURSE SRC_FILES "main/*.cpp")
 
 # Custom target to build the website with Vite
