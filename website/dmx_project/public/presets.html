@@ -65,7 +65,7 @@
                   tbody.appendChild(row);
                   // Up
                   row.querySelector('.up-btn').addEventListener('click', async () => {
-                     await sendPresetAction(`/api/v1/move_preset_up/${i + 1}`);
+                     await sendPresetAction(`/api/v1/presets/${i + 1}/move_up`, 'PUT');
                   });
                   // Down
                   row.querySelector('.down-btn').addEventListener('click', async () => {
@@ -94,10 +94,8 @@
             }
          }
 
-         async function sendPresetAction(url) {
+         async function sendPresetAction(url, method = 'PUT') {
             try {
-               let method = 'PUT';
-               if (url.startsWith('/api/v1/delete_preset/')) method = 'DELETE';
                const response = await fetch(url, { method });
                if (!response.ok) throw new Error('Request failed');
                // Always expect the updated preset list as response

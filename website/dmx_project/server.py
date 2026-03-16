@@ -7,9 +7,11 @@ import time
 import threading
 import json
 from flask import Flask, request, send_from_directory, jsonify, Response
+from flask_cors import CORS
 
 # --- Flask App ---
 app = Flask(__name__, static_folder=".")
+CORS(app)
 
 # --- Firmware upload state (in-memory, per node) ---
 firmware_uploads = {}
