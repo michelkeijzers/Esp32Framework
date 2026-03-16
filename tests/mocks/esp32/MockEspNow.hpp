@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../main/common/esp_now/IEspNow.hpp"
+#include "../../../main/common/esp/esp_now/IEspNow.hpp"
 #include <vector>
 #include <cstring>
 

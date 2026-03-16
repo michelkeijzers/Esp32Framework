@@ -168,7 +168,7 @@ participant SlaveTask
 participant EspNowTask
 participant NvsTask
 
-Website -> DmxControllerHttpTask : POST Esp Now Key
+Website ->  DmxControllerHttpTask : POST Esp Now Key
 DmxControllerHttpTask -> HttpTask : (Common API handler)
 HttpTask -> ApiSecurity : Esp Now Key \n is for security
 ApiSecurity -> SlaveTask : Handle Esp Now key
@@ -180,11 +180,37 @@ SlaveTask -> NvsTask : Store in NVS
 NvsTask --> IEspNvs: Store in NVS
 IEspNvs --> NvsTask: Ack
 NvsTask --> SlaveTask : Ack
+SlaveTask --> SlaveTask : Wait for acks from EspNowTask and NvsTask
 SlaveTask -> HttpTask : Respond to HTTP request
 HttpTask --> DmxControllerHttpTask : Respond to \n HTTP request
 DmxControllerHttpTask --> Website : Respond to \n HTTP request
 
 @enduml 
+
+@startuml 
+
+title Webserver Slave Design / DMX Controller, Get preset
+
+participant Website
+participant DmxControllerTask
+participant DmxControllerHttpTask
+participant ApiPreset
+participant PresetTask
+participant ESP32LittleFs
+
+Website -> DmxControllerHttpTask : GET preset
+DmxControllerHttpTask -> ApiPreset : parseRequest()
+ApiPreset --> DmxControllerHttpTask : presetId
+DmxControllerHttpTask -> PresetTask : getPreset(presetId)
+PresetTask -> ESP32LittleFs : readPresetFile(presetId)
+PresetTask --> PresetTask : wait for data
+PresetTask -> DmxControllerTask : sendPresetData(data)
+DmxControllerTask -> ApiPreset : formatResponse(data)
+ApiPreset --> DmxControllerTask : response
+DmxControllerTask -> DmxControllerHttpTask : response
+DmxControllerHttpTask -> Website : HTTP response
+
+@enduml
 
 @startuml 
 

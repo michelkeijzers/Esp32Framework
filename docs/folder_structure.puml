@@ -1,0 +1,80 @@
+
+@startmindmap
+
+* MAIN 
+** common
+*** esp
+' **** esp_error
+' ***** esp_error_if.hpp
+' **** esp_filesystem
+' ***** esp_littlefs_if.h
+' ***** esp_spiffs-if.h   
+' ***** IEspLittleFs.hpp
+' ***** EspLittleFs.hpp/cpp
+' **** esp_http_server
+' **** esp_now
+' **** esp_logger
+' **** esp_nvs
+*** tasks
+**** esp_now_task
+***** EspNowTask.hpp/cpp
+**** status_task
+***** StatusTask.hpp/cpp
+**** nvs_task
+***** NvsTask.hpp/cpp
+**** ota_task
+***** OtaTask.hpp/cpp
+*** nodes
+**** master
+***** main.hpp/cpp
+***** master_task
+****** MasterTask.hpp/cpp
+***** esp_now_task
+****** EspNowTask.hpp/cpp
+**** webserver
+***** main.hpp/cpp
+***** webserver_task
+****** WebserverTask.hpp/cpp
+***** http_task
+****** HttpTask.hpp/cpp
+****** apis
+******* ApiSecurity.hpp/cpp
+******* ApiStatus.hpp/cpp
+******* ApiOta.hpp/cpp
+******* ...
+****** website
+******* status.html
+******* logging.html
+******* nodes.html
+******* ...
+**** dmx
+***** main.hpp/cpp
+***** dmx_task
+****** DmxTask.hpp/cpp
+***** dmx_sender_task
+****** DmxSenderTask.hpp/cpp
+****** Universe.hpp/cpp
+
+-- projects
+--- dmx_controller/ (webserver implementation)
+---- main.hpp/cpp
+---- dmx_controller_task
+----- DmxControllerTask.hpp/cpp
+---- preset_task
+----- PresetTask.hpp/cpp
+----- Presets.hpp/cpp
+----- Preset.hpp/cpp
+---- http_task
+----- DmxControllerHttpTask.hpp/cpp
+----- website
+------ index.html
+------ control.html
+------ dmx_presets.html
+------ dmx_edit_preset.html
+------ dmx_edit_value.html
+------ configuration.html
+------ custom.css
+
+
+
+@endmindmap

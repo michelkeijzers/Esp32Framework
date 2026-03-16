@@ -1,7 +1,7 @@
 #pragma once
 
 #include "IPresetManager.hpp"
-#include "../esp_nvs/IEspNvs.hpp"
+#include "../../esp/esp_nvs/IEspNvs.hpp"
 #include <vector>
 #include <memory>
 

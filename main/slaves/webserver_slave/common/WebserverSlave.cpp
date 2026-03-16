@@ -6,9 +6,9 @@
 #include "../common/apis/ApiSecurity.hpp"
 #include "../common/apis/ApiLogging.hpp"
 #include "../common/apis/StaticFileHandler.hpp"
-#include "../../../common/esp_logger/IEspLogger.hpp"
-#include "../../../common/esp_http_server/IEspHttpServer.hpp"
-#include "../../../common/esp_file_systems/IEspLittleFs.hpp"
+#include "../../../common/esp/esp_logger/IEspLogger.hpp"
+#include "../../../common/esp/esp_http_server/IEspHttpServer.hpp"
+#include "../../../common/esp/esp_file_systems/IEspLittleFs.hpp"
 
 #include <cstring>
 

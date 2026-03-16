@@ -2,7 +2,7 @@
 
 #include "IWebserverSlave.hpp"
 #include <memory>
-#include "../../../common/esp_http_server/esp_http_server_if.hpp"
+#include "../../../common/esp/esp_http_server/esp_http_server_if.hpp"
 #include "../common/apis/StaticFileHandler.hpp"
 #include "../common/apis/ApiStatus.hpp"
 #include "../common/apis/ApiNodes.hpp"

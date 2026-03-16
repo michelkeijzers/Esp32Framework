@@ -14,10 +14,10 @@
 
 #elif defined(BUILD_WEBSERVER_SLAVE)
 
-#include "common/esp_file_systems/EspLittleFs.hpp"
-#include "common/esp_http_server/EspHttpServer.hpp"
-#include "common/esp_nvs/EspNvs.hpp"
-#include "common/esp_logger/EspLogger.hpp"
+#include "common/esp/esp_file_systems/EspLittleFs.hpp"
+#include "common/esp/esp_http_server/EspHttpServer.hpp"
+#include "common/esp/esp_nvs/EspNvs.hpp"
+#include "common/esp/esp_logger/EspLogger.hpp"
 #include "slaves/webserver_slave/dmx_controller/DmxControllerWebserverSlave.hpp"
 #include "slaves/webserver_slave/dmx_controller/IDmxControllerWebserverSlave.hpp"
 #include "slaves/webserver_slave/common/apis/ApiStatus.hpp"

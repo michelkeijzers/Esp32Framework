@@ -1,6 +1,6 @@
 #include "ApiPresetValues.hpp"
 #include "IEspHttpServer.hpp"
-#include "../../../../common/esp_http_server/UriParamExtractor.hpp"
+#include "../../../../common/esp/esp_http_server/UriParamExtractor.hpp"
 
 ApiPresetValues::ApiPresetValues(IEspHttpServer& espHttpServer, IPresetManager& presetManager) 
     : espHttpServer_(espHttpServer), presetManager_(presetManager) {}

@@ -1,7 +1,7 @@
 #pragma once
 #include "IApiPresetValues.hpp"
-#include "../../../../common/esp_http_server/esp_http_server_if.hpp"
-#include "../../../../common/esp/esp_error_if.hpp"
+#include "../../../../common/esp/esp_http_server/esp_http_server_if.hpp"
+#include "../../../../common/esp/esp_error/esp_error_if.hpp"
 #include "../presets/IPresetManager.hpp"
 
 class IEspHttpServer;

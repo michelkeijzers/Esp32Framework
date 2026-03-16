@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <functional>
-#include "../esp/esp_error_if.hpp"
+#include "../esp_error/esp_error_if.hpp"
 #include "esp_http_server_if.hpp"
 
 // Interface for ESP32 HTTP server abstraction

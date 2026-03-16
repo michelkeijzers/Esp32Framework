@@ -1,7 +1,7 @@
 #include "MockEspNvs.hpp"
 #include <cstring>
 #include <algorithm>
-#include "../../../../common/esp/esp_error_if.hpp"
+#include "../../../../common/esp/esp_error/esp_error_if.hpp"
 
 esp_err_t MockEspNvs::nvs_flash_init() {
     return ESP_OK;

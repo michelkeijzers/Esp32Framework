@@ -1,9 +1,9 @@
 
 #pragma once
 #include "IApiConfig.hpp"
-#include "../../../../common/esp_http_server/esp_http_server_if.hpp"
-#include "../../../../common/esp/esp_error_if.hpp"
-#include "../../../../common/esp_nvs/IEspNvs.hpp"
+#include "../../../../common/esp/esp_http_server/esp_http_server_if.hpp"
+#include "../../../../common/esp/esp_error/esp_error_if.hpp"
+#include "../../../../common/esp/esp_nvs/IEspNvs.hpp"
 
 class IEspHttpServer;
 class IEspNvs;

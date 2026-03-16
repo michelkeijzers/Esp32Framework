@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../common/component.hpp"
-#include "../common/esp_now/EspNow.hpp"
+#include "../common/esp/esp_now/EspNow.hpp"
 
 class Master : Component
 {

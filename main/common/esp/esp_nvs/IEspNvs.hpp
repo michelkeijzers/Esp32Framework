@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <cstdint>
-#include "../esp/esp_error_if.hpp"
+#include "../esp_error/esp_error_if.hpp"
 #include "esp_nvs_if.hpp"
 
 // Interface for ESP32 NVS (Non-Volatile Storage) abstraction

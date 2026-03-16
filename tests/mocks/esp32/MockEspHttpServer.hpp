@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../main/common/esp_http_server/IEspHttpServer.hpp"
+#include "../../../main/common/esp/esp_http_server/IEspHttpServer.hpp"
 #include <unordered_map>
 #include <string>
 #include <functional>

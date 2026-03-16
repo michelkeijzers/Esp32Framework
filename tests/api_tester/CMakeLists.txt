@@ -30,7 +30,7 @@ add_executable(api_tester
     ../../main/slaves/webserver_slave/common/apis/ApiLogging.cpp
     ../../main/slaves/webserver_slave/common/apis/ApiResponse.cpp
     ../../main/slaves/webserver_slave/common/apis/ApiValidator.cpp
-    ../../main/common/esp_http_server/EspHttpServer.cpp
+    ../../main/common/esp/esp_http_server/EspHttpServer.cpp
     ../../main/slaves/webserver_slave/dmx_controller/presets/PresetManager.cpp
     ../../main/slaves/webserver_slave/common/WebserverSlave.cpp
     # ../../main/common/esp_nvs/EspNvs.cpp
@@ -58,10 +58,10 @@ target_include_directories(api_tester PRIVATE
     ../../main/slaves/webserver_slave/dmx_controller/apis
     ../../main/common
     ../../main/common/nvs
-    ../../main/common/esp_logger
-    ../../main/common/esp_http_server
-    ../../main/common/esp_now
-    ../../main/common/esp_nvs
+    ../../main/common/esp/esp_logger
+    ../../main/common/esp/esp_http_server
+    ../../main/common/esp/esp_now
+    ../../main/common/esp/esp_nvs
 )
 
 # Add additional include directories if needed

@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../main/common/esp_nvs/IEspNvs.hpp"
+#include "../../../main/common/esp/esp_nvs/IEspNvs.hpp"
 #include <map>
 #include <vector>
 
