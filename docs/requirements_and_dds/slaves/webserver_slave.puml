@@ -5,18 +5,19 @@ title Webserver Slave Design / RTOS Tasks
 package WebserverSlave_Package
 {
     class Main {}
+    note right of Main
+        Creates all objects (DI)
+    end note
 
-    class DmxControllerTask <<RTOS>> {}
+    class DmxControllerWebserverSlave <<RtosTask>> {}
 
     class Website <<LittleFS>>
 
-    class DmxControllerHttpTask <<RTOS>> {}
-    class PresetsTask <<RTOS>> {}
+    class DmxControllerHttpTask <<RtosTask>> {}
+    class PresetsTask <<RtosTask>> {}
 
-    Main *--> DmxControllerTask
-    Main *--> DmxControllerHttpTask
-    Main *--> PresetsTask
-
+    Main *--> DmxControllerWebserverSlave
+    
     Website <--> DmxControllerHttpTask : REST API
 }
 
@@ -24,20 +25,20 @@ package Common
 {
     package RtosTasks
     {
-        class RtosTask <<RTOS>> {}
+        class RtosTask <<RtosTask>> {}
 
-        class SlaveTask <<RTOS>> {}
-        class HttpTask <<RTOS>> {}
+        class SlaveTask <<RtosTask>> {}
+        class HttpTask <<RtosTask>> {}
         note bottom of HttpTask
             Only for
             webserver slaves 
             and remotes
         end note        
-        class WifiTask <<RTOS>> {}
-        class EspNowTask <<RTOS>> {}
-        class OtaTask <<RTOS>> {}
-        class StatusTask <<RTOS>> {}
-        class NvsTask <<RTOS>> {}
+        class WifiTask <<RtosTask>> {}
+        class EspNowTask <<RtosTask>> {}
+        class OtaTask <<RtosTask>> {}
+        class StatusTask <<RtosTask>> {}
+        class NvsTask <<RtosTask>> {}
 
         SlaveTask -u-|> RtosTask
         HttpTask -u-|> RtosTask
@@ -61,17 +62,17 @@ package Common
     NvsTask ---> IEspNvs
 }
 
-DmxControllerTask --|> SlaveTask
+DmxControllerWebserverSlave --|> SlaveTask
 DmxControllerHttpTask --|> HttpTask
 PresetsTask --|> RtosTask
 
-DmxControllerTask --> DmxControllerHttpTask
-DmxControllerTask --> PresetsTask
-DmxControllerTask --> StatusTask
-DmxControllerTask --> EspNowTask
-DmxControllerTask --> WifiTask
-DmxControllerTask --> OtaTask
-DmxControllerTask --> NvsTask
+DmxControllerWebserverSlave *-- DmxControllerHttpTask
+DmxControllerWebserverSlave *-- PresetsTask
+DmxControllerWebserverSlave *-- StatusTask
+DmxControllerWebserverSlave *-- EspNowTask
+DmxControllerWebserverSlave *-- WifiTask
+DmxControllerWebserverSlave *-- OtaTask
+DmxControllerWebserverSlave *-- NvsTask
 
 @enduml
 
@@ -83,14 +84,14 @@ package WebserverSlave_Package
 {
     class Main {}
 
-    class DmxControllerTask <<RTOS>> {}
+    class DmxControllerWebserverSlave <<RtosTask>> {}
 
     class Website <<LittleFS>>
 
-    class DmxControllerHttpTask <<RTOS>> {}
-    class PresetsTask <<RTOS>> {}
+    class DmxControllerHttpTask <<RtosTask>> {}
+    class PresetsTask <<RtosTask>> {}
 
-    Main *--> DmxControllerTask
+    Main *--> DmxControllerWebserverSlave
     Main *--> DmxControllerHttpTask
     Main *--> PresetsTask
 
@@ -114,20 +115,20 @@ package Common
 
     package RtosTasks
     {
-        class RtosTask <<RTOS>> {}
+        class RtosTask <<RtosTask>> {}
 
-        class SlaveTask <<RTOS>> {}
-        class HttpTask <<RTOS>> {}
+        class SlaveTask <<RtosTask>> {}
+        class HttpTask <<RtosTask>> {}
         note bottom of HttpTask
             Only for
             webserver slaves 
             and remotes
         end note        
-        class WifiTask <<RTOS>> {}
-        class EspNowTask <<RTOS>> {}
-        class OtaTask <<RTOS>> {}
-        class StatusTask <<RTOS>> {}
-        class NvsTask <<RTOS>> {}
+        class WifiTask <<RtosTask>> {}
+        class EspNowTask <<RtosTask>> {}
+        class OtaTask <<RtosTask>> {}
+        class StatusTask <<RtosTask>> {}
+        class NvsTask <<RtosTask>> {}
 
         SlaveTask -u-|> RtosTask
         HttpTask -u-|> RtosTask
@@ -149,8 +150,8 @@ package Common
 
 }
 
-DmxControllerTask --|> SlaveTask
-HttpTask --|> HttpTask : 2. (Common API)
+DmxControllerWebserverSlave --|> SlaveTask
+DmxControllerHttpTask --> HttpTask : 2. (Common API)
 PresetsTask --|> RtosTask
 
 @enduml
@@ -193,20 +194,20 @@ package Common_Package
 {
     package RtosTasks_Package
     {
-        class RtosTask <<RTOS>> {}
+        class RtosTask <<RtosTask>> {}
 
-        class SlaveTask <<RTOS>> {}
-        class HttpTask <<RTOS>> {}
+        class SlaveTask <<RtosTask>> {}
+        class HttpTask <<RtosTask>> {}
         note bottom of HttpTask
             Only for
             webserver slaves 
             and remotes
         end note        
-        class WifiTask <<RTOS>> {}
-        class EspNowTask <<RTOS>> {}
-        class OtaTask <<RTOS>> {}
-        class StatusTask <<RTOS>> {}
-        class NvsTask <<RTOS>> {}
+        class WifiTask <<RtosTask>> {}
+        class EspNowTask <<RtosTask>> {}
+        class OtaTask <<RtosTask>> {}
+        class StatusTask <<RtosTask>> {}
+        class NvsTask <<RtosTask>> {}
 
         SlaveTask -u-|> RtosTask
         HttpTask -u-|> RtosTask
@@ -307,8 +308,17 @@ package Common_Package
 
     ESP32_Package -[hidden]u-----> RtosTasks_Package 
 
+    SlaveTask --> IEspLogger
+    HttpTask --> IEspLogger
+    WifiTask --> IEspLogger
+    EspNowTask --> IEspLogger
+    OtaTask --> IEspLogger
+    StatusTask --> IEspLogger
+    NvsTask --> IEspLogger
+
     StatusTask --> IEspNow
     'WifiTask --> IEspWifi
+    HttpTask ---> IEspHttpServer
     EspNowTask --> IEspNow
     NvsTask --> IEspNvs
 }

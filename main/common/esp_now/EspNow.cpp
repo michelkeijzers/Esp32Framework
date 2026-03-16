@@ -1,4 +1,4 @@
-#include "EspNowHandler.hpp"
+#include "EspNow.hpp"
 #include <cstring>
 
 #ifdef ESP_PLATFORM
@@ -6,18 +6,18 @@
 #include "esp_wifi.h"
 #include "esp_log.h"
 
-static const char* TAG = "EspNowHandler";
+static const char* TAG = "EspNow";
 
-EspNowHandler::EspNowHandler() : initialized_(false)
+EspNow::EspNow() : initialized_(false)
 {
 }
 
-EspNowHandler::~EspNowHandler()
+EspNow::~EspNow()
 {
     deinit();
 }
 
-esp_err_t EspNowHandler::init()
+esp_err_t EspNow::init()
 {
     if (initialized_) {
         return ESP_OK;
@@ -33,7 +33,7 @@ esp_err_t EspNowHandler::init()
     return ret;
 }
 
-esp_err_t EspNowHandler::deinit()
+esp_err_t EspNow::deinit()
 {
     if (!initialized_) {
         return ESP_OK;
@@ -47,7 +47,7 @@ esp_err_t EspNowHandler::deinit()
     return ret;
 }
 
-esp_err_t EspNowHandler::connectPeer(const uint8_t *peer_addr)
+esp_err_t EspNow::connectPeer(const uint8_t *peer_addr)
 {
     if (!initialized_) {
         ESP_LOGE(TAG, "ESP-NOW not initialized");
@@ -68,7 +68,7 @@ esp_err_t EspNowHandler::connectPeer(const uint8_t *peer_addr)
     return ret;
 }
 
-esp_err_t EspNowHandler::disconnectPeer(const uint8_t *peer_addr)
+esp_err_t EspNow::disconnectPeer(const uint8_t *peer_addr)
 {
     if (!initialized_) {
         ESP_LOGE(TAG, "ESP-NOW not initialized");
@@ -84,7 +84,7 @@ esp_err_t EspNowHandler::disconnectPeer(const uint8_t *peer_addr)
     return ret;
 }
 
-esp_err_t EspNowHandler::sendMessage(const uint8_t *data, size_t len)
+esp_err_t EspNow::sendMessage(const uint8_t *data, size_t len)
 {
     if (!initialized_) {
         ESP_LOGE(TAG, "ESP-NOW not initialized");
@@ -108,37 +108,37 @@ esp_err_t EspNowHandler::sendMessage(const uint8_t *data, size_t len)
 #else
 // Stub implementations for non-ESP32 platforms
 
-EspNowHandler::EspNowHandler() : initialized_(false)
+EspNow::EspNow() : initialized_(false)
 {
 }
 
-EspNowHandler::~EspNowHandler()
+EspNow::~EspNow()
 {
 }
 
-esp_err_t EspNowHandler::init()
+esp_err_t EspNow::init()
 {
     initialized_ = true;
     return ESP_OK;
 }
 
-esp_err_t EspNowHandler::deinit()
+esp_err_t EspNow::deinit()
 {
     initialized_ = false;
     return ESP_OK;
 }
 
-esp_err_t EspNowHandler::connectPeer(const uint8_t *peer_addr)
+esp_err_t EspNow::connectPeer(const uint8_t *peer_addr)
 {
     return ESP_OK;
 }
 
-esp_err_t EspNowHandler::disconnectPeer(const uint8_t *peer_addr)
+esp_err_t EspNow::disconnectPeer(const uint8_t *peer_addr)
 {
     return ESP_OK;
 }
 
-esp_err_t EspNowHandler::sendMessage(const uint8_t *data, size_t len)
+esp_err_t EspNow::sendMessage(const uint8_t *data, size_t len)
 {
     return ESP_OK;
 }

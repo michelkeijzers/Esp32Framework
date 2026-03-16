@@ -1,16 +1,16 @@
-#include "MockEspNowHandler.hpp"
+#include "MockEspNow.hpp"
 
-MockEspNowHandler::MockEspNowHandler() : initialized_(false)
+MockEspNow::MockEspNow() : initialized_(false)
 {
 }
 
-esp_err_t MockEspNowHandler::init()
+esp_err_t MockEspNow::init()
 {
     initialized_ = true;
     return ESP_OK;
 }
 
-esp_err_t MockEspNowHandler::deinit()
+esp_err_t MockEspNow::deinit()
 {
     initialized_ = false;
     peers_.clear();
@@ -18,7 +18,7 @@ esp_err_t MockEspNowHandler::deinit()
     return ESP_OK;
 }
 
-esp_err_t MockEspNowHandler::connectPeer(const uint8_t *peer_addr)
+esp_err_t MockEspNow::connectPeer(const uint8_t *peer_addr)
 {
     if (!initialized_) {
         return ESP_FAIL;
@@ -34,7 +34,7 @@ esp_err_t MockEspNowHandler::connectPeer(const uint8_t *peer_addr)
     return ESP_OK;
 }
 
-esp_err_t MockEspNowHandler::disconnectPeer(const uint8_t *peer_addr)
+esp_err_t MockEspNow::disconnectPeer(const uint8_t *peer_addr)
 {
     if (!initialized_) {
         return ESP_FAIL;
@@ -49,7 +49,7 @@ esp_err_t MockEspNowHandler::disconnectPeer(const uint8_t *peer_addr)
     return ESP_FAIL;  // Peer not found
 }
 
-esp_err_t MockEspNowHandler::sendMessage(const uint8_t *data, size_t len)
+esp_err_t MockEspNow::sendMessage(const uint8_t *data, size_t len)
 {
     if (!initialized_) {
         return ESP_FAIL;
@@ -64,7 +64,7 @@ esp_err_t MockEspNowHandler::sendMessage(const uint8_t *data, size_t len)
     return ESP_OK;
 }
 
-bool MockEspNowHandler::hasPeer(const uint8_t *peer_addr) const
+bool MockEspNow::hasPeer(const uint8_t *peer_addr) const
 {
     for (const auto& peer : peers_) {
         if (std::memcmp(peer.data(), peer_addr, 6) == 0) {

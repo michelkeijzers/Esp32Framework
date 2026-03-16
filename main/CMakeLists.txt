@@ -4,7 +4,7 @@ idf_component_register(
         "master/master.cpp"
         "common/esp_logger/EspLogger.cpp"
         "common/esp_http_server/EspHttpServer.cpp"
-        "common/esp_now/EspNowHandler.cpp"
+        "common/esp_now/EspNow.cpp"
         "common/esp_nvs/EspNvs.cpp"
         "common/esp_file_systems/EspLittleFs.cpp"
         "slaves/webserver_slave/dmx_controller/apis/ApiConfig.cpp"

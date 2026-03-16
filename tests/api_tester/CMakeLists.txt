@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(api_tester
     test_main.cpp
     ../mocks/esp32/MockEspHttpServer.cpp
-    ../mocks/esp32/MockEspNowHandler.cpp
+    ../mocks/esp32/MockEspNow.cpp
     ../mocks/esp32/MockEspNvs.cpp
     ../mocks/esp32/MockEspLogger.cpp
     apis/ApiPresetsTests.cpp
@@ -31,7 +31,7 @@ add_executable(api_tester
     ../../main/slaves/webserver_slave/common/apis/ApiResponse.cpp
     ../../main/slaves/webserver_slave/common/apis/ApiValidator.cpp
     ../../main/common/esp_http_server/EspHttpServer.cpp
-    ../../main/common/esp_now/EspNowHandler.cpp
+    ../../main/common/esp_now/EspNow.cpp
     ../../main/slaves/webserver_slave/dmx_controller/presets/PresetManager.cpp
     ../../main/slaves/webserver_slave/common/WebserverSlave.cpp
     # ../../main/common/esp_nvs/EspNvs.cpp

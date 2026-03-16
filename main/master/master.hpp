@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../common/component.hpp"
-#include "../common/esp_now/EspNowHandler.hpp"
+#include "../common/esp_now/EspNow.hpp"
 
 class Master : Component
 {
@@ -12,5 +12,5 @@ public:
     esp_err_t init();
 
 private:
-    EspNowHandler espNowHandler_;
+    EspNow espNowHandler_;
 };

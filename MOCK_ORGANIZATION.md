@@ -20,7 +20,7 @@ All mocks have been reorganized into a clear, hierarchical structure that separa
   - `MockEspHttpServer.cpp/hpp` - Mock for HTTP server functionality
   - `MockEspLogger.cpp/hpp` - Mock for logging capability
   - `MockEspNvs.cpp/hpp` - Mock for NVS (Non-Volatile Storage) operations
-  - `MockEspNowHandler.cpp/hpp` - Mock for ESP-NOW wireless communication
+  - `MockEspNow.cpp/hpp` - Mock for ESP-NOW wireless communication
 
 - **`apis/`** - API endpoint mocks (common API implementations)
   - `MockApiSystem.hpp` - Mock for system API

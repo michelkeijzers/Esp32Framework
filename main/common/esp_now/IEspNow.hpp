@@ -2,9 +2,9 @@
 #include "esp_now_if.hpp"
 
 // Interface for ESP-NOW abstraction
-class IEspNowHandler {
+class IEspNow {
 public:
-    virtual ~IEspNowHandler() = default;
+    virtual ~IEspNow() = default;
 
     virtual esp_err_t init() = 0;
     virtual esp_err_t deinit() = 0;

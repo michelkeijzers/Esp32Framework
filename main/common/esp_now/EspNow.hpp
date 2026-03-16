@@ -1,11 +1,11 @@
 #pragma once
-#include "IEspNowHandler.hpp"
+#include "IEspNow.hpp"
 
 // Concrete implementation of ESP-NOW handler for ESP32
-class EspNowHandler : public IEspNowHandler {
+class EspNow : public IEspNow {
 public:
-    EspNowHandler();
-    ~EspNowHandler();
+    EspNow();
+    ~EspNow();
 
     esp_err_t init() override;
     esp_err_t deinit() override;

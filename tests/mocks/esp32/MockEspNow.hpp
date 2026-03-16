@@ -1,13 +1,13 @@
 #pragma once
-#include "../../../main/common/esp_now/IEspNowHandler.hpp"
+#include "../../../main/common/esp_now/IEspNow.hpp"
 #include <vector>
 #include <cstring>
 
 // Mock implementation for unit testing
-class MockEspNowHandler : public IEspNowHandler {
+class MockEspNow : public IEspNow {
 public:
-    MockEspNowHandler();
-    ~MockEspNowHandler() = default;
+    MockEspNow();
+    ~MockEspNow() = default;
 
     esp_err_t init() override;
     esp_err_t deinit() override;
