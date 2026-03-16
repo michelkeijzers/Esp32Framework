@@ -1,10 +1,10 @@
 #pragma once
-#include "../../../main/common/nodes/webserver/common/IWebserverSlave.hpp"
+#include "../../../main/common/nodes/webserver/common/IWebserver.hpp"
 
-class MockWebserverSlave : public IWebserverSlave {
+class MockWebserver : public IWebserver {
 public:
-    MockWebserverSlave() = default;
-    ~MockWebserverSlave() override = default;
+    MockWebserver() = default;
+    ~MockWebserver() override = default;
     void start() override {}
     void stop() override {}
 };

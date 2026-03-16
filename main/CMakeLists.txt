@@ -18,8 +18,8 @@ idf_component_register(
         "common/nodes/webserver/common/apis/ApiLogging.cpp"
         "common/nodes/webserver/common/apis/ApiResponse.cpp"
         "common/nodes/webserver/common/apis/ApiValidator.cpp"
-        "common/nodes/webserver/common/WebserverSlave.cpp"
-        "common/nodes/webserver/dmx_controller/DmxControllerWebserverSlave.cpp"
+        "common/nodes/webserver/common/Webserver.cpp"
+        "common/nodes/webserver/webserver_task/DmxControllerWebserver.cpp"
         "common/nodes/webserver/dmx_controller/presets/PresetManager.cpp"
     INCLUDE_DIRS
         "."

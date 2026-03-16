@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IWebserverSlave.hpp"
+#include "IWebserver.hpp"
 #include <memory>
 #include "../../../common/esp/esp_http_server/esp_http_server_if.hpp"
 #include "../common/apis/StaticFileHandler.hpp"
@@ -16,19 +16,19 @@ class IEspHttpServer;
 class IEspLogger;
 
 /**
- * Base WebserverSlave class with common functionality for all webserver implementations
+ * Base Webserver class with common functionality for all webserver implementations
  * Handles LittleFS mounting, static file serving, and generic API registration
  * Derived classes can override register_endpoints() to add project-specific endpoints
  */
 
-class WebserverSlave : public IWebserverSlave
+class Webserver : public IWebserver
 {
 public:
-    explicit WebserverSlave(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspLogger& logger,
+    explicit Webserver(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspLogger& logger,
                             IApiStatus& apiStatus, IApiNodes& apiNodes, IApiSystem& apiSystem,
                             IApiFirmware& apiFirmware, IApiSecurity& apiSecurity, IApiLogging& apiLogging);
 
-    virtual ~WebserverSlave();
+    virtual ~Webserver();
 
     virtual void start() override;
     virtual void stop() override;

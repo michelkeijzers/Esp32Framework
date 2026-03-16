@@ -1,4 +1,4 @@
-#include "WebserverSlave.hpp"
+#include "Webserver.hpp"
 #include "../common/apis/ApiStatus.hpp"
 #include "../common/apis/ApiNodes.hpp"
 #include "../common/apis/ApiSystem.hpp"
@@ -12,7 +12,7 @@
 
 #include <cstring>
 
-WebserverSlave::WebserverSlave(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspLogger& logger,
+Webserver::Webserver(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspLogger& logger,
                                 IApiStatus& apiStatus, IApiNodes& apiNodes, IApiSystem& apiSystem,
                                 IApiFirmware& apiFirmware, IApiSecurity& apiSecurity, IApiLogging& apiLogging)
     : espLittleFs_(espLittleFs), espHttpServer_(espHttpServer), logger_(logger),
@@ -23,12 +23,12 @@ WebserverSlave::WebserverSlave(IEspLittleFs& espLittleFs, IEspHttpServer& espHtt
     server = nullptr;
 }
 
-WebserverSlave::~WebserverSlave()
+Webserver::~Webserver()
 {
     stop();
 }
 
-void WebserverSlave::start()
+void Webserver::start()
 {
     // Base implementation - just mounts littlefs and starts server
     // Derived classes will override to add project-specific initialization
@@ -41,11 +41,11 @@ void WebserverSlave::start()
     }
     else
     {
-        logger_.log_error("WebserverSlave", "Failed to start HTTP server");
+        logger_.log_error("Webserver", "Failed to start HTTP server");
     }
 }
 
-void WebserverSlave::stop()
+void Webserver::stop()
 {
     if (server)
     {
@@ -55,7 +55,7 @@ void WebserverSlave::stop()
 }
 
 // Non-static member for static file handler
-esp_err_t WebserverSlave::static_file_handler(httpd_req_t *req) {
+esp_err_t Webserver::static_file_handler(httpd_req_t *req) {
     // Build the file path
     char filepath[1024];  // Increased buffer size to handle long URIs safely
     snprintf(filepath, sizeof(filepath), "/littlefs%s", req->uri);
@@ -91,12 +91,12 @@ esp_err_t WebserverSlave::static_file_handler(httpd_req_t *req) {
 }
 
 // Static thunk for C API
-esp_err_t WebserverSlave::static_file_handler_thunk(httpd_req_t *req) {
-    auto* self = static_cast<WebserverSlave*>(req->user_ctx);
+esp_err_t Webserver::static_file_handler_thunk(httpd_req_t *req) {
+    auto* self = static_cast<Webserver*>(req->user_ctx);
     return self->static_file_handler(req);
 }
 
-void WebserverSlave::register_endpoints()
+void Webserver::register_endpoints()
 {
     register_generic_endpoints();
     register_static_file_handler();
@@ -158,7 +158,7 @@ static esp_err_t logging_handler_static(httpd_req_t *req) {
     return obj->logging_handler(req);
 }
 
-void WebserverSlave::register_generic_endpoints()
+void Webserver::register_generic_endpoints()
 {
     // GET /api/status
     httpd_uri_t status_uri = {
@@ -249,19 +249,19 @@ void WebserverSlave::register_generic_endpoints()
     espHttpServer_.httpd_register_uri_handler(server, &logging_uri);
 }
 
-void WebserverSlave::register_static_file_handler()
+void Webserver::register_static_file_handler()
 {
     // Register static file handler for serving web UI from LittleFS
     // This must be registered AFTER all API endpoints so API calls take precedence
     httpd_uri_t static_file_uri = {
         .uri = "/*",
         .method = HTTP_GET,
-        .handler = WebserverSlave::static_file_handler_thunk,
+        .handler = Webserver::static_file_handler_thunk,
         .user_ctx = this};
     espHttpServer_.httpd_register_uri_handler(server, &static_file_uri);
 }
 
-void WebserverSlave::mount_littlefs()
+void Webserver::mount_littlefs()
 {
     // LittleFS configuration
     esp_vfs_littlefs_conf_t conf = {

@@ -1,24 +1,24 @@
 #pragma once
 
-#include "../common/WebserverSlave.hpp"
-#include "IDmxControllerWebserverSlave.hpp"
+#include "../common/Webserver.hpp"
+#include "IDmxControllerWebserver.hpp"
 
-#include "apis/ApiConfig.hpp"
-#include "apis/ApiPresets.hpp"
-#include "apis/ApiPresetValues.hpp"
+#include "../dmx_controller/apis/ApiConfig.hpp"
+#include "../dmx_controller/apis/ApiPresets.hpp"
+#include "../dmx_controller/apis/ApiPresetValues.hpp"
 
 
 class IEspNvs;
 class IPresetManager;
-class DmxControllerWebserverSlave : public WebserverSlave, public IDmxControllerWebserverSlave
+class DmxControllerWebserver : public Webserver, public IDmxControllerWebserver
 {
 public:
-    explicit DmxControllerWebserverSlave(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager, IEspLogger& logger,
+    explicit DmxControllerWebserver(IEspLittleFs& espLittleFs, IEspHttpServer& espHttpServer, IEspNvs& nvsManager, IEspLogger& logger,
                                          IApiStatus& apiStatus, IApiNodes& apiNodes, IApiSystem& apiSystem,
                                          IApiFirmware& apiFirmware, IApiSecurity& apiSecurity, IApiLogging& apiLogging,
                                          IApiConfig* apiConfig, IApiPresets* apiPresets, IApiPresetValues* apiPresetValues,
                                          IPresetManager& presetManager);
-    ~DmxControllerWebserverSlave();
+    ~DmxControllerWebserver();
 
     void start() override;
     void stop() override;

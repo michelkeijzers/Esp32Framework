@@ -28,13 +28,11 @@
 ***** OtaTask.hpp/cpp
 *** nodes
 **** master
-***** main.hpp/cpp
 ***** master_task
 ****** MasterTask.hpp/cpp
 ***** esp_now_task
 ****** EspNowTask.hpp/cpp
 **** webserver
-***** main.hpp/cpp
 ***** webserver_task
 ****** WebserverTask.hpp/cpp
 ***** http_task
@@ -50,7 +48,6 @@
 ******* nodes.html
 ******* ...
 **** dmx
-***** main.hpp/cpp
 ***** dmx_task
 ****** DmxTask.hpp/cpp
 ***** dmx_sender_task

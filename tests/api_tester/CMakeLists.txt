@@ -18,7 +18,7 @@ add_executable(api_tester
     apis/ApiPresetValuesTests.cpp
     apis/ApiSecurityTests.cpp
     apis/ApiSystemTests.cpp
-    ../../main/common/nodes/webserver/dmx_controller/DmxControllerWebserverSlave.cpp
+    ../../main/common/nodes/webserver/webserver_task/DmxControllerWebserver.cpp
     ../../main/common/nodes/webserver/dmx_controller/apis/ApiPresets.cpp
     ../../main/common/nodes/webserver/dmx_controller/apis/ApiConfig.cpp
     ../../main/common/nodes/webserver/common/apis/ApiStatus.cpp
@@ -32,7 +32,7 @@ add_executable(api_tester
     ../../main/common/nodes/webserver/common/apis/ApiValidator.cpp
     ../../main/common/esp/esp_http_server/EspHttpServer.cpp
     ../../main/common/nodes/webserver/dmx_controller/presets/PresetManager.cpp
-    ../../main/common/nodes/webserver/common/WebserverSlave.cpp
+    ../../main/common/nodes/webserver/common/Webserver.cpp
     # ../../main/common/esp_nvs/EspNvs.cpp
 )
 

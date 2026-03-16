@@ -17,8 +17,8 @@
 #include "common/esp/esp_http_server/EspHttpServer.hpp"
 #include "common/esp/esp_nvs/EspNvs.hpp"
 #include "common/esp/esp_logger/EspLogger.hpp"
-#include "common/nodes/webserver/dmx_controller/DmxControllerWebserverSlave.hpp"
-#include "common/nodes/webserver/dmx_controller/IDmxControllerWebserverSlave.hpp"
+#include "common/nodes/webserver/webserver_task/DmxControllerWebserver.hpp"
+#include "common/nodes/webserver/webserver_task/IDmxControllerWebserver.hpp"
 #include "common/nodes/webserver/common/apis/ApiStatus.hpp"
 #include "common/nodes/webserver/common/apis/ApiNodes.hpp"
 #include "common/nodes/webserver/common/apis/ApiSystem.hpp"
@@ -29,8 +29,8 @@
 #include "common/nodes/webserver/dmx_controller/apis/ApiPresets.hpp"
 #include "common/nodes/webserver/dmx_controller/apis/ApiPresetValues.hpp"
 #include "common/nodes/webserver/dmx_controller/presets/PresetManager.hpp"
-#include "common/nodes/webserver/common/IWebserverSlave.hpp"
-#include "../tests/mocks/project_dmx_controller/MockDmxControllerWebserverSlave.hpp"
+#include "common/nodes/webserver/common/IWebserver.hpp"
+#include "../tests/mocks/project_dmx_controller/MockDmxControllerWebserver.hpp"
 
 #else 
 
@@ -68,8 +68,8 @@ extern "C" void app_main(void)
     ApiPresets* apiPresets = new ApiPresets(espHttpServer, presetManager);
     ApiPresetValues* apiPresetValues = new ApiPresetValues(espHttpServer, presetManager);
     
-    // Create WebserverSlave with all dependencies injected
-    IWebserverSlave* webserverSlave = new DmxControllerWebserverSlave(
+    // Create DmxControllerWebserver with all dependencies injected
+    IDmxControllerWebserver* webserverSlave = new DmxControllerWebserver(
         espLittleFs, espHttpServer, espNvs, espLogger,
         static_cast<ApiStatus&>(apiStatus),
         static_cast<ApiNodes&>(apiNodes),
@@ -79,7 +79,7 @@ extern "C" void app_main(void)
         static_cast<ApiLogging&>(apiLogging),
         apiConfig, apiPresets, apiPresetValues, static_cast<IPresetManager&>(presetManager));
     webserverSlave->start();
-    printf("Built Webserver Slave component\n");
+    printf("Built Webserver component\n");
 #else
 // Other slaves
 #endif // BUILD
