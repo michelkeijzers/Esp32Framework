@@ -102,11 +102,11 @@ package Common
 {
     package Apis 
     {
+        class ApiSecurity <<API>> {}
         class ApiFirmware <<API>> {}
         class ApiLogging <<API>> {}
         class ApiNodes <<API>> {}
         class ApiResposne <<API>> {}
-        class ApiSecurity <<API>> {}
         class ApiStatus <<API>> {}
         class ApiSystem <<API>> {}
         class ApiValidator <<API>> {}
@@ -119,7 +119,10 @@ package Common
 
         class NodeTask <<RtosTask>> {}
         class HttpTask <<RtosTask>> {}
-        note bottom of HttpTask
+        class ApiServer {}
+        HttpTask --> ApiServer : 2b Handle by API Server
+
+        note right of HttpTask
             Only for
             webservers
             and remotes
@@ -139,15 +142,13 @@ package Common
         NvsTask -u-|> RtosTask
     }
 
-    HttpTask --> ApiSecurity : 3. Esp Now Key is for security
-    ApiSecurity --> NodeTask : 4. Handle Esp Now key
+    ApiServer --> ApiSecurity : 3. Esp Now Key is for security
+    ApiSecurity -> NodeTask : 4. Handle Esp Now key
     NodeTask --> EspNowTask : 5. Send to other nodes (for all nodes)
     EspNowTask ..> NodeTask: 5b Ack
     NodeTask --> NvsTask : 6. Store in NVS 
     NvsTask ..> NodeTask : 6b. Ack
     NodeTask --> HttpTask : 7. Respond to HTTP request
-
-
 }
 
 DmxControllerWebserver --|> NodeTask
@@ -163,6 +164,7 @@ title Webserver Design / API Endpoints, example of security API endpoint (as seq
 participant Website
 participant DmxControllerHttpTask
 participant HttpTask
+participant ApiServer
 participant ApiSecurity
 participant NodeTask
 participant EspNowTask
@@ -170,7 +172,8 @@ participant NvsTask
 
 Website ->  DmxControllerHttpTask : POST Esp Now Key
 DmxControllerHttpTask -> HttpTask : (Common API handler)
-HttpTask -> ApiSecurity : Esp Now Key \n is for security
+HttpTask -> ApiServer : Delegate to API Server
+ApiServer -> ApiSecurity : Esp Now Key \n is for security
 ApiSecurity -> NodeTask : Handle Esp Now key
 NodeTask -> EspNowTask : Send to other nodes \n (for all nodes)
 EspNowTask --> IEspNow : Send Esp Now message
@@ -181,7 +184,9 @@ NvsTask --> IEspNvs: Store in NVS
 IEspNvs --> NvsTask: Ack
 NvsTask --> NodeTask : Ack
 NodeTask --> NodeTask : Wait for acks from EspNowTask and NvsTask
-NodeTask -> HttpTask : Respond to HTTP request
+NodeTask --> ApiSecurity : Ack
+ApiSecurity --> ApiServer : Ack
+ApiServer --> HttpTask : Ack
 HttpTask --> DmxControllerHttpTask : Respond to \n HTTP request
 DmxControllerHttpTask --> Website : Respond to \n HTTP request
 

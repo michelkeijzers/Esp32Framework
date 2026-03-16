@@ -32,9 +32,8 @@ add_executable(api_tester
     ../../main/common/nodes/webserver/http_task/apis/ApiValidator.cpp
     ../../main/common/esp/esp_http_server/EspHttpServer.cpp
     ../../main/projects/dmx_controller/presets_task/PresetManager.cpp
-    ../../main/common/nodes/webserver/webserver_task/Webserver.cpp
+    ../../main/common/nodes/webserver/http_task/ApiServer.cpp
     ../../main/projects/dmx_controller/http_task/DmxControllerHttpTask.cpp
-    # ../../main/common/esp_nvs/EspNvs.cpp
 )
 
 set_property(TARGET api_tester PROPERTY CXX_STANDARD 20)

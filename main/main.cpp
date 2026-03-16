@@ -31,7 +31,7 @@
 #include "common/nodes/webserver/http_task/apis/ApiFirmware.hpp"
 #include "common/nodes/webserver/http_task/apis/ApiSecurity.hpp"
 #include "common/nodes/webserver/http_task/apis/ApiLogging.hpp"
-#include "common/nodes/webserver/webserver_task/IWebserver.hpp"
+#include "common/nodes/webserver/http_task/IApiServer.hpp"
 
 #ifdef BUILD_PROJECT_DMX_CONTROLLER
 

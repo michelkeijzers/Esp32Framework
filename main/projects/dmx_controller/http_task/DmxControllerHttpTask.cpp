@@ -10,7 +10,7 @@
 
 DmxControllerHttpTask::DmxControllerHttpTask(Contexts &contexts, IApiConfig &apiConfig, IApiPresets &apiPresets,
                                              IApiPresetValues &apiPresetValues, IPresetManager &presetManager)
-    : Webserver(contexts), presetManager_(presetManager), apiConfig_(apiConfig), apiPresets_(apiPresets),
+    : ApiServer(contexts), presetManager_(presetManager), apiConfig_(apiConfig), apiPresets_(apiPresets),
       apiPresetValues_(apiPresetValues)
 {
 }
@@ -37,13 +37,13 @@ void DmxControllerHttpTask::start()
     // }
 
     // Call base class start() which handles mount_littlefs and httpd_start
-    Webserver::start();
+    ApiServer::start();
 }
 
 void DmxControllerHttpTask::stop()
 {
     // Call base class stop() which handles httpd_stop
-    Webserver::stop();
+    ApiServer::stop();
 }
 
 void DmxControllerHttpTask::register_endpoints()

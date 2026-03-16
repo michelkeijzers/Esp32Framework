@@ -1,7 +1,7 @@
 #pragma once
-#include "../../../main/common/nodes/webserver/webserver_task/IWebserver.hpp"
+#include "../../../main/common/nodes/webserver/http_task/IApiServer.hpp"
 
-class MockWebserver : public IWebserver {
+class MockWebserver : public IApiServer {
 public:
     MockWebserver() = default;
     ~MockWebserver() override = default;

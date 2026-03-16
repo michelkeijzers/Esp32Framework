@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../common/nodes/webserver/webserver_task/Webserver.hpp"
+#include "../../../common/nodes/webserver/http_task/ApiServer.hpp"
 #include "IDmxControllerHttpTask.h"
 #include "../../../common/context/Contexts.hpp"
 
@@ -9,7 +9,8 @@
 #include "apis/ApiPresetValues.hpp"
 
 class IPresetManager;
-class DmxControllerHttpTask : public Webserver, public IDmxControllerHttpTask
+
+class DmxControllerHttpTask : public ApiServer, public IDmxControllerHttpTask
 {
 public:
   explicit DmxControllerHttpTask(Contexts &contexts, IApiConfig &apiConfig, IApiPresets &apiPresets,
