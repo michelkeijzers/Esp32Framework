@@ -72,6 +72,40 @@ def copy_common_website_files():
         return False
 
 
+def copy_dmx_app_website_files():
+    """Copy DMX app-specific website files from main/projects/dmx_controller/http_task/website/ to dist/"""
+    # Path to DMX app-specific website files
+    dmx_website_dir = os.path.join(SCRIPT_DIR, "../../main/projects/dmx_controller/http_task/website")
+    dmx_website_dir = os.path.abspath(dmx_website_dir)
+    
+    if not os.path.isdir(dmx_website_dir):
+        print(f"Warning: DMX app website directory not found at {dmx_website_dir}")
+        print("Proceeding with common files only.")
+        return True
+    
+    print(f"Copying DMX app website files from {dmx_website_dir}")
+    try:
+        for filename in os.listdir(dmx_website_dir):
+            src = os.path.join(dmx_website_dir, filename)
+            dst = os.path.join(DIST_DIR, filename)
+            
+            if os.path.isfile(src):
+                # Copy file, overwriting if it exists
+                shutil.copy2(src, dst)
+                print(f"  Copied: {filename}")
+            elif os.path.isdir(src) and filename != '__pycache__':
+                # Copy directory, overwriting if it exists
+                if os.path.exists(dst):
+                    shutil.rmtree(dst)
+                shutil.copytree(src, dst)
+                print(f"  Copied directory: {filename}")
+        
+        return True
+    except Exception as e:
+        print(f"Error copying DMX app website files: {e}")
+        return False
+
+
 def create_littlefs_image():
     """Create LittleFS image from dist/ folder"""
     
@@ -84,6 +118,10 @@ def create_littlefs_image():
     # Copy common website files to dist/
     if not copy_common_website_files():
         print("Warning: Could not copy common website files")
+    
+    # Copy DMX app-specific website files to dist/
+    if not copy_dmx_app_website_files():
+        print("Warning: Could not copy DMX app website files")
     
     # Check if mklittlefs is available
     mklittlefs = check_mklittlefs()
