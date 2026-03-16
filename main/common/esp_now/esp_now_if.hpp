@@ -18,6 +18,7 @@ typedef int esp_err_t;
 
 typedef int wifi_second_chan_t; // Add this typedef for host builds
 typedef struct {
+    uint8_t peer_addr[6];
     uint8_t channel;
     wifi_second_chan_t second_channel;
 } esp_now_peer_info_t;

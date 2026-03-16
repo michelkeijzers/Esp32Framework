@@ -18,18 +18,18 @@ esp_err_t MockEspNow::deinit()
     return ESP_OK;
 }
 
-esp_err_t MockEspNow::connectPeer(const uint8_t *peer_addr)
+esp_err_t MockEspNow::connectPeer(const esp_now_peer_info_t* peer_info)
 {
     if (!initialized_) {
         return ESP_FAIL;
     }
 
     // Check if peer already exists
-    if (hasPeer(peer_addr)) {
+    if (hasPeer(peer_info->peer_addr)) {
         return ESP_FAIL;  // Peer already connected
     }
 
-    std::vector<uint8_t> peer(peer_addr, peer_addr + 6);
+    std::vector<uint8_t> peer(peer_info->peer_addr, peer_info->peer_addr + 6);
     peers_.push_back(peer);
     return ESP_OK;
 }

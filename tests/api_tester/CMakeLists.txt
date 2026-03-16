@@ -31,7 +31,6 @@ add_executable(api_tester
     ../../main/slaves/webserver_slave/common/apis/ApiResponse.cpp
     ../../main/slaves/webserver_slave/common/apis/ApiValidator.cpp
     ../../main/common/esp_http_server/EspHttpServer.cpp
-    ../../main/common/esp_now/EspNow.cpp
     ../../main/slaves/webserver_slave/dmx_controller/presets/PresetManager.cpp
     ../../main/slaves/webserver_slave/common/WebserverSlave.cpp
     # ../../main/common/esp_nvs/EspNvs.cpp
