@@ -1,9 +1,8 @@
 #pragma once
 
-#include "../common/component.hpp"
-#include "../common/esp/esp_now/EspNow.hpp"
+#include "../../esp/esp_now/EspNow.hpp"
 
-class Master : Component
+class Master
 {
 public:
     Master();

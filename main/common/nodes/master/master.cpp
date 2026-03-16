@@ -1,6 +1,6 @@
 #include "master.hpp"
 
-Master::Master() : Component(Component::Type::Master), espNowHandler_()
+Master::Master() : espNowHandler_()
 {
 }
 

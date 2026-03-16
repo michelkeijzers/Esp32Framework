@@ -2,15 +2,14 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-#include "common/component.hpp"
-#include "common/slave.hpp"
+// ...removed component.hpp and slave.hpp...
 
 //#define BUILD_MASTER
 #define BUILD_WEBSERVER_SLAVE 1
 
 #if defined(BUILD_MASTER)
 
-#include "master/master.hpp"
+#include "common/nodes/master/master.hpp"
 
 #elif defined(BUILD_WEBSERVER_SLAVE)
 

@@ -1,7 +1,7 @@
 idf_component_register(
     SRCS
         "main.cpp"
-        "master/master.cpp"
+        "common/nodes/master/master.cpp"
         "common/esp/esp_logger/EspLogger.cpp"
         "common/esp/esp_http_server/EspHttpServer.cpp"
         "common/esp/esp_now/EspNow.cpp"
@@ -23,8 +23,8 @@ idf_component_register(
         "slaves/webserver_slave/dmx_controller/presets/PresetManager.cpp"
     INCLUDE_DIRS
         "."
-            "master"
         "common"
+        "common/nodes/master"
         "common/esp/esp_logger"
         "common/esp/esp_http_server"
         "common/esp/esp_now"

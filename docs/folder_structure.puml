@@ -1,7 +1,9 @@
 
 @startmindmap
 
-* MAIN 
+* **main** 
+-- docs
+-- esp_littlefs 
 ** common
 *** esp
 ' **** esp_error
