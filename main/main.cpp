@@ -80,10 +80,9 @@ extern "C" void app_main(void)
     CommonApiContexts commonApiContexts{apiStatus, apiNodes, apiSystem, apiFirmware, apiSecurity, apiLogging};
     Contexts contexts{espContexts, commonApiContexts};
 
-    DmxControllerHttpTask webserver(
+    DmxControllerHttpTask httpTask(
         DmxControllerHttpTask(contexts, apiConfig, apiPresets, apiPresetValues, presetManager));
-    webserver.start();
-    printf("Built Webserver component\n");
+    httpTask.start();
 #else
 // Other nodes
 #endif // BUILD

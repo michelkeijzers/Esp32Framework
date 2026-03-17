@@ -49,11 +49,8 @@ protected:
     IApiSecurity& apiSecurity_;
     IApiLogging& apiLogging_;
 
-#ifndef UNIT_TEST
     httpd_handle_t server;
-#else
-    void* server = nullptr;  // Dummy for unit tests
-#endif
+
     void mount_littlefs();
     void register_static_file_handler();
     

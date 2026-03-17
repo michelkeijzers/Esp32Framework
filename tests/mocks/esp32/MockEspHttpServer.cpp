@@ -20,9 +20,12 @@ esp_err_t MockEspHttpServer::httpd_start(httpd_handle_t *handle, const httpd_con
 	return ESP_OK;
 }
 
-esp_err_t MockEspHttpServer::httpd_stop(httpd_handle_t handle) {
-	return ESP_OK;
-}	
+esp_err_t MockEspHttpServer::httpd_stop(httpd_handle_t handle) { return ESP_OK; }
+
+int MockEspHttpServer::httpd_req_recv(httpd_req_t *r, char *buf, size_t buf_len)
+{
+    return 0; // Simulate no data received
+}
 
 esp_err_t MockEspHttpServer::httpd_resp_set_type(httpd_req_t *req, const char *type) {
 	return ESP_OK;

@@ -12,6 +12,8 @@ public:
     virtual esp_err_t httpd_start(httpd_handle_t *handle, const httpd_config_t *config) = 0;
     virtual esp_err_t httpd_stop(httpd_handle_t handle) = 0;
 
+    virtual int httpd_req_recv(httpd_req_t *r, char *buf, size_t buf_len) = 0;
+
     virtual esp_err_t httpd_resp_set_type(httpd_req_t *req, const char *type) = 0;
     virtual esp_err_t httpd_resp_send(httpd_req_t *req, const char *buf, size_t len) = 0;
 

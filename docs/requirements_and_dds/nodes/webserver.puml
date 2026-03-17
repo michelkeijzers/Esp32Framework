@@ -9,15 +9,13 @@ package Webserver_Package
         Creates all objects (DI)
     end note
 
-    class DmxControllerWebserver <<RtosTask>> {}
-
     class Website <<LittleFS>>
 
     class DmxControllerHttpTask <<RtosTask>> {}
-    class PresetsTask <<RtosTask>> {}
+    Main *-- DmxControllerHttpTask
 
-    Main *--> DmxControllerWebserver
-    
+    class PresetsTask <<RtosTask>> {}
+   
     Website <--> DmxControllerHttpTask : REST API
 }
 
@@ -27,7 +25,6 @@ package Common
     {
         class RtosTask <<RtosTask>> {}
 
-        class NodeTask <<RtosTask>> {}
         class HttpTask <<RtosTask>> {}
         note bottom of HttpTask
             Only for
@@ -40,7 +37,6 @@ package Common
         class StatusTask <<RtosTask>> {}
         class NvsTask <<RtosTask>> {}
 
-        NodeTask -u-|> RtosTask
         HttpTask -u-|> RtosTask
         WifiTask -u-|> RtosTask
         EspNowTask -u-|> RtosTask
@@ -62,40 +58,59 @@ package Common
     NvsTask ---> IEspNvs
 }
 
-DmxControllerWebserver --|> NodeTask
 DmxControllerHttpTask --|> HttpTask
 PresetsTask --|> RtosTask
 
-DmxControllerWebserver *-- DmxControllerHttpTask
-DmxControllerWebserver *-- PresetsTask
-DmxControllerWebserver *-- StatusTask
-DmxControllerWebserver *-- EspNowTask
-DmxControllerWebserver *-- WifiTask
-DmxControllerWebserver *-- OtaTask
-DmxControllerWebserver *-- NvsTask
+DmxControllerHttpTask *-- DmxControllerHttpTask
+DmxControllerHttpTask *-- PresetsTask
+DmxControllerHttpTask *-- StatusTask
+DmxControllerHttpTask *-- EspNowTask
+DmxControllerHttpTask *-- WifiTask
+DmxControllerHttpTask *-- OtaTask
+DmxControllerHttpTask *-- NvsTask
 
 @enduml
 
 @startuml 
 
-title Webserver Design / API Endpoints, example of security API endpoint 
+title Webserver Design / DMX Controller
 
 package Webserver_Package
 {
     class Main {}
-
-    class DmxControllerWebserver <<RtosTask>> {}
-
     class Website <<LittleFS>>
 
-    class DmxControllerHttpTask <<RtosTask>> {}
-    class PresetsTask <<RtosTask>> {}
+    package HttpTask_Package
+    {
+        class DmxControllerHttpTask <<RtosTask>> {}
+        class DmxControllerApiServer <<HttpTask>> {}
 
-    Main *--> DmxControllerWebserver
-    Main *--> DmxControllerHttpTask
-    Main *--> PresetsTask
+        class ApiConfig <<API>> {}
+        class ApiPreset <<API>> {}
+        class ApiPresetValues <<API>> {}
 
-    Website --> DmxControllerHttpTask : 1. POST Esp Now Key
+        DmxControllerHttpTask *-- DmxControllerApiServer
+
+        DmxControllerApiServer *-- ApiConfig
+        DmxControllerApiServer *-- ApiPreset
+        DmxControllerApiServer *-- ApiPresetValues
+    }
+
+    Main *-- DmxControllerHttpTask
+    Website --> DmxControllerHttpTask
+
+    package PresetsTask_Package
+    {
+        class PresetsTask <<RtosTask>> {}
+
+        class Presets {}
+        class Preset {}
+        Presets *-- "*" Preset
+        PresetsTask *-- Presets
+    }
+
+    Main *-- PresetsTask
+
 }
 
 package Common 
@@ -106,7 +121,7 @@ package Common
         class ApiFirmware <<API>> {}
         class ApiLogging <<API>> {}
         class ApiNodes <<API>> {}
-        class ApiResposne <<API>> {}
+        class ApiResponse <<API>> {}
         class ApiStatus <<API>> {}
         class ApiSystem <<API>> {}
         class ApiValidator <<API>> {}
@@ -117,23 +132,22 @@ package Common
     {
         class RtosTask <<RtosTask>> {}
 
-        class NodeTask <<RtosTask>> {}
         class HttpTask <<RtosTask>> {}
         class ApiServer {}
-        HttpTask --> ApiServer : 2b Handle by API Server
+        HttpTask *-- ApiServer
 
-        note right of HttpTask
+        note bottom of HttpTask
             Only for
             webservers
             and remotes
-        end note        
+        end note    
+
         class WifiTask <<RtosTask>> {}
         class EspNowTask <<RtosTask>> {}
         class OtaTask <<RtosTask>> {}
         class StatusTask <<RtosTask>> {}
         class NvsTask <<RtosTask>> {}
 
-        NodeTask -u-|> RtosTask
         HttpTask -u-|> RtosTask
         WifiTask -u-|> RtosTask
         EspNowTask -u-|> RtosTask
@@ -142,18 +156,20 @@ package Common
         NvsTask -u-|> RtosTask
     }
 
-    ApiServer --> ApiSecurity : 3. Esp Now Key is for security
-    ApiSecurity -> NodeTask : 4. Handle Esp Now key
-    NodeTask --> EspNowTask : 5. Send to other nodes (for all nodes)
-    EspNowTask ..> NodeTask: 5b Ack
-    NodeTask --> NvsTask : 6. Store in NVS 
-    NvsTask ..> NodeTask : 6b. Ack
-    NodeTask --> HttpTask : 7. Respond to HTTP request
+    ApiServer --> ApiSecurity
+
+    DmxControllerHttpTask --> EspNowTask
+    DmxControllerHttpTask --> StatusTask
+    DmxControllerHttpTask --> WifiTask
+    DmxControllerHttpTask --> OtaTask
+    DmxControllerHttpTask --> NvsTask
+
 }
 
-DmxControllerWebserver --|> NodeTask
-DmxControllerHttpTask --> HttpTask : 2. (Common API)
 PresetsTask --|> RtosTask
+
+DmxControllerHttpTask -----|> HttpTask
+DmxControllerApiServer --|> ApiServer
 
 @enduml
 
@@ -162,33 +178,37 @@ PresetsTask --|> RtosTask
 title Webserver Design / API Endpoints, example of security API endpoint (as seq diagram)
 
 participant Website
+participant EspWifi
 participant DmxControllerHttpTask
-participant HttpTask
-participant ApiServer
+participant DmxControllerApiServer
 participant ApiSecurity
-participant NodeTask
 participant EspNowTask
 participant NvsTask
 
-Website ->  DmxControllerHttpTask : POST Esp Now Key
-DmxControllerHttpTask -> HttpTask : (Common API handler)
-HttpTask -> ApiServer : Delegate to API Server
-ApiServer -> ApiSecurity : Esp Now Key \n is for security
-ApiSecurity -> NodeTask : Handle Esp Now key
-NodeTask -> EspNowTask : Send to other nodes \n (for all nodes)
-EspNowTask --> IEspNow : Send Esp Now message
-IEspNow --> EspNowTask : Ack
-EspNowTask --> NodeTask: Ack
-NodeTask -> NvsTask : Store in NVS
+ DmxControllerHttpTask : POST Esp Now Key
+
+DmxControllerHttpTask -> DmxControllerApiServer : POST Esp  Now Key
+DmxControllerApiServer -> ApiSecurity : POST Esp Now Key
+ApiSecurity -> DmxControllerHttpTask : send key
+loop for all nodes
+    DmxControllerHttpTask -> EspNowTask : send key
+    EspNowTask --> IEspNow : Send Esp Now message
+    IEspNow --> EspNowTask : Ack
+    EspNowTask --> DmxControllerHttpTask: Ack
+end
+note over DmxControllerHttpTask
+    Wait for all acks
+end note
+DmxControllerHttpTask -> NvsTask : Store in NVS
 NvsTask --> IEspNvs: Store in NVS
 IEspNvs --> NvsTask: Ack
-NvsTask --> NodeTask : Ack
-NodeTask --> NodeTask : Wait for acks from EspNowTask and NvsTask
-NodeTask --> ApiSecurity : Ack
-ApiSecurity --> ApiServer : Ack
-ApiServer --> HttpTask : Ack
-HttpTask --> DmxControllerHttpTask : Respond to \n HTTP request
-DmxControllerHttpTask --> Website : Respond to \n HTTP request
+NvsTask --> DmxControllerHttpTask : Ack
+DmxControllerHttpTask -> DmxControllerApiServer : MakeAckResponse(Ack)
+DmxControllerApiServer -> ApiSecurity : MakeResponse(Ack)
+ApiSecurity --> DmxControllerApiServer : Ack Response
+DmxControllerApiServer --> DmxControllerHttpTask : Ack Response
+DmxControllerHttpTask -> 
+DmxControllerHttpTask -> Website : Send Response
 
 @enduml 
 

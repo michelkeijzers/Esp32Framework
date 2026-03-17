@@ -5,6 +5,9 @@
 #else
 #include <string>
 
+#define HTTPD_SOCK_ERR_FAIL -1
+#define HTTPD_SOCK_ERR_INVALID -2
+#define HTTPD_SOCK_ERR_TIMEOUT -3
 
 /* Request Methods */
 #define HTTP_METHOD_MAP(XX)         \

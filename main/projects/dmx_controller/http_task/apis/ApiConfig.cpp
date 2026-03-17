@@ -61,12 +61,10 @@ esp_err_t ApiConfig::get_config_handler(httpd_req_t *req) {
 esp_err_t ApiConfig::put_config_handler(httpd_req_t *req) {
     char buffer[512] = {0};
     int total_len = 0;
-    
-#ifndef UNIT_TEST
-    // In production (ESP32), read from HTTP request
+
     int cur_len = 0;
     while (cur_len < sizeof(buffer) - 1) {
-        cur_len = httpd_req_recv(req, buffer + total_len, sizeof(buffer) - 1 - total_len);
+        cur_len = espHttpServer_.httpd_req_recv(req, buffer + total_len, sizeof(buffer) - 1 - total_len);
         if (cur_len <= 0) {
             if (cur_len == HTTPD_SOCK_ERR_TIMEOUT) {
                 continue;
@@ -76,18 +74,9 @@ esp_err_t ApiConfig::put_config_handler(httpd_req_t *req) {
         total_len += cur_len;
     }
     buffer[total_len] = '\0';
-#else
-    // In tests, buffer is empty (test should inject data via user_ctx if needed)
-    if (req && req->user_ctx) {
-        strncpy(buffer, (const char*)req->user_ctx, sizeof(buffer) - 1);
-        buffer[sizeof(buffer) - 1] = '\0';
-    }
-#endif
 
     char response[MAX_RESPONSE_SIZE];
     char ssid[MAX_SSID_LEN + 1] = {0};
-    //char password[MAX_PASSWORD_LEN + 1] = {0};
-    //char espnow_key[MAX_ESPNOW_KEY_LEN + 1] = {0};
     char device_name[MAX_DEVICE_NAME_LEN + 1] = {0};
     bool has_ssid = false, has_device_name = false;
     
