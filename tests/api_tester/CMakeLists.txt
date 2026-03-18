@@ -18,7 +18,7 @@ add_executable(api_tester
     apis/ApiPresetValuesTests.cpp
     apis/ApiSecurityTests.cpp
     apis/ApiSystemTests.cpp
-    ../../main/projects/dmx_controller/http_task/DmxControllerHttpTask.cpp
+    ../../main/projects/dmx_controller/http_task/DmxControllerWebserver.cpp
     ../../main/projects/dmx_controller/http_task/apis/ApiPresets.cpp
     ../../main/projects/dmx_controller/http_task/apis/ApiConfig.cpp
     ../../main/common/nodes/webserver/http_task/apis/ApiStatus.cpp
@@ -33,7 +33,7 @@ add_executable(api_tester
     ../../main/common/esp/esp_http_server/EspHttpServer.cpp
     ../../main/projects/dmx_controller/presets_task/PresetManager.cpp
     ../../main/common/nodes/webserver/http_task/ApiServer.cpp
-    ../../main/projects/dmx_controller/http_task/DmxControllerHttpTask.cpp
+
 )
 
 set_property(TARGET api_tester PROPERTY CXX_STANDARD 20)

@@ -1,6 +1,6 @@
 #include "DmxControllerTask.hpp"
 #include "../service_locator/DmxServiceLocator.hpp"
-#include "../http_task/DmxControllerHttpTask.hpp"
+#include "../http_task/DmxControllerWebserver.hpp"
 #include "../../../common/tasks/RtosTask.hpp"
 
 DmxControllerTask::DmxControllerTask(DmxServiceLocator &serviceLocator, const char *name, uint32_t stackSize,

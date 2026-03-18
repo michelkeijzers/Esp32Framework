@@ -19,7 +19,7 @@ idf_component_register(
         "common/nodes/webserver/http_task/apis/ApiResponse.cpp"
         "common/nodes/webserver/http_task/apis/ApiValidator.cpp"
         "common/nodes/webserver/http_task/ApiServer.cpp"
-        "projects/dmx_controller/http_task/DmxControllerHttpTask.cpp"
+        "projects/dmx_controller/http_task/DmxControllerWebserver.cpp"
         "projects/dmx_controller/presets_task/PresetManager.cpp"
         "projects/dmx_controller/dmx_controller_task/DmxControllerTask.cpp"
         "projects/dmx_controller/dmx_controller_task/DmxControllerTask.hpp"

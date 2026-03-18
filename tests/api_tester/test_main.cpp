@@ -1,7 +1,7 @@
 
 #include "../mocks/esp32/MockEspHttpServer.hpp"
 #include "../mocks/esp32/MockEspLogger.hpp"
-#include "../../main/projects/dmx_controller/http_task/DmxControllerHttpTask.hpp"
+#include "../../main/projects/dmx_controller/http_task/DmxControllerWebserver.hpp"
 #include "apis/ApiPresetsTests.hpp"
 #include "apis/ApiStatusTests.hpp"
 #include "apis/ApiConfigTests.hpp"
