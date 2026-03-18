@@ -11,13 +11,25 @@ DmxControllerTask::DmxControllerTask(DmxServiceLocator &serviceLocator, const ch
 
 esp_err_t DmxControllerTask::init()
 {
-    // Initialize any resources needed by the controller task here
-    // For example, create and initialize subsystem tasks (HttpTask, PresetsTask, EspNowTask)
-    // using the service locator to get their dependencies
+    esp_err_t err = ESP_OK;
 
-    // Example (pseudocode):
-    // httpTask = new DmxControllerHttpTask(serviceLocator.createHttpTaskContext());
-    // httpTask->init();
+    // // Create Http Task.
+    // auto httpTaskContext = _serviceLocator.createHttpTaskContext();
+    // auto httpTask = new DmxControllerHttpTask(*httpTaskContext, "HttpTask", 4096, 5);
+    // err = httpTask->init();
+    // if (err != ESP_OK)
+    // {
+    //     // Handle initialization error (e.g., log it
+    // }
+
+    // // Create Presets task.
+    // auto presetsTaskContext = _serviceLocator.createPresetsTaskContext();
+    // auto presetsTask = new PresetsTask(*presetsTaskContext, "PresetsTask", 4096, 5);
+    // err = presetsTask->init();
+    // if (err != ESP_OK)
+    // {
+    //     // Handle initialization error (e.g., log it)
+    // }
 
     return ESP_OK;
 }
