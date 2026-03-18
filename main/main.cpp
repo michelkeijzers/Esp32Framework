@@ -57,7 +57,7 @@ extern "C"
     DmxServiceLocator serviceLocator;
 
     // Create and start main controller task
-    DmxControllerTask controllerTask(serviceLocator);
+    DmxControllerTask controllerTask(serviceLocator, "DMX Controller Task", 4096, 5);
     esp_err_t err = controllerTask.init();
     if (err != ESP_OK)
     {

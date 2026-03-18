@@ -1,8 +1,13 @@
 #include "DmxControllerTask.hpp"
+#include "../service_locator/DmxServiceLocator.hpp"
+#include "../http_task/DmxControllerHttpTask.hpp"
+#include "../../../common/tasks/RtosTask.hpp"
 
-#include "DmxControllerTask.hpp"
-
-DmxControllerTask::DmxControllerTask(DmxServiceLocator &locator) : IDmxControllerTask(), serviceLocator_(locator) {}
+DmxControllerTask::DmxControllerTask(DmxServiceLocator &serviceLocator, const char *name, uint32_t stackSize,
+                                     UBaseType_t priority)
+    : RtosTask(name, stackSize, priority), _serviceLocator(serviceLocator)
+{
+}
 
 esp_err_t DmxControllerTask::init()
 {

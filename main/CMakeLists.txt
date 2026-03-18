@@ -23,6 +23,9 @@ idf_component_register(
         "projects/dmx_controller/presets_task/PresetManager.cpp"
         "projects/dmx_controller/dmx_controller_task/DmxControllerTask.cpp"
         "projects/dmx_controller/dmx_controller_task/DmxControllerTask.hpp"
+        "common/tasks/RtosTask.cpp"
+        "common/tasks/RtosTask.hpp"
+        "common/tasks/IRtosTask.hpp"
     INCLUDE_DIRS
         "."
         "common"

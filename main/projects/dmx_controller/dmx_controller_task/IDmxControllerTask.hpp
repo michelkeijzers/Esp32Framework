@@ -1,13 +1,9 @@
 #pragma once
 
-class DmxServiceLocator;
+#include "../../../common/tasks/IRtosTask.hpp"
 
-class IDmxControllerTask
+class IDmxControllerTask : public IRtosTask
 {
   public:
-    IDmxControllerTask() = default;
     virtual ~IDmxControllerTask() = default;
-
-    virtual esp_err_t init() = 0;
-    virtual esp_err_t start() = 0;
 };
