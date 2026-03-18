@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../service_locator/DmxServiceLocator.hpp"
+#include "IDmxControllerTask.hpp"
 
 /**
  * @brief Main DMX Controller Task
@@ -9,14 +10,14 @@
  * - PresetsTask (preset management)
  * - EspNowTask (wireless communication with other nodes)
  */
-class DmxControllerTask
+class DmxControllerTask : IDmxControllerTask
 {
-  private:
-    DmxServiceLocator &serviceLocator;
-
   public:
-    DmxControllerTask(DmxServiceLocator &locator) : serviceLocator(locator) {}
+    DmxControllerTask(DmxServiceLocator &locator);
 
-    esp_err_t init();
+    esp_err_t init() override;
     esp_err_t start();
+
+  private:
+    DmxServiceLocator &serviceLocator_;
 };

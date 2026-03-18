@@ -1,5 +1,9 @@
 #include "DmxControllerTask.hpp"
 
+#include "DmxControllerTask.hpp"
+
+DmxControllerTask::DmxControllerTask(DmxServiceLocator &locator) : IDmxControllerTask(), serviceLocator_(locator) {}
+
 esp_err_t DmxControllerTask::init()
 {
     // Initialize any resources needed by the controller task here

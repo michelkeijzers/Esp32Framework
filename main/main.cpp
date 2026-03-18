@@ -45,8 +45,10 @@
 
 #endif // NODE_TO_BUILD
 
-extern "C" void app_main(void)
+extern "C"
 {
+    void app_main(void)
+    {
 #if defined(BUILD_WEBSERVER_NODE)
 
 #if defined(BUILD_PROJECT_DMX_CONTROLLER)
@@ -80,4 +82,5 @@ extern "C" void app_main(void)
 #else
 // Other nodes
 #endif // BUILD
+}
 }
