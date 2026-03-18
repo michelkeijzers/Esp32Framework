@@ -21,6 +21,8 @@ idf_component_register(
         "common/nodes/webserver/http_task/ApiServer.cpp"
         "projects/dmx_controller/http_task/DmxControllerHttpTask.cpp"
         "projects/dmx_controller/presets_task/PresetManager.cpp"
+        "projects/dmx_controller/dmx_controller_task/DmxControllerTask.cpp"
+        "projects/dmx_controller/dmx_controller_task/DmxControllerTask.hpp"
     INCLUDE_DIRS
         "."
         "common"
@@ -30,5 +32,6 @@ idf_component_register(
         "common/esp/esp_now"
         "common/esp/esp_nvs"
         "common/nodes/webserver/http_task/apis"
+        "projects/dmx_controller/dmx_controller_task"
     REQUIRES esp_littlefs esp_http_server nvs_flash esp_wifi
 )

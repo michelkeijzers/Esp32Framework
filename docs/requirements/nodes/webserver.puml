@@ -1,0 +1,416 @@
+@startuml 
+
+title Webserver Design / RTOS Tasks
+
+package Webserver_Package
+{
+    class Main {}
+    note right of Main
+        Creates all objects (DI)
+    end note
+
+    class Website <<LittleFS>>
+
+    class DmxControllerHttpTask <<RtosTask>> {}
+    Main *-- DmxControllerHttpTask
+
+    class PresetsTask <<RtosTask>> {}
+   
+    Website <--> DmxControllerHttpTask : REST API
+}
+
+package Common 
+{
+    package RtosTasks
+    {
+        class RtosTask <<RtosTask>> {}
+
+        class HttpTask <<RtosTask>> {}
+        note bottom of HttpTask
+            Only for
+            webservers
+            and remotes
+        end note        
+        class WifiTask <<RtosTask>> {}
+        class EspNowTask <<RtosTask>> {}
+        class OtaTask <<RtosTask>> {}
+        class StatusTask <<RtosTask>> {}
+        class NvsTask <<RtosTask>> {}
+
+        HttpTask -u-|> RtosTask
+        WifiTask -u-|> RtosTask
+        EspNowTask -u-|> RtosTask
+        OtaTask -u-|> RtosTask
+        StatusTask -u-|> RtosTask
+        NvsTask -u-|> RtosTask
+        
+    }
+    package ESP
+    {
+        class IEspWifi <<ESP32>> {}
+        class IEspNow <<ESP32>> {}
+        class IEspNvs <<ESP32>> {}
+    }
+
+    StatusTask ---> IEspNow
+    WifiTask ---> IEspWifi
+    EspNowTask ---> IEspNow
+    NvsTask ---> IEspNvs
+}
+
+DmxControllerHttpTask --|> HttpTask
+PresetsTask --|> RtosTask
+
+DmxControllerHttpTask *-- DmxControllerHttpTask
+DmxControllerHttpTask *-- PresetsTask
+DmxControllerHttpTask *-- StatusTask
+DmxControllerHttpTask *-- EspNowTask
+DmxControllerHttpTask *-- WifiTask
+DmxControllerHttpTask *-- OtaTask
+DmxControllerHttpTask *-- NvsTask
+
+@enduml
+
+@startuml 
+
+title Webserver Design / DMX Controller
+
+package Webserver_Package
+{
+    class Main {}
+    class Website <<LittleFS>>
+
+    package HttpTask_Package
+    {
+        class DmxControllerHttpTask <<RtosTask>> {}
+        class DmxControllerApiServer <<HttpTask>> {}
+
+        class ApiConfig <<API>> {}
+        class ApiPreset <<API>> {}
+        class ApiPresetValues <<API>> {}
+
+        DmxControllerHttpTask *-- DmxControllerApiServer
+
+        DmxControllerApiServer *-- ApiConfig
+        DmxControllerApiServer *-- ApiPreset
+        DmxControllerApiServer *-- ApiPresetValues
+    }
+
+    Main *-- DmxControllerHttpTask
+    Website --> DmxControllerHttpTask
+
+    package PresetsTask_Package
+    {
+        class PresetsTask <<RtosTask>> {}
+
+        class Presets {}
+        class Preset {}
+        Presets *-- "*" Preset
+        PresetsTask *-- Presets
+    }
+
+    Main *-- PresetsTask
+
+}
+
+package Common 
+{
+    package Apis 
+    {
+        class ApiSecurity <<API>> {}
+        class ApiFirmware <<API>> {}
+        class ApiLogging <<API>> {}
+        class ApiNodes <<API>> {}
+        class ApiResponse <<API>> {}
+        class ApiStatus <<API>> {}
+        class ApiSystem <<API>> {}
+        class ApiValidator <<API>> {}
+        class StaticFileHandler <<API>> {}
+    }
+
+    package RtosTasks
+    {
+        class RtosTask <<RtosTask>> {}
+
+        class HttpTask <<RtosTask>> {}
+        class ApiServer {}
+        HttpTask *-- ApiServer
+
+        note bottom of HttpTask
+            Only for
+            webservers
+            and remotes
+        end note    
+
+        class WifiTask <<RtosTask>> {}
+        class EspNowTask <<RtosTask>> {}
+        class OtaTask <<RtosTask>> {}
+        class StatusTask <<RtosTask>> {}
+        class NvsTask <<RtosTask>> {}
+
+        HttpTask -u-|> RtosTask
+        WifiTask -u-|> RtosTask
+        EspNowTask -u-|> RtosTask
+        OtaTask -u-|> RtosTask
+        StatusTask -u-|> RtosTask
+        NvsTask -u-|> RtosTask
+    }
+
+    ApiServer --> ApiSecurity
+
+    DmxControllerHttpTask --> EspNowTask
+    DmxControllerHttpTask --> StatusTask
+    DmxControllerHttpTask --> WifiTask
+    DmxControllerHttpTask --> OtaTask
+    DmxControllerHttpTask --> NvsTask
+
+}
+
+PresetsTask --|> RtosTask
+
+DmxControllerHttpTask -----|> HttpTask
+DmxControllerApiServer --|> ApiServer
+
+@enduml
+
+@startuml 
+
+title Webserver Design / API Endpoints, example of security API endpoint (as seq diagram)
+
+participant Website
+participant EspWifi
+participant DmxControllerHttpTask
+participant DmxControllerApiServer
+participant ApiSecurity
+participant EspNowTask
+participant NvsTask
+
+Website -> DmxControllerHttpTask : POST Esp  Now Key
+DmxControllerHttpTask -> DmxControllerApiServer : POST Esp  Now Key
+DmxControllerApiServer -> ApiSecurity : POST Esp Now Key
+ApiSecurity -> DmxControllerHttpTask : send key
+loop for all nodes
+    DmxControllerHttpTask -> EspNowTask : send key
+    EspNowTask --> IEspNow : Send Esp Now message
+    IEspNow --> EspNowTask : Ack
+    EspNowTask --> DmxControllerHttpTask: Ack
+end
+note over DmxControllerHttpTask
+    Wait for all acks
+end note
+DmxControllerHttpTask -> NvsTask : Store in NVS
+NvsTask --> IEspNvs: Store in NVS
+IEspNvs --> NvsTask: Ack
+NvsTask --> DmxControllerHttpTask : Ack
+DmxControllerHttpTask -> DmxControllerApiServer : MakeAckResponse(Ack)
+DmxControllerApiServer -> ApiSecurity : MakeResponse(Ack)
+ApiSecurity --> DmxControllerApiServer : Ack Response
+DmxControllerApiServer --> DmxControllerHttpTask : Ack Response
+DmxControllerHttpTask -> 
+DmxControllerHttpTask -> Website : Send Response
+
+@enduml 
+
+@startuml 
+
+title Webserver Design / DMX Controller, Get preset Values
+
+actor Website
+box "DmxController"
+    participant DmxControllerHttpTask <<RtosTask>>
+    participant ApiPreset
+    participant DmxControllerTask <<RtosTask>>
+    participant PresetsTask <<RtosTask>>
+    participant DC_EspNowTask <<RtosTask>>
+end box
+box "Master"
+    participant MAS_EspNowTask <<RtosTask>>
+    participant MasterTask  <<RtosTask>>
+end box 
+box "DMX Node"
+    participant DMX_EspNowTask <<RtosTask>>
+    participant DmxTask <<RtosTask>>
+    participant UniversesTask <<RtosTask>>
+    participant FileSystemTask <<RtosTask>>
+    participant ESP32LittleFs <<ESP32>>
+end box
+
+Website -> DmxControllerHttpTask : GET preset_values\n <presetId> 
+DmxControllerHttpTask -> ApiPreset : parseRequest()
+ApiPreset -> DmxControllerTask : getPresetValues(\n presetId)
+DmxControllerTask -> PresetsTask : getPresetValues(\n presetId)
+PresetsTask -> DmxControllerTask : getDmxUniverseValues(\n presetId)
+DmxControllerTask -> DC_EspNowTask : getDmxUniverseValues(\n universe
+DC_EspNowTask -->> MAS_EspNowTask: getDmxUniverseValues(\n From: DmxController, \n universeId)
+MAS_EspNowTask -> MasterTask : getDmxUniverseValues(\n From: DmxController, \n universeId)
+MasterTask -> MAS_EspNowTask : getDmxUniverseValues(\n To: DmxNode, \n universeId)
+MAS_EspNowTask -->> DMX_EspNowTask: getDmxUniverseValues(\n To: DmxNode, \n universeId) 
+DMX_EspNowTask -> DmxTask : getDmxUniverseValues(\n universeId)
+DmxTask -> UniversesTask: FileSystemTask : getDmxUniverseValues(\n universeId)
+UniversesTask -> FileSystemTask : getDmxUniverseValues(\n universeId)
+FileSystemTask -> ESP32LittleFs : readFile(universeId)
+ESP32LittleFs --> FileSystemTask : fileData
+
+FileSystemTask -> UniversesTask : SendDmxValues(dmxValues)
+UniversesTask -> DmxTask : SendDmxValues(dmxValues)
+DmxTask -> DMX_EspNowTask : SendDmxValues(dmxValues)
+loop 3 packages (max 250 bytes)
+    DMX_EspNowTask -->> MAS_EspNowTask: SendDmxValues(\ndmxValues)
+end
+MAS_EspNowTask -> MAS_EspNowTask : CombineMessages(dmxValue)
+DMX_EspNowTask -->> MAS_EspNowTask: SendDmxValues(\n From: DnxNode, \n dmxValues)
+MAS_EspNowTask -> MasterTask : SendDmxValues(\n From: DnxNode, \n dmxValues)
+MasterTask -> MAS_EspNowTask : SendDmxValues(\nTo: DmxController, \n dmxValues)
+loop 3 packages (max 250 bytes)
+    MAS_EspNowTask -->> DC_EspNowTask: SendDmxValues(\ndmxValues)
+end
+DC_EspNowTask -> DC_EspNowTask : CombineMessages(dmxValue)
+DC_EspNowTask -> DmxControllerTask : SendDmxValues(\ndmxValues)
+DmxControllerTask -> PresetsTask : SendDmxValues(\ndmxValues)
+PresetsTask -> DmxControllerTask : SendDmxValuesToServer(\ndmxValues)
+DmxControllerTask -> ApiPreset : formatResponse(data)
+ApiPreset -> DmxControllerHttpTask : response
+DmxControllerHttpTask -> Website : HTTP response
+
+
+
+@enduml
+
+@startuml 
+
+title Webserver Design / ESP32 Interfaces
+
+package Common_Package
+{
+    package RtosTasks_Package
+    {
+        class RtosTask <<RtosTask>> {}
+
+        class NodeTask <<RtosTask>> {}
+        class HttpTask <<RtosTask>> {}
+        note bottom of HttpTask
+            Only for
+            webservers 
+            and remotes
+        end note        
+        class WifiTask <<RtosTask>> {}
+        class EspNowTask <<RtosTask>> {}
+        class OtaTask <<RtosTask>> {}
+        class StatusTask <<RtosTask>> {}
+        class NvsTask <<RtosTask>> {}
+
+        NodeTask -u-|> RtosTask
+        HttpTask -u-|> RtosTask
+        WifiTask -u-|> RtosTask
+        EspNowTask -u-|> RtosTask
+        OtaTask -u-|> RtosTask
+        StatusTask -u-|> RtosTask
+        NvsTask -u-|> RtosTask
+        
+    }
+
+    package ESP32_Package
+    {
+        package EspFileSystems_Package     
+        {
+            class IEspLittleFs <<ESP32>> {}
+            class EspLittleFs <<ESP32>> {}
+            class MockEspLittleFs <<ESP32>> {}
+            class esp_littlfs_if_h <<C>> {}
+            class esp_spiffs_if_h <<C>> {}
+
+            EspLittleFs -u-|> IEspLittleFs
+            MockEspLittleFs -u-|> IEspLittleFs
+            note bottom of MockEspLittleFs
+                Only for testing
+            end note
+            EspLittleFs --> esp_littlfs_if_h
+            EspLittleFs --> esp_spiffs_if_h
+        }
+
+        package IEspWifi_Package
+        {
+
+        }
+        
+        package IEspNow_Package
+        {
+            class IEspNow <<ESP32>> {}
+            class EspNow <<ESP32>> {}   
+            class MockEspNow <<ESP32>> {}
+
+            EspNow -u-|> IEspNow
+            MockEspNow -u-|> IEspNow
+            note bottom of MockEspNow
+                Only for testing
+            end note
+
+            EspNow --> esp_now_if_h
+        }
+
+        package IEspNvs_Package 
+        {
+            class IEspNvs <<ESP32>> {}
+            class EspNvs <<ESP32>> {}
+            class MockEspNvs <<ESP32>> {}
+
+            EspNvs -u-|> IEspNvs
+            MockEspNvs -u-|> IEspNvs
+            note bottom of MockEspNvs
+                Only for testing
+            end note
+
+            EspNvs --> nvs_if_h
+        }
+
+        package IEspHttpServer_Package
+        {
+            class IEspHttpServer <<ESP32>> {}
+            class EspHttpServer <<ESP32>> {}    
+            class MockEspHttpServer <<ESP32>> {}
+
+            EspHttpServer -u-|> IEspHttpServer
+            MockEspHttpServer -u-|> IEspHttpServer
+            note bottom of MockEspHttpServer
+                Only for testing
+            end note
+
+            EspHttpServer --> esp_http_server_if_h
+        }
+
+        package IEspLogger_Package
+        {
+            class IEspLogger <<ESP32>> {}
+            class EspLogger <<ESP32>> {}
+            class MockEspLogger <<ESP32>> {}
+
+            EspLogger -u-|> IEspLogger
+            MockEspLogger -u-|> IEspLogger
+            note bottom of MockEspLogger
+                Only for testing
+            end note
+
+            EspLogger --> esp_logger_if_h
+        }
+
+
+    }
+
+    ESP32_Package -[hidden]u-----> RtosTasks_Package 
+
+    NodeTask --> IEspLogger
+    HttpTask --> IEspLogger
+    WifiTask --> IEspLogger
+    EspNowTask --> IEspLogger
+    OtaTask --> IEspLogger
+    StatusTask --> IEspLogger
+    NvsTask --> IEspLogger
+
+    StatusTask --> IEspNow
+    'WifiTask --> IEspWifi
+    HttpTask ---> IEspHttpServer
+    EspNowTask --> IEspNow
+    NvsTask --> IEspNvs
+}
+
+@enduml
