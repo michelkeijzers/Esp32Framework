@@ -1,3 +1,8 @@
+@startuml
+
+a -> b : f()
+@enduml
+
 @startuml 
 
 title Webserver Design / RTOS Tasks
@@ -173,6 +178,7 @@ DmxControllerApiServer --|> ApiServer
 
 @enduml
 
+
 @startuml 
 
 title Webserver Design / API Endpoints, example of security API endpoint (as seq diagram)
@@ -210,6 +216,7 @@ DmxControllerHttpTask ->
 DmxControllerHttpTask -> Website : Send Response
 
 @enduml 
+
 
 @startuml 
 
@@ -275,7 +282,6 @@ DmxControllerHttpTask -> Website : HTTP response
 
 
 @enduml
-
 @startuml 
 
 title Webserver Design / ESP32 Interfaces

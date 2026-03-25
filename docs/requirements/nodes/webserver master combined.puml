@@ -1,0 +1,101 @@
+
+package Common 
+{
+    package Apis 
+    {
+        class ApiSecurity <<API>> {}
+        class ApiFirmware <<API>> {}
+        class ApiLogging <<API>> {}
+        class ApiNodes <<API>> {}
+        class ApiResponse <<API>> {}
+        class ApiStatus <<API>> {}
+        class ApiSystem <<API>> {}
+        class ApiValidator <<API>> {}
+        class StaticFileHandler <<API>> {}
+    }
+
+    package RtosTasks
+    {
+        class RtosTask <<RtosTask>> {}
+
+        class HttpTask <<RtosTask>> {}
+        class ApiServer {}
+        HttpTask *-- ApiServer
+
+        note bottom of HttpTask
+            Only for
+            webservers
+            and remotes
+        end note    
+
+        class WifiTask <<RtosTask>> {}
+        class EspNowTask <<RtosTask>> {}
+        class OtaTask <<RtosTask>> {}
+        class StatusTask <<RtosTask>> {}
+        class NvsTask <<RtosTask>> {}
+
+        HttpTask -u-|> RtosTask
+        WifiTask -u-|> RtosTask
+        EspNowTask -u-|> RtosTask
+        OtaTask -u-|> RtosTask
+        StatusTask -u-|> RtosTask
+        NvsTask -u-|> RtosTask
+    }
+
+    ApiServer --> ApiSecurity
+
+    DmxControllerHttpTask --> EspNowTask
+    DmxControllerHttpTask --> StatusTask
+    DmxControllerHttpTask --> WifiTask
+    DmxControllerHttpTask --> OtaTask
+    DmxControllerHttpTask --> NvsTask
+
+}
+
+PresetsTask --|> RtosTask
+
+DmxControllerHttpTask -----|> HttpTask
+DmxControllerApiServer --|> ApiServer
+
+@enduml
+
+
+
+@startuml 
+
+title Webserver Design / DMX Controller, Get preset Values
+
+actor Website
+box "DmxController"
+    participant DmxController  
+    participant DmxControllerHttpTask <<RtosTask>>
+    participant ApiPreset
+    participant DmxControllerTask <<RtosTask>>
+    participant PresetsTask <<RtosTask>>
+end box
+box "DMX Node"
+    participant DmxTask <<RtosTask>>
+    participant UniversesTask <<RtosTask>>
+    participant FileSystemTask <<RtosTask>>
+    participant ESP32LittleFs <<ESP32>>
+end box
+
+Website -> DmxControllerHttpTask : GET preset_values\n <presetId> 
+DmxControllerHttpTask -> ApiPreset : parseRequest()
+ApiPreset -> DmxControllerTask : getPresetValues(\n presetId)
+DmxControllerTask ->DmxTask : getDmxUniverseValues(\n universeId)
+DmxTask -> UniversesTask: FileSystemTask : getDmxUniverseValues(\n universeId)
+UniversesTask -> FileSystemTask : getDmxUniverseValues(\n universeId)
+FileSystemTask -> ESP32LittleFs : readFile(universeId)
+ESP32LittleFs --> FileSystemTask : fileData
+
+FileSystemTask -> UniversesTask : SendDmxValues(dmxValues)
+UniversesTask -> DmxTask : SendDmxValues(dmxValues)
+DmxTask -> DmxControllerTask : SendDmxValues(\ndmxValues)
+DmxControllerTask -> ApiPreset : formatResponse(data)
+ApiPreset -> DmxControllerHttpTask : response
+DmxControllerHttpTask -> Website : HTTP response
+
+
+
+@enduml
